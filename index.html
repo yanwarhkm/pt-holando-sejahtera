@@ -6,6 +6,12 @@
     <title>Platform Pertanian</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // Aktifkan scroll reveal sebelum render pertama (hindari konten berkedip)
+        if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.documentElement.classList.add('js-reveal');
+        }
+    </script>
 </head>
 <body>
 <!-- NAVBAR -->
@@ -95,21 +101,21 @@
         <aside class="filter-card">
             <div class="filter-header">
                 <h3>Filter</h3>
-                <button class="filter-reset-btn">Reset</button>
+                <button class="filter-reset-btn" id="filterReset" type="button">Reset</button>
             </div>
             <div class="filter-group">
                 <h4>Kategori</h4>
                 <label class="filter-option">
-                    <input type="checkbox" checked> Semua Produk
+                    <input type="checkbox" class="filter-kategori" value="semua" checked> Semua Produk
                 </label>
                 <label class="filter-option">
-                    <input type="checkbox"> Sayuran
+                    <input type="checkbox" class="filter-kategori" value="Sayuran"> Sayuran
                 </label>
                 <label class="filter-option">
-                    <input type="checkbox"> Buah-buahan
+                    <input type="checkbox" class="filter-kategori" value="Buah"> Buah-buahan
                 </label>
                 <label class="filter-option">
-                    <input type="checkbox"> Biji & Umbi
+                    <input type="checkbox" class="filter-kategori" value="Umbi"> Biji & Umbi
                 </label>
             </div>
             <div class="filter-help">
@@ -121,117 +127,20 @@
             <div class="catalog-toolbar">
                 <div class="catalog-search">
                     <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Cari produk...">
+                    <input type="text" id="productSearch" placeholder="Cari produk..." aria-label="Cari produk">
                 </div>
-                <select class="sort-select">
-                    <option>Urutkan: Terbaru</option>
-                    <option>Harga: Rendah ke Tinggi</option>
-                    <option>Harga: Tinggi ke Rendah</option>
+                <select class="sort-select" id="productSort" aria-label="Urutkan produk">
+                    <option value="terbaru">Urutkan: Terbaru</option>
+                    <option value="harga-asc">Harga: Rendah ke Tinggi</option>
+                    <option value="harga-desc">Harga: Tinggi ke Rendah</option>
+                    <option value="nama">Nama: A–Z</option>
                 </select>
             </div>
             <div class="catalog-result-row">
-                <span>Menampilkan 6 produk</span>
+                <span id="productCount">Memuat produk...</span>
             </div>
-            <div class="products-grid">
-                <!-- Produk 1 -->
-                <div class="product-card">
-                    <div class="product-img-wrapper">
-                        <img src="sml.jpg" alt="Produk" class="product-img">
-                        <span class="product-badge">Baru</span>
-                    </div>
-                    <div class="product-body">
-                        <span class="product-meta">Sayuran</span>
-                        <h3 class="product-title">Kentang Pilihan Premium</h3>
-                        <p class="product-description">Kentang segar baru dipetik, ukuran seragam</p>
-                        <strong class="product-price">Rp 15.000 / kg</strong>
-                        <div class="product-actions">
-                            <button class="btn-add-cart">Tambah</button>
-                            <button class="btn-detail"><i class="fas fa-eye"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Produk 2 -->
-                <div class="product-card">
-                    <div class="product-img-wrapper">
-                        <img src="ss.jpg" alt="Produk" class="product-img">
-                    </div>
-                    <div class="product-body">
-                        <span class="product-meta">Sayuran</span>
-                        <h3 class="product-title">Wortel Segar</h3>
-                        <p class="product-description">Manis, renyah, kaya vitamin A</p>
-                        <strong class="product-price">Rp 12.000 / kg</strong>
-                        <div class="product-actions">
-                            <button class="btn-add-cart">Tambah</button>
-                            <button class="btn-detail"><i class="fas fa-eye"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Produk 3 -->
-                <div class="product-card">
-                    <div class="product-img-wrapper">
-                        <img src="s.jpg" alt="Produk" class="product-img">
-                        <span class="product-badge">Populer</span>
-                    </div>
-                    <div class="product-body">
-                        <span class="product-meta">Buah</span>
-                        <h3 class="product-title">Pisang Cavendish</h3>
-                        <p class="product-description">Manis lembut, siap santap</p>
-                        <strong class="product-price">Rp 18.000 / sisir</strong>
-                        <div class="product-actions">
-                            <button class="btn-add-cart">Tambah</button>
-                            <button class="btn-detail"><i class="fas fa-eye"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Produk 4 -->
-                <div class="product-card">
-                    <div class="product-img-wrapper">
-                        <img src="m.jpg" alt="Produk" class="product-img">
-                    </div>
-                    <div class="product-body">
-                        <span class="product-meta">Sayuran</span>
-                        <h3 class="product-title">Bayam Segar</h3>
-                        <p class="product-description">Daun hijau segar, kaya zat besi</p>
-                        <strong class="product-price">Rp 8.000 / ikat</strong>
-                        <div class="product-actions">
-                            <button class="btn-add-cart">Tambah</button>
-                            <button class="btn-detail"><i class="fas fa-eye"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Produk 5 -->
-                <div class="product-card">
-                    <div class="product-img-wrapper">
-                        <img src="l.jpg" alt="Produk" class="product-img">
-                        <span class="product-badge">Diskon</span>
-                    </div>
-                    <div class="product-body">
-                        <span class="product-meta">Buah</span>
-                        <h3 class="product-title">Alpukat Mentega</h3>
-                        <p class="product-description">Daging tebal, manis, kaya lemak sehat</p>
-                        <strong class="product-price">Rp 25.000 / kg</strong>
-                        <div class="product-actions">
-                            <button class="btn-add-cart">Tambah</button>
-                            <button class="btn-detail"><i class="fas fa-eye"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Produk 6 -->
-                <div class="product-card">
-                    <div class="product-img-wrapper">
-                        <img src="xl.jpg" alt="Produk" class="product-img">
-                    </div>
-                    <div class="product-body">
-                        <span class="product-meta">Umbi</span>
-                        <h3 class="product-title">Ubi Jalar Madu</h3>
-                        <p class="product-description">Manis alami, empuk saat dimasak</p>
-                        <strong class="product-price">Rp 10.000 / kg</strong>
-                        <div class="product-actions">
-                            <button class="btn-add-cart">Tambah</button>
-                            <button class="btn-detail"><i class="fas fa-eye"></i></button>
-                        </div>
-                    </div>
-                </div>
+            <div class="products-grid" id="productGrid">
+                <p class="data-status">Memuat produk...</p>
             </div>
         </div>
     </div>
@@ -304,7 +213,7 @@
                 <div class="checker-card">
                     <h3><i class="fas fa-check-circle"></i> Cek Kode Manual</h3>
                     <div class="input-group">
-                        <input type="text" id="kodeProduk" class="form-input" placeholder="Masukkan kode produk">
+                        <input type="text" id="kodeProduk" class="form-input" placeholder="Masukkan kode produk" maxlength="50">
                         <button class="btn-primary" onclick="cekKode()">Periksa</button>
                     </div>
                     <p class="hint">Atau tekan <kbd>Enter</kbd> setelah mengetik kode</p>
@@ -344,27 +253,33 @@
             <div class="guide-card blur-content" id="guideLocked1">
                 <span class="guide-number">4</span>
                 <h3>Pemupukan</h3>
-                <p>Pupuk rutin setiap 2 minggu sekali. Gunakan pupuk organik cair agar hasil lebih sehat dan ramah lingkungan. Tambahkan pupuk kandang saat tanaman mulai tumbuh besar. Hindari pemupukan berlebih.</p>
+                <p>Isi langkah ini tersedia di panduan lengkap untuk konsumen yang sudah melakukan pembelian. Silakan verifikasi pesanan Anda.</p>
             </div>
             <div class="guide-card blur-content" id="guideLocked2">
                 <span class="guide-number">5</span>
                 <h3>Pengendalian Hama</h3>
-                <p>Cek tanaman secara rutin pagi dan sore. Gunakan pestisida nabati dari daun pepaya, bawang putih, atau cabai untuk mengusir hama tanpa merusak lingkungan. Pisahkan tanaman yang terserang agar tidak menular.</p>
+                <p>Isi langkah ini tersedia di panduan lengkap untuk konsumen yang sudah melakukan pembelian. Silakan verifikasi pesanan Anda.</p>
             </div>
             <div class="guide-card blur-content" id="guideLocked3">
                 <span class="guide-number">6</span>
                 <h3>Panen & Pascapanen</h3>
-                <p>Panen saat buah/sayur sudah matang sempurna namun belum terlalu tua. Lakukan pagi hari setelah embun kering. Pisahkan berdasarkan ukuran dan kualitas. Simpan di tempat sejuk dan bersih agar tahan lama.</p>
+                <p>Isi langkah ini tersedia di panduan lengkap untuk konsumen yang sudah melakukan pembelian. Silakan verifikasi pesanan Anda.</p>
             </div>
         </div>
         <div class="lock-overlay" id="guideLockOverlay">
             <div class="guide-paywall-box" id="guidePaywall">
                 <i class="fas fa-lock"></i>
                 <h3>Konten Terkunci</h3>
-                <p>Dapatkan akses penuh ke semua langkah panduan, tips rahasia, dan jadwal perawatan tanaman lengkap.</p>
-                <button class="btn-primary" style="margin-top:15px; background:white; color:var(--primary-dark);" onclick="bukaPanduan()">
-                    <i class="fas fa-unlock"></i> Buka Akses Penuh
-                </button>
+                <p>Panduan lengkap tersedia untuk konsumen yang sudah melakukan pembelian.</p>
+                <form class="guide-akses-form" id="formAksesPanduan" novalidate>
+                    <input type="text" id="aksesKode" placeholder="Nomor Pesanan (PSN-...)" maxlength="30" autocomplete="off" aria-label="Nomor pesanan" required>
+                    <input type="tel" id="aksesWa" placeholder="No. WhatsApp saat checkout" maxlength="20" aria-label="Nomor WhatsApp saat checkout" required>
+                    <button type="submit" class="btn-primary" id="btnCekPesanan">
+                        <i class="fas fa-search"></i> Cek Pesanan
+                    </button>
+                </form>
+                <p class="guide-akses-pesan" id="aksesPesan" role="status" aria-live="polite"></p>
+                <a href="#katalog" class="guide-akses-link">Belum punya pesanan? Lihat Produk <i class="fas fa-arrow-right"></i></a>
             </div>
         </div>
     </div>
@@ -425,17 +340,17 @@
                 <form id="kontakForm">
                     <div class="form-group">
                         <label>Nama Lengkap</label>
-                        <input type="text" id="namaKontak" placeholder="Nama Anda" required>
+                        <input type="text" id="namaKontak" placeholder="Nama Anda" maxlength="100" required>
                     </div>
                     <div class="form-group">
                         <label>No. WhatsApp</label>
-                        <input type="tel" id="waKontak" placeholder="08xx-xxxx-xxxx" required>
+                        <input type="tel" id="waKontak" placeholder="08xx-xxxx-xxxx" maxlength="20" required>
                     </div>
                     <div class="form-group">
                         <label>Pesan / Kebutuhan</label>
-                        <textarea id="pesanKontak" rows="3" placeholder="Jumlah, jenis produk, jadwal pengiriman..." required></textarea>
+                        <textarea id="pesanKontak" rows="3" placeholder="Jumlah, jenis produk, jadwal pengiriman..." maxlength="1000" required></textarea>
                     </div>
-                    <button type="submit" class="btn-primary full-btn">
+                    <button type="submit" class="btn-primary full-btn" id="btnKontak">
                         <i class="fas fa-paper-plane"></i> Kirim Pesan
                     </button>
                 </form>
@@ -465,48 +380,16 @@
         <h2>Pendapat Pelanggan</h2>
         <p>Ulasan dari pelanggan yang sudah membeli produk kami</p>
     </div>
-    <div class="testimonial-grid">
-        <div class="testimonial-card">
-            <div class="stars">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-            </div>
-            <p>"Produknya selalu segar dan bersih. Harga juga sangat masuk akal. Langganan terus!"</p>
-            <strong>— Ibu Sari, Pembeli di Bandung</strong>
-        </div>
-        <div class="testimonial-card">
-            <div class="stars">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-            </div>
-            <p>"Pengiriman cepat, kemasan rapi. Sayurannya masih segar saat sampai. Terima kasih!"</p>
-            <strong>— Pak Budi, Restoran Sehat</strong>
-        </div>
-        <div class="testimonial-card">
-            <div class="stars">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star-half-alt"></i>
-            </div>
-            <p>"Sumber terpercaya untuk kebutuhan dapur harian. Kualitas stabil dan konsisten."</p>
-            <strong>— Bu Rina, Katering Sehat</strong>
-        </div>
+    <div class="testimonial-grid" id="testimonialGrid">
+        <p class="data-status">Memuat ulasan...</p>
     </div>
     <div class="testimonial-form-card">
         <h3>Bagaimana pengalaman Anda?</h3>
         <p>Berikan ulasan Anda</p>
         <form id="ulasanForm">
-            <input type="text" placeholder="Nama Anda" required>
-            <textarea rows="3" placeholder="Tulis ulasan Anda..." required></textarea>
-            <button type="submit" class="btn-primary">
+            <input type="text" id="ulasanNama" placeholder="Nama Anda" maxlength="100" required>
+            <textarea id="ulasanPesan" rows="3" placeholder="Tulis ulasan Anda..." maxlength="1000" required></textarea>
+            <button type="submit" class="btn-primary" id="btnUlasan">
                 <i class="fas fa-pen"></i> Kirim Ulasan
             </button>
         </form>
@@ -554,9 +437,9 @@
             <strong id="cartTotal">Rp 0</strong>
         </div>
         <div class="checkout-fields">
-            <input type="text" id="namaPenerima" placeholder="Nama Penerima">
-            <input type="text" id="alamatKirim" placeholder="Alamat Lengkap Pengiriman">
-            <input type="tel" id="waPenerima" placeholder="No. WhatsApp">
+            <input type="text" id="namaPenerima" placeholder="Nama Penerima" maxlength="100">
+            <input type="text" id="alamatKirim" placeholder="Alamat Lengkap Pengiriman" maxlength="255">
+            <input type="tel" id="waPenerima" placeholder="No. WhatsApp" maxlength="20">
             <select id="caraBayar">
                 <option value="">Metode Pembayaran</option>
                 <option>Transfer Bank</option>
@@ -564,7 +447,7 @@
                 <option>Bayar via WhatsApp</option>
             </select>
         </div>
-        <button class="btn-wa full-btn" onclick="pesanSekarang()">
+        <button class="btn-wa full-btn" id="btnPesan" onclick="pesanSekarang()">
             <i class="fab fa-whatsapp"></i> Pesan Sekarang via WhatsApp
         </button>
     </div>
@@ -584,17 +467,170 @@
 <div class="toast-container" id="toastContainer"></div>
 
 <!-- JAVASCRIPT -->
+<script src="js/api.js"></script>
 <script>
-// Variabel Keranjang
+// Keranjang hanya menyimpan { id: produk_id, jumlah }. Nama/harga untuk tampilan
+// diambil dari data produk terbaru; harga final selalu dihitung ulang server saat checkout.
 let keranjang = [];
-const hargaSatuan = {
-    'Kentang Pilihan Premium': 15000,
-    'Wortel Segar': 12000,
-    'Pisang Cavendish': 18000,
-    'Bayam Segar': 8000,
-    'Alpukat Mentega': 25000,
-    'Ubi Jalar Madu': 10000
-};
+// Satu-satunya sumber data katalog: GET api/produk.php (tabel produk di MySQL)
+let daftarProduk = [];
+const GAMBAR_CADANGAN = 'WhatsApp Image 2026-09-08 at 11.19.26.jpeg';
+
+// Katalog Produk (GET api/produk.php)
+async function muatProduk() {
+    const grid = document.getElementById('productGrid');
+    const info = document.getElementById('productCount');
+    grid.innerHTML = '<p class="data-status"><i class="fas fa-spinner fa-spin"></i> Memuat produk...</p>';
+    info.textContent = 'Memuat produk...';
+    try {
+        const res = await apiRequest('api/produk.php');
+        daftarProduk = res.data;
+        renderProduk();
+        perbaruiKeranjang();
+    } catch (err) {
+        info.textContent = 'Produk gagal dimuat';
+        grid.innerHTML = `
+            <div class="data-status data-error">
+                <p><i class="fas fa-exclamation-circle"></i> Gagal memuat produk. Silakan coba lagi.</p>
+                <button class="btn-primary" onclick="muatProduk()"><i class="fas fa-rotate-right"></i> Coba Lagi</button>
+            </div>`;
+        tampilkanPesan('error', err.message);
+    }
+}
+
+// Pencarian, filter kategori, dan urutan — semuanya terhadap data dari API
+function produkTampil() {
+    const kataKunci = document.getElementById('productSearch').value.trim().toLowerCase();
+    const kategori = [...document.querySelectorAll('.filter-kategori:checked')].map(c => c.value).filter(v => v !== 'semua');
+    const urutan = document.getElementById('productSort').value;
+
+    const hasil = daftarProduk.filter(p =>
+        (kategori.length === 0 || kategori.includes(p.kategori)) &&
+        (!kataKunci || `${p.nama} ${p.kategori}`.toLowerCase().includes(kataKunci))
+    );
+    const pembanding = {
+        'terbaru': (a, b) => b.id - a.id,
+        'harga-asc': (a, b) => a.harga - b.harga || a.nama.localeCompare(b.nama, 'id'),
+        'harga-desc': (a, b) => b.harga - a.harga || a.nama.localeCompare(b.nama, 'id'),
+        'nama': (a, b) => a.nama.localeCompare(b.nama, 'id')
+    };
+    return hasil.sort(pembanding[urutan] || pembanding.terbaru);
+}
+
+function renderProduk() {
+    const grid = document.getElementById('productGrid');
+    const info = document.getElementById('productCount');
+    if (daftarProduk.length === 0) {
+        info.textContent = 'Menampilkan 0 produk';
+        grid.innerHTML = '<p class="data-status">Belum ada produk tersedia.</p>';
+        return;
+    }
+    const tampil = produkTampil();
+    info.textContent = `Menampilkan ${tampil.length} produk`;
+    if (tampil.length === 0) {
+        grid.innerHTML = '<p class="data-status">Produk tidak ditemukan. Coba ubah kata kunci atau filter.</p>';
+        return;
+    }
+    grid.innerHTML = tampil.map(p => {
+        const habis = p.stok <= 0;
+        return `
+        <div class="product-card${habis ? ' stok-habis' : ''}" data-id="${p.id}">
+            <div class="product-img-wrapper">
+                <img src="${escapeHTML(p.gambar || GAMBAR_CADANGAN)}" alt="${escapeHTML(p.nama)}" class="product-img" loading="lazy"
+                     onerror="this.onerror=null; this.src=GAMBAR_CADANGAN; this.classList.add('img-cadangan');">
+                ${habis ? '<span class="product-badge badge-habis">Stok Habis</span>'
+                        : (p.badge ? `<span class="product-badge">${escapeHTML(p.badge)}</span>` : '')}
+            </div>
+            <div class="product-body">
+                <span class="product-meta">${escapeHTML(p.kategori)}</span>
+                <h3 class="product-title">${escapeHTML(p.nama)}</h3>
+                <p class="product-description">${escapeHTML(p.deskripsi)}</p>
+                <strong class="product-price">${formatRupiah(p.harga)} / ${escapeHTML(p.satuan)}</strong>
+                <span class="product-stok">${habis ? 'Stok habis' : `Stok: ${p.stok.toLocaleString('id-ID')} ${escapeHTML(p.satuan)}`}</span>
+                <div class="product-actions">
+                    <button class="btn-add-cart"${habis ? ' disabled' : ''}>${habis ? 'Stok Habis' : 'Tambah'}</button>
+                    <button class="btn-detail"><i class="fas fa-eye"></i></button>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+// "Semua Produk" dan kategori tertentu saling eksklusif
+document.querySelectorAll('.filter-kategori').forEach(cb => cb.addEventListener('change', () => {
+    const semua = document.querySelector('.filter-kategori[value="semua"]');
+    const lain = [...document.querySelectorAll('.filter-kategori:not([value="semua"])')];
+    if (cb === semua && semua.checked) lain.forEach(c => c.checked = false);
+    if (cb !== semua && cb.checked) semua.checked = false;
+    if (!lain.some(c => c.checked)) semua.checked = true;
+    renderProduk();
+}));
+document.getElementById('productSearch').addEventListener('input', renderProduk);
+document.getElementById('productSort').addEventListener('change', renderProduk);
+document.getElementById('filterReset').addEventListener('click', () => {
+    document.getElementById('productSearch').value = '';
+    document.getElementById('productSort').value = 'terbaru';
+    document.querySelectorAll('.filter-kategori').forEach(c => c.checked = c.value === 'semua');
+    renderProduk();
+});
+
+// Testimoni (GET api/testimoni.php)
+function bintang(rating) {
+    let html = '';
+    for (let i = 1; i <= 5; i++) {
+        if (rating >= i) html += '<i class="fas fa-star"></i>';
+        else if (rating >= i - 0.5) html += '<i class="fas fa-star-half-alt"></i>';
+        else html += '<i class="far fa-star"></i>';
+    }
+    return html;
+}
+
+async function muatTestimoni() {
+    const grid = document.getElementById('testimonialGrid');
+    try {
+        const res = await apiRequest('api/testimoni.php');
+        if (res.data.length === 0) {
+            grid.innerHTML = '<p class="data-status">Belum ada ulasan.</p>';
+            return;
+        }
+        grid.innerHTML = res.data.map(t => `
+            <div class="testimonial-card">
+                <div class="stars">${bintang(t.rating)}</div>
+                <p>"${escapeHTML(t.pesan)}"</p>
+                <strong>— ${escapeHTML(t.nama)}</strong>
+            </div>
+        `).join('');
+    } catch (err) {
+        grid.innerHTML = `<p class="data-status data-error"><i class="fas fa-exclamation-circle"></i> Ulasan gagal dimuat: ${escapeHTML(err.message)}</p>`;
+    }
+}
+
+// Status loading tombol
+function setLoading(button, loading, teksLoading = 'Memproses...') {
+    if (!button) return;
+    if (loading) {
+        button.dataset.htmlAsli = button.innerHTML;
+        button.disabled = true;
+        button.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${teksLoading}`;
+    } else {
+        button.disabled = false;
+        if (button.dataset.htmlAsli) button.innerHTML = button.dataset.htmlAsli;
+    }
+}
+
+// Buka tab kosong langsung saat klik (agar tidak diblokir popup blocker),
+// lalu arahkan ke WhatsApp setelah data tersimpan di database.
+function bukaTabWA() {
+    const tab = window.open('', '_blank');
+    if (tab) tab.opener = null;
+    return tab;
+}
+
+function arahkanKeWA(tab, teks) {
+    const link = `https://wa.me/6285797187917?text=${encodeURIComponent(teks)}`;
+    if (tab && !tab.closed) tab.location.href = link;
+    else window.open(link, '_blank');
+}
 
 // Navigasi Mobile
 document.getElementById('menuBtn').addEventListener('click', () => {
@@ -628,17 +664,31 @@ function hitungPanen() {
     tampilkanPesan('success', 'Perhitungan selesai!');
 }
 
-// Cek Kode Produk
-function cekKode() {
+// Cek Kode Produk (GET api/verifikasi.php)
+async function cekKode() {
     const kode = document.getElementById('kodeProduk').value.trim().toUpperCase();
-    const daftarValid = ['TANI-001','TANI-002','TANI-003','TANI-004','TANI-005'];
-    
+
     const el = document.getElementById('verifikasiHasil');
     if (!kode) {
         el.innerHTML = '<em>Masukkan kode produk terlebih dahulu</em>';
         return;
     }
-    if (daftarValid.includes(kode)) {
+    if (!/^[A-Z0-9][A-Z0-9\-\/]{1,49}$/.test(kode)) {
+        el.innerHTML = '<em>Format kode tidak valid. Gunakan huruf, angka, "-" atau "/". Contoh: TANI-001</em>';
+        return;
+    }
+
+    el.innerHTML = '<em><i class="fas fa-spinner fa-spin"></i> Memeriksa kode...</em>';
+    let data;
+    try {
+        data = (await apiRequest('api/verifikasi.php?kode=' + encodeURIComponent(kode))).data;
+    } catch (err) {
+        el.innerHTML = `<div class="verification-invalid">${escapeHTML(err.message)}</div>`;
+        tampilkanPesan('error', err.message);
+        return;
+    }
+
+    if (data.valid) {
         el.innerHTML = `
             <div class="verification-valid">
                 <div class="verification-result">
@@ -648,11 +698,11 @@ function cekKode() {
                         <strong>TERVERIFIKASI — Produk Asli</strong>
                         <div class="verification-code">
                             <span class="verification-label">Kode:</span>
-                            <span>${kode}</span>
+                            <span>${escapeHTML(data.kode)}</span>
                         </div>
                         <div class="verification-meta">
-                            <span><i class="fas fa-calendar"></i> Terdaftar: 20 Sep 2026</span>
-                            <span><i class="fas fa-map-marker-alt"></i> Asal: Bandung</span>
+                            <span><i class="fas fa-calendar"></i> Terdaftar: ${escapeHTML(formatTanggal(data.tanggal_terdaftar))}</span>
+                            <span><i class="fas fa-map-marker-alt"></i> Asal: ${escapeHTML(data.asal || '-')}</span>
                         </div>
                     </div>
                 </div>
@@ -667,7 +717,7 @@ function cekKode() {
                     <div>
                         <div class="verification-label">Status Produk</div>
                         <strong>TIDAK TERDAFTAR — Hati-hati Barang Palsu</strong>
-                        <p style="margin-top:8px; font-size:0.9rem;">Kode <code>${kode}</code> tidak ditemukan dalam sistem kami.</p>
+                        <p style="margin-top:8px; font-size:0.9rem;">Kode <code>${escapeHTML(kode)}</code> tidak ditemukan dalam sistem kami.</p>
                     </div>
                 </div>
             </div>
@@ -680,25 +730,84 @@ document.getElementById('kodeProduk').addEventListener('keypress', e => {
     if (e.key === 'Enter') cekKode();
 });
 
-// Buka Panduan Penuh
-function bukaPanduan() {
+// Panduan Penuh — akses ditentukan server berdasarkan pesanan terkonfirmasi
+// (api/akses_panduan.php). Tidak ada status akses yang disimpan di browser.
+function bukaPanduan(langkah) {
+    langkah.forEach((l, i) => {
+        const kartu = document.getElementById('guideLocked' + (i + 1));
+        if (!kartu) return;
+        kartu.classList.remove('blur-content');
+        kartu.innerHTML = `
+            <span class="guide-number">${Number(l.no)}</span>
+            <h3>${escapeHTML(l.judul)}</h3>
+            <p>${escapeHTML(l.isi)}</p>`;
+    });
     document.getElementById('guideContainer').classList.add('unlocked');
-    document.getElementById('guidePaywall').style.display = 'none';
     document.getElementById('guideLockOverlay').style.display = 'none';
-    document.querySelectorAll('.blur-content').forEach(el => el.style.filter = 'none');
-    tampilkanPesan('success', 'Akses penuh dibuka! Selamat membaca 📖');
 }
 
-// Keranjang
-document.querySelectorAll('.btn-add-cart').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const card = this.closest('.product-card');
-        const nama = card.querySelector('.product-title').textContent;
-        const harga = hargaSatuan[nama] || 10000;
-        keranjang.push({ nama, harga, jumlah: 1 });
-        perbaruiKeranjang();
-        tampilkanPesan('success', `${nama} ditambahkan ke keranjang`);
-    });
+function pesanAksesPanduan(teks, jenis) {
+    const el = document.getElementById('aksesPesan');
+    el.textContent = teks;
+    el.className = 'guide-akses-pesan' + (jenis ? ' is-' + jenis : '');
+}
+
+async function cekAksesPanduan() {
+    try {
+        const res = await apiRequest('api/akses_panduan.php?halaman=beranda');
+        if (res.hasAccess) bukaPanduan(res.data.langkah);
+    } catch (err) {
+        pesanAksesPanduan(err.message, 'error');
+    }
+}
+
+document.getElementById('formAksesPanduan').addEventListener('submit', async e => {
+    e.preventDefault();
+    const kode = document.getElementById('aksesKode').value.trim().toUpperCase();
+    const wa = document.getElementById('aksesWa').value.trim();
+    if (!/^PSN-\d{6}-[0-9A-F]{6}$/.test(kode)) {
+        return pesanAksesPanduan('Format nomor pesanan tidak valid. Contoh: PSN-260925-A1B2C3.', 'error');
+    }
+    if (!waValid(wa)) {
+        return pesanAksesPanduan('Nomor WhatsApp tidak valid. Contoh: 081234567890.', 'error');
+    }
+
+    const tombol = document.getElementById('btnCekPesanan');
+    setLoading(tombol, true, 'Memeriksa...');
+    try {
+        const res = await apiRequest('api/akses_panduan.php', {
+            method: 'POST',
+            body: { halaman: 'beranda', kode, wa }
+        });
+        if (res.hasAccess) {
+            bukaPanduan(res.data.langkah);
+            tampilkanPesan('success', 'Pesanan terverifikasi. Selamat membaca 📖');
+        } else {
+            pesanAksesPanduan(res.message, 'warning');
+        }
+    } catch (err) {
+        pesanAksesPanduan(err.message, 'error');
+    } finally {
+        setLoading(tombol, false);
+    }
+});
+
+// Keranjang (produk dibuat dinamis, jadi pakai event delegation)
+document.getElementById('productGrid').addEventListener('click', e => {
+    const btn = e.target.closest('.btn-add-cart');
+    if (!btn) return;
+    const id = Number(btn.closest('.product-card').dataset.id);
+    const produk = daftarProduk.find(p => p.id === id);
+    if (!produk || produk.stok <= 0) return;
+    const item = keranjang.find(i => i.id === id);
+    if ((item ? item.jumlah : 0) + 1 > produk.stok) {
+        tampilkanPesan('error', `Stok ${produk.nama} hanya ${produk.stok} ${produk.satuan}`);
+        return;
+    }
+    if (item) item.jumlah += 1;
+    else keranjang.push({ id, jumlah: 1 });
+    perbaruiKeranjang();
+    tampilkanPesan('success', `${produk.nama} ditambahkan ke keranjang`);
 });
 
 function perbaruiKeranjang() {
@@ -716,12 +825,14 @@ function perbaruiKeranjang() {
     
     let total = 0;
     items.innerHTML = keranjang.map((item, idx) => {
-        total += item.harga * item.jumlah;
+        // Harga tampilan dari data produk terbaru (bukan harga yang disimpan di keranjang)
+        const produk = daftarProduk.find(p => p.id === item.id);
+        if (produk) total += produk.harga * item.jumlah;
         return `
             <div class="cart-item-row">
                 <div class="cart-item-info">
-                    <strong>${item.nama}</strong>
-                    <span>Rp ${item.harga.toLocaleString('id-ID')} × ${item.jumlah}</span>
+                    <strong>${produk ? escapeHTML(produk.nama) : 'Produk tidak tersedia'}</strong>
+                    <span>${produk ? `${formatRupiah(produk.harga)} × ${item.jumlah}` : 'Hapus dari keranjang untuk melanjutkan'}</span>
                 </div>
                 <div class="qty-control">
                     <button onclick="ubahJumlah(${idx}, -1)">−</button>
@@ -736,6 +847,11 @@ function perbaruiKeranjang() {
 }
 
 function ubahJumlah(index, delta) {
+    const produk = daftarProduk.find(p => p.id === keranjang[index].id);
+    if (delta > 0 && produk && keranjang[index].jumlah + delta > produk.stok) {
+        tampilkanPesan('error', `Stok ${produk.nama} hanya ${produk.stok} ${produk.satuan}`);
+        return;
+    }
     keranjang[index].jumlah += delta;
     if (keranjang[index].jumlah <= 0) keranjang.splice(index, 1);
     perbaruiKeranjang();
@@ -749,25 +865,63 @@ function tutupKeranjang() {
     document.getElementById('cartModal').classList.remove('active');
 }
 
-function pesanSekarang() {
+// Simpan pesanan ke database (POST api/pesanan.php), lalu lanjut ke WhatsApp
+async function pesanSekarang() {
     if (keranjang.length === 0) {
         alert('Keranjang masih kosong!');
         return;
     }
-    const nama = document.getElementById('namaPenerima').value || 'Tidak diisi';
-    const alamat = document.getElementById('alamatKirim').value || 'Tidak diisi';
-    const wa = document.getElementById('waPenerima').value || 'Tidak diisi';
-    const bayar = document.getElementById('caraBayar').value || 'Tidak diisi';
-    
-    let pesan = 'Halo, saya ingin memesan:\n\n';
-    keranjang.forEach(i => {
-        pesan += `✅ ${i.nama} — ${i.jumlah} × Rp ${i.harga.toLocaleString('id-ID')} = Rp ${(i.harga*i.jumlah).toLocaleString('id-ID')}\n`;
-    });
-    pesan += `\n📝 Data Penerima:\nNama: ${nama}\nAlamat: ${alamat}\nWA: ${wa}\nMetode: ${bayar}`;
-    
-    const link = `https://wa.me/6285797187917?text=${encodeURIComponent(pesan)}`;
-    window.open(link, '_blank');
-    tampilkanPesan('success', 'Membuka WhatsApp...');
+    const nama = document.getElementById('namaPenerima').value.trim();
+    const alamat = document.getElementById('alamatKirim').value.trim();
+    const wa = document.getElementById('waPenerima').value.trim();
+    const bayar = document.getElementById('caraBayar').value;
+
+    let error = '';
+    if (nama.length < 3) error = 'Nama penerima minimal 3 karakter.';
+    else if (alamat.length < 10) error = 'Alamat pengiriman minimal 10 karakter.';
+    else if (!waValid(wa)) error = 'Nomor WhatsApp tidak valid. Contoh: 081234567890.';
+    else if (!bayar) error = 'Pilih metode pembayaran.';
+    if (error) {
+        tampilkanPesan('error', error);
+        return;
+    }
+
+    const tombol = document.getElementById('btnPesan');
+    setLoading(tombol, true, 'Menyimpan pesanan...');
+    const tabWA = bukaTabWA();
+    try {
+        const res = await apiRequest('api/pesanan.php', {
+            method: 'POST',
+            body: {
+                nama, alamat, wa, metode: bayar,
+                items: keranjang.map(i => ({ produk_id: i.id, jumlah: i.jumlah }))
+            }
+        });
+        const order = res.data;
+
+        // Harga & total memakai data yang sudah dihitung ulang oleh server
+        let pesan = `Halo, saya ingin memesan (No. Pesanan: ${order.kode_pesanan}):\n\n`;
+        order.items.forEach(i => {
+            pesan += `✅ ${i.nama} — ${i.jumlah} × ${formatRupiah(i.harga)} = ${formatRupiah(i.subtotal)}\n`;
+        });
+        pesan += `\nTotal: ${formatRupiah(order.total)}`;
+        pesan += `\n\n📝 Data Penerima:\nNama: ${nama}\nAlamat: ${alamat}\nWA: ${wa}\nMetode: ${bayar}`;
+        arahkanKeWA(tabWA, pesan);
+
+        keranjang = [];
+        perbaruiKeranjang();
+        ['namaPenerima', 'alamatKirim', 'waPenerima', 'caraBayar'].forEach(id => document.getElementById(id).value = '');
+        tutupKeranjang();
+        tampilkanPesan('success', `Pesanan ${order.kode_pesanan} tersimpan. Membuka WhatsApp...`);
+        muatProduk(); // tampilkan stok terbaru
+    } catch (err) {
+        if (tabWA) tabWA.close();
+        tampilkanPesan('error', err.message);
+        // Stok/produk berubah di database → segarkan katalog & keranjang
+        if (err.status === 422) muatProduk();
+    } finally {
+        setLoading(tombol, false);
+    }
 }
 
 // Galeri
@@ -791,21 +945,60 @@ function tutupGaleri() {
 }
 
 // Form Kontak & Ulasan
-document.getElementById('kontakForm').addEventListener('submit', function(e) {
+// POST api/kontak.php, lalu lanjut ke WhatsApp
+document.getElementById('kontakForm').addEventListener('submit', async function(e) {
     e.preventDefault();
-    const nama = document.getElementById('namaKontak').value;
-    const wa = document.getElementById('waKontak').value;
-    const pesan = document.getElementById('pesanKontak').value;
-    const teks = `Halo, saya ${nama}.\n\n${pesan}\n\nHubungi via WA: ${wa}`;
-    window.open(`https://wa.me/6285797187917?text=${encodeURIComponent(teks)}`, '_blank');
-    this.reset();
-    tampilkanPesan('success', 'Pesan dikirim! 📩');
+    const form = this;
+    const nama = document.getElementById('namaKontak').value.trim();
+    const wa = document.getElementById('waKontak').value.trim();
+    const pesan = document.getElementById('pesanKontak').value.trim();
+
+    let error = '';
+    if (nama.length < 3) error = 'Nama lengkap minimal 3 karakter.';
+    else if (!waValid(wa)) error = 'Nomor WhatsApp tidak valid. Contoh: 081234567890.';
+    else if (pesan.length < 5) error = 'Pesan minimal 5 karakter.';
+    if (error) {
+        tampilkanPesan('error', error);
+        return;
+    }
+
+    const tombol = document.getElementById('btnKontak');
+    setLoading(tombol, true, 'Mengirim...');
+    const tabWA = bukaTabWA();
+    try {
+        await apiRequest('api/kontak.php', { method: 'POST', body: { nama, wa, pesan } });
+        arahkanKeWA(tabWA, `Halo, saya ${nama}.\n\n${pesan}\n\nHubungi via WA: ${wa}`);
+        form.reset();
+        tampilkanPesan('success', 'Pesan dikirim! 📩');
+    } catch (err) {
+        if (tabWA) tabWA.close();
+        tampilkanPesan('error', err.message);
+    } finally {
+        setLoading(tombol, false);
+    }
 });
 
-document.getElementById('ulasanForm').addEventListener('submit', function(e) {
+// POST api/testimoni.php — ulasan tampil setelah disetujui admin
+document.getElementById('ulasanForm').addEventListener('submit', async function(e) {
     e.preventDefault();
-    tampilkanPesan('success', 'Terima kasih atas ulasan Anda! ⭐');
-    this.reset();
+    const form = this;
+    const nama = document.getElementById('ulasanNama').value.trim();
+    const pesan = document.getElementById('ulasanPesan').value.trim();
+
+    if (nama.length < 2) return tampilkanPesan('error', 'Nama minimal 2 karakter.');
+    if (pesan.length < 5) return tampilkanPesan('error', 'Ulasan minimal 5 karakter.');
+
+    const tombol = document.getElementById('btnUlasan');
+    setLoading(tombol, true, 'Mengirim...');
+    try {
+        const res = await apiRequest('api/testimoni.php', { method: 'POST', body: { nama, pesan } });
+        tampilkanPesan('success', res.message + ' ⭐');
+        form.reset();
+    } catch (err) {
+        tampilkanPesan('error', err.message);
+    } finally {
+        setLoading(tombol, false);
+    }
 });
 
 // Pesan Notifikasi
@@ -825,6 +1018,68 @@ document.querySelectorAll('.modal-overlay').forEach(modal => {
         if (e.target === modal) modal.classList.remove('active');
     });
 });
+
+// Animasi UI: navbar saat scroll, parallax hero, scroll reveal, badge keranjang
+(function initAnimasiUI() {
+    const kurangiGerak = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const navbar = document.querySelector('.navbar');
+    const hero = document.querySelector('.hero');
+
+    let menunggu = false;
+    function saatScroll() {
+        const y = window.scrollY;
+        navbar.classList.toggle('is-scrolled', y > 8);
+        if (!kurangiGerak && y < hero.offsetHeight) {
+            hero.style.setProperty('--hero-shift', (y * 0.12).toFixed(1) + 'px');
+        }
+        menunggu = false;
+    }
+    window.addEventListener('scroll', () => {
+        if (!menunggu) { menunggu = true; requestAnimationFrame(saatScroll); }
+    }, { passive: true });
+    saatScroll();
+
+    // Badge keranjang "berdenyut" setiap jumlah berubah
+    const badge = document.getElementById('cartBadge');
+    new MutationObserver(() => {
+        badge.classList.remove('bump');
+        void badge.offsetWidth; // restart animasi
+        badge.classList.add('bump');
+    }).observe(badge, { childList: true });
+
+    if (!document.documentElement.classList.contains('js-reveal')) return;
+
+    // Scroll reveal; kartu dalam satu grup muncul bergantian (stagger)
+    const grupReveal = [
+        { sel: '.quick-card', jeda: 90, awal: 700 },
+        { sel: '.section-heading' },
+        { sel: '.calc-box, .checker-box', jeda: 100 },
+        { sel: '.catalog-layout' },
+        { sel: '.guide-container' },
+        { sel: '.gallery-card', jeda: 80 },
+        { sel: '.farmer-card', jeda: 100 },
+        { sel: '#testimonialGrid, .testimonial-form-card', jeda: 100 }
+    ];
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+        });
+    }, { threshold: 0, rootMargin: '0px 0px -8% 0px' });
+    grupReveal.forEach(({ sel, jeda = 0, awal = 0 }) => {
+        document.querySelectorAll(sel).forEach((el, i) => {
+            el.classList.add('reveal');
+            el.style.setProperty('--reveal-delay', (awal + i * jeda) + 'ms');
+            observer.observe(el);
+        });
+    });
+})();
+
+// Muat data dari database saat halaman dibuka
+muatProduk();
+muatTestimoni();
+cekAksesPanduan();
 </script>
 </body>
 </html>

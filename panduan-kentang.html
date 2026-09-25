@@ -18,6 +18,7 @@
             --border-color: #DCDDE1;
             --shadow: 0 5px 20px rgba(0,0,0,.08);
             --radius: 14px;
+            --success: #2E7D32;
         }
         * {
             box-sizing: border-box;
@@ -209,6 +210,23 @@
             text-decoration: none;
             box-shadow: 0 5px 15px rgba(0,0,0,.2);
         }
+        .akses-form { display: grid; gap: 10px; max-width: 420px; margin: 0 auto 12px; }
+        .akses-form input {
+            width: 100%; padding: 12px 14px; border: 0; border-radius: 10px;
+            font-size: .95rem; color: var(--text-main);
+        }
+        .akses-form input:focus { outline: 3px solid rgba(255,255,255,.5); }
+        .akses-form .btn-buy { width: 100%; cursor: pointer; }
+        .akses-form .btn-buy:disabled { opacity: .7; cursor: wait; transform: none; }
+        .akses-pesan:empty { display: none; }
+        .akses-pesan {
+            max-width: 420px; margin: 0 auto 12px !important; padding: 10px 12px;
+            border-radius: 8px; font-size: .88rem !important; opacity: 1 !important;
+        }
+        .akses-warning { background: #FFF8E1; color: #7A5200; }
+        .akses-error { background: #FFEBEE; color: #B71C1C; }
+        .akses-info { font-size: .8rem !important; margin-bottom: 10px !important; }
+        .btn-link { color: white; font-weight: 700; font-size: .9rem; text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -243,31 +261,33 @@
             <p>Tanam bibit kentang sedalam 10–15 cm dengan jarak antar tanaman 30–40 cm. Letakkan tunas menghadap ke atas.</p>
         </div>
 
-        <!-- BAGIAN TERKUNCI = DIKABURKAN -->
-        <div class="blur-content">
+        <!-- BAGIAN TERKUNCI = DIKABURKAN
+             Isi asli tidak ada di HTML; dikirim server (api/akses_panduan.php)
+             hanya untuk konsumen dengan pesanan terverifikasi. -->
+        <div class="blur-content" id="langkahTerkunci" aria-hidden="true">
             <div class="step">
                 <h3><span>4</span> Penyiraman & Pemupukan</h3>
-                <p>Siram tanaman secara teratur, jaga tanah tetap lembap tapi tidak becek. Gunakan pupuk kandang saat tanam dan pupuk organik cair setiap 2 minggu sekali agar pertumbuhan umbi maksimal. Hindari pupuk kimia berlebih agar rasa kentang tetap enak dan sehat.</p>
+                <p>Isi langkah ini tersedia di panduan lengkap untuk konsumen yang sudah melakukan pembelian produk kami. Silakan verifikasi pesanan Anda.</p>
             </div>
 
             <div class="step">
                 <h3><span>5</span> Penggemburan Tanah</h3>
-                <p>Timbun tanah ke pangkal batang setinggi 15–20 cm saat tanaman mencapai tinggi 20–30 cm. Ini penting agar umbi yang tumbuh tidak terkena sinar matahari dan berubah warna menjadi hijau (beracun). Lakukan penggemburan 2–3 kali selama masa pertumbuhan.</p>
+                <p>Isi langkah ini tersedia di panduan lengkap untuk konsumen yang sudah melakukan pembelian produk kami. Silakan verifikasi pesanan Anda.</p>
             </div>
 
             <div class="step">
                 <h3><span>6</span> Pencegahan Hama & Penyakit</h3>
-                <p>Hama utama kentang adalah ulat, kutu daun, dan kumbang. Cegah dengan menanam bawang merah di sekitarnya sebagai tanaman pengusir hama. Cabut tanaman yang sakit segera agar tidak menular. Gunakan pestisida alami dari air rendaman tembakau atau bawang putih.</p>
+                <p>Isi langkah ini tersedia di panduan lengkap untuk konsumen yang sudah melakukan pembelian produk kami. Silakan verifikasi pesanan Anda.</p>
             </div>
 
             <div class="step">
                 <h3><span>7</span> Masa Panen</h3>
-                <p>Kentang siap dipanen saat daun mulai menguning dan mengering, biasanya 90–120 hari setelah tanam. Cek umbi di tanah, jika kulit sudah kuat dan tidak mudah lepas, berarti sudah siap. Cabut tanaman perlahan dan biarkan kentang di tanah 1–2 hari untuk mengeringkan kulit sebelum disimpan.</p>
+                <p>Isi langkah ini tersedia di panduan lengkap untuk konsumen yang sudah melakukan pembelian produk kami. Silakan verifikasi pesanan Anda.</p>
             </div>
 
             <div class="step">
                 <h3><span>8</span> Penyimpanan</h3>
-                <p>Simpan kentang di tempat yang sejuk, gelap, dan berventilasi baik. Suhu ideal 4–10°C. Jangan simpan di tempat lembap atau terkena cahaya karena akan tumbuh tunas dan berubah warna menjadi hijau. Pisahkan kentang yang rusak agar tidak membusukkan yang lain.</p>
+                <p>Isi langkah ini tersedia di panduan lengkap untuk konsumen yang sudah melakukan pembelian produk kami. Silakan verifikasi pesanan Anda.</p>
             </div>
         </div>
 
@@ -277,14 +297,18 @@
             <p class="lock-text">Masih ada langkah lengkap Perawatan, Pencegahan Hama, Panen & Penyimpanan yang belum dibuka</p>
         </div>
 
-        <!-- KOTAK PEMBELIAN -->
+        <!-- KOTAK AKSES: verifikasi pesanan -->
         <div class="paywall-box" id="pay-section">
-            <h3>🔓 Buka Panduan Lengkap</h3>
-            <p>Dapatkan panduan lengkap 8 langkah terperinci + tips rahasia agar panen melimpah</p>
-            <div class="price-tag">Rp 15.000</div>
-            <button class="btn-buy" onclick="beliAkses()">
-                💳 Buka Sekarang
-            </button>
+            <h3>🔒 Konten Terkunci</h3>
+            <p>Panduan lengkap tersedia untuk konsumen yang sudah melakukan pembelian.</p>
+            <form class="akses-form" id="formAkses" novalidate>
+                <input type="text" id="aksesKode" placeholder="Nomor Pesanan (contoh: PSN-260925-A1B2C3)" maxlength="30" autocomplete="off" required>
+                <input type="tel" id="aksesWa" placeholder="No. WhatsApp saat checkout" maxlength="20" required>
+                <button type="submit" class="btn-buy" id="btnCekPesanan">🔎 Cek Pesanan</button>
+            </form>
+            <p class="akses-pesan" id="aksesPesan" role="status" aria-live="polite"></p>
+            <p class="akses-info">Nomor pesanan tercantum di pesan WhatsApp saat Anda checkout. Panduan terbuka setelah pesanan dikonfirmasi admin.</p>
+            <a href="index.html#katalog" class="btn-link">Belum punya pesanan? Lihat Produk →</a>
         </div>
     </div>
 </div>
@@ -292,28 +316,74 @@
 <!-- Tombol WhatsApp -->
 <a href="https://wa.me/6281234567890" target="_blank" class="floating-wa">💬</a>
 
+<script src="js/api.js"></script>
 <script>
-    // Cek apakah sudah beli
-    function cekAkses() {
-        const sudahBeli = localStorage.getItem('panduanKentangLengkap');
-        if (sudahBeli === 'ya') {
-            document.getElementById('guide-wrapper').classList.add('unlocked');
+    // Akses panduan ditentukan server berdasarkan pesanan di database
+    // (api/akses_panduan.php). Tidak ada status akses yang disimpan di browser.
+    const wrapper = document.getElementById('guide-wrapper');
+    const pesanEl = document.getElementById('aksesPesan');
+
+    function tampilkanPesanAkses(teks, jenis = 'info') {
+        pesanEl.textContent = teks;
+        pesanEl.className = 'akses-pesan akses-' + jenis;
+    }
+
+    function bukaKonten(langkah) {
+        const wadah = document.getElementById('langkahTerkunci');
+        wadah.innerHTML = langkah.map(l => `
+            <div class="step">
+                <h3><span>${Number(l.no)}</span> ${escapeHTML(l.judul)}</h3>
+                <p>${escapeHTML(l.isi)}</p>
+            </div>
+        `).join('');
+        wadah.removeAttribute('aria-hidden');
+        wrapper.classList.add('unlocked');
+    }
+
+    // Cek akses sesi saat halaman dibuka
+    async function cekAkses() {
+        try {
+            const res = await apiRequest('api/akses_panduan.php?halaman=panduan-kentang');
+            if (res.hasAccess) bukaKonten(res.data.langkah);
+        } catch (err) {
+            tampilkanPesanAkses(err.message, 'error');
         }
     }
 
-    // Proses beli
-    function beliAkses() {
-        const konfirmasi = confirm('Setelah klik OK, Anda akan diarahkan ke WhatsApp untuk menyelesaikan pembayaran. Setelah dibayar, panduan akan terbuka selamanya.');
-        if (konfirmasi) {
-            // Simpan status akses
-            localStorage.setItem('panduanKentangLengkap', 'ya');
-            // Buka langsung
-            document.getElementById('guide-wrapper').classList.add('unlocked');
-            alert('✅ Terima kasih! Panduan lengkap sudah terbuka. Selamat membaca!');
-            // Buka WhatsApp (ganti nomornya ke nomor kamu)
-            window.open('https://wa.me/6281234567890?text=Halo%2C%20saya%20mau%20beli%20Panduan%20Lengkap%20Menanam%20Kentang%20Rp15.000', '_blank');
+    // Verifikasi pesanan: nomor pesanan + nomor WhatsApp saat checkout
+    document.getElementById('formAkses').addEventListener('submit', async e => {
+        e.preventDefault();
+        const kode = document.getElementById('aksesKode').value.trim().toUpperCase();
+        const wa = document.getElementById('aksesWa').value.trim();
+
+        if (!/^PSN-\d{6}-[0-9A-F]{6}$/.test(kode)) {
+            return tampilkanPesanAkses('Format nomor pesanan tidak valid. Contoh: PSN-260925-A1B2C3.', 'error');
         }
-    }
+        if (!waValid(wa)) {
+            return tampilkanPesanAkses('Nomor WhatsApp tidak valid. Contoh: 081234567890.', 'error');
+        }
+
+        const tombol = document.getElementById('btnCekPesanan');
+        tombol.disabled = true;
+        tombol.textContent = '⏳ Memeriksa...';
+        try {
+            const res = await apiRequest('api/akses_panduan.php', {
+                method: 'POST',
+                body: { halaman: 'panduan-kentang', kode, wa }
+            });
+            if (res.hasAccess) {
+                bukaKonten(res.data.langkah);
+                wrapper.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                tampilkanPesanAkses(res.message, 'warning');
+            }
+        } catch (err) {
+            tampilkanPesanAkses(err.message, 'error');
+        } finally {
+            tombol.disabled = false;
+            tombol.textContent = '🔎 Cek Pesanan';
+        }
+    });
 
     // Jalankan saat halaman dibuka
     cekAkses();

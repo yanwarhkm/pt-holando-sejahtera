@@ -112,6 +112,9 @@
     }
     .status-pending { background: #FFF3E0; color: #E65100; }
     .status-done { background: #E8F5E9; color: #2E7D32; }
+    .status-process { background: #E3F2FD; color: #1565C0; }
+    .status-cancel { background: #FFEBEE; color: #C62828; }
+    .status-select { padding: 6px 8px; border: 1px solid #ddd; border-radius: 6px; font-size: .8rem; margin-right: 4px; }
     .btn {
       padding: 7px 12px;
       border: none;
@@ -238,18 +241,24 @@
   <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Kembali ke Beranda</a>
 </div>
 
+<script src="js/api.js"></script>
 <script>
 // ==== CEK LOGIN ====
-if (localStorage.getItem("adminSudahLogin") !== "ya") {
-  alert("Silakan login terlebih dahulu!");
+// Sesi diverifikasi server; semua data di halaman ini diambil dari API yang
+// menolak request tanpa sesi admin (401).
+function keLogin() {
   window.location.href = "login.html";
 }
 
 // Keluar
-function keluarAdmin() {
+async function keluarAdmin() {
   if (confirm("Yakin ingin keluar?")) {
-    localStorage.removeItem("adminSudahLogin");
-    window.location.href = "login.html";
+    try {
+      await apiRequest("api/auth.php", { method: "POST", body: { action: "logout" } });
+    } catch (e) {
+      // Tetap arahkan ke login walaupun request gagal
+    }
+    keLogin();
   }
 }
 
@@ -261,92 +270,164 @@ function bukaTab(namaTab) {
   document.getElementById("tab-" + namaTab).classList.add("active");
 }
 
+const STATUS_PESANAN = {
+  baru: { label: "Baru", kelas: "status-pending" },
+  diproses: { label: "Diproses", kelas: "status-process" },
+  selesai: { label: "Selesai", kelas: "status-done" },
+  batal: { label: "Batal", kelas: "status-cancel" }
+};
+const TRANSISI_STATUS = { baru: ["diproses", "batal"], diproses: ["selesai", "batal"], selesai: [], batal: [] };
+
+function tampilkanStatus(id, teks, gagal = false) {
+  document.getElementById(id).innerHTML =
+    `<div class="empty-state"${gagal ? ' style="color:var(--danger);"' : ''}>${escapeHTML(teks)}</div>`;
+}
+
 // Tampilkan Data
-function muatData() {
-  // Mitra
-  const mitra = JSON.parse(localStorage.getItem("daftarMitra") || "[]");
+function renderMitra(mitra) {
   document.getElementById("jumlahMitra").textContent = mitra.length;
   if (mitra.length === 0) {
-    document.getElementById("daftarMitra").innerHTML = `<div class="empty-state">Belum ada mitra terdaftar.</div>`;
-  } else {
-    let html = `<table><tr><th>No</th><th>Nama</th><th>WhatsApp</th><th>Lokasi</th><th>Luas Lahan</th></tr>`;
-    mitra.forEach((m, i) => {
-      html += `<tr>
-        <td>${i+1}</td>
-        <td>${m.nama || "-"}</td>
-        <td>${m.wa || "-"}</td>
-        <td>${m.lokasi || "-"}</td>
-        <td>${m.lahan || "-"} m²</td>
-      </tr>`;
-    });
-    html += `</table>`;
-    document.getElementById("daftarMitra").innerHTML = html;
+    tampilkanStatus("daftarMitra", "Belum ada mitra terdaftar.");
+    return;
   }
+  let html = `<table><tr><th>No</th><th>Nama</th><th>WhatsApp</th><th>Lokasi</th><th>Luas Lahan</th><th>Aksi</th></tr>`;
+  mitra.forEach((m, i) => {
+    html += `<tr>
+      <td>${i+1}</td>
+      <td>${escapeHTML(m.nama)}</td>
+      <td>${escapeHTML(m.wa)}</td>
+      <td>${escapeHTML(m.lokasi)}</td>
+      <td>${Number(m.lahan).toLocaleString("id-ID")} m²</td>
+      <td><button class="btn btn-danger" data-label="mitra ${escapeHTML(m.nama)}" onclick="hapusData('mitra', ${m.id}, this)"><i class="fa-solid fa-trash"></i></button></td>
+    </tr>`;
+  });
+  html += `</table>`;
+  document.getElementById("daftarMitra").innerHTML = html;
+}
 
-  // Pesanan
-  const pesanan = JSON.parse(localStorage.getItem("daftarPesanan") || "[]");
+function renderPesanan(pesanan) {
   document.getElementById("jumlahPesanan").textContent = pesanan.length;
   if (pesanan.length === 0) {
-    document.getElementById("daftarPesanan").innerHTML = `<div class="empty-state">Belum ada pesanan.</div>`;
-  } else {
-    let html = `<table><tr><th>No</th><th>Nama</th><th>WhatsApp</th><th>Total</th><th>Status</th></tr>`;
-    pesanan.forEach((p, i) => {
-      html += `<tr>
-        <td>${i+1}</td>
-        <td>${p.nama || "-"}</td>
-        <td>${p.wa || "-"}</td>
-        <td>${p.total || "-"}</td>
-        <td><span class="status-badge status-pending">Baru</span></td>
-      </tr>`;
-    });
-    html += `</table>`;
-    document.getElementById("daftarPesanan").innerHTML = html;
+    tampilkanStatus("daftarPesanan", "Belum ada pesanan.");
+    return;
   }
+  let html = `<table><tr><th>No</th><th>Kode</th><th>Nama</th><th>WhatsApp</th><th>Total</th><th>Status</th><th>Aksi</th></tr>`;
+  pesanan.forEach((p, i) => {
+    const status = STATUS_PESANAN[p.status] || STATUS_PESANAN.baru;
+    const rincian = p.items.map(it => `${it.nama} × ${it.jumlah}`).join(", ");
+    // Hanya status saat ini + transisi yang diizinkan server (api/pesanan.php)
+    const pilihan = [p.status, ...(TRANSISI_STATUS[p.status] || [])].map(nilai =>
+      `<option value="${nilai}"${nilai === p.status ? " selected" : ""}>${STATUS_PESANAN[nilai].label}</option>`).join("");
+    html += `<tr>
+      <td>${i+1}</td>
+      <td title="${escapeHTML(formatTanggal(p.created_at, true))}">${escapeHTML(p.kode_pesanan)}</td>
+      <td title="${escapeHTML(p.alamat)}">${escapeHTML(p.nama)}</td>
+      <td>${escapeHTML(p.wa)}</td>
+      <td title="${escapeHTML(rincian)}">${formatRupiah(p.total)}</td>
+      <td><span class="status-badge ${status.kelas}">${status.label}</span></td>
+      <td style="white-space:nowrap;">
+        <select class="status-select" onchange="ubahStatusPesanan(${p.id}, this)">${pilihan}</select>
+        <button class="btn btn-danger" data-label="pesanan ${escapeHTML(p.kode_pesanan)}" onclick="hapusData('pesanan', ${p.id}, this)"><i class="fa-solid fa-trash"></i></button>
+      </td>
+    </tr>`;
+  });
+  html += `</table>`;
+  document.getElementById("daftarPesanan").innerHTML = html;
+}
 
-  // Akses Panduan
-  const panduan = JSON.parse(localStorage.getItem("pembeliPanduan") || "[]");
+function renderPanduan(panduan) {
   document.getElementById("jumlahPanduan").textContent = panduan.length;
   if (panduan.length === 0) {
-    document.getElementById("daftarPanduan").innerHTML = `<div class="empty-state">Belum ada pembeli panduan.</div>`;
-  } else {
-    let html = `<table><tr><th>No</th><th>Waktu</th></tr>`;
-    panduan.forEach((p, i) => {
-      html += `<tr>
-        <td>${i+1}</td>
-        <td>${p.waktu || "-"}</td>
-      </tr>`;
-    });
-    html += `</table>`;
-    document.getElementById("daftarPanduan").innerHTML = html;
+    tampilkanStatus("daftarPanduan", "Belum ada pembeli panduan.");
+    return;
   }
+  let html = `<table><tr><th>No</th><th>Waktu</th><th>No. Pesanan</th><th>Halaman</th></tr>`;
+  panduan.forEach((p, i) => {
+    html += `<tr>
+      <td>${i+1}</td>
+      <td>${escapeHTML(formatTanggal(p.created_at, true))}</td>
+      <td>${escapeHTML(p.kode_pesanan || "-")}</td>
+      <td>${p.sumber === "panduan-kentang" ? "Panduan Kentang" : "Beranda"}</td>
+    </tr>`;
+  });
+  html += `</table>`;
+  document.getElementById("daftarPanduan").innerHTML = html;
+}
 
-  // Testimoni
-  const testimoni = JSON.parse(localStorage.getItem("daftarTestimoni") || "[]");
+function renderTestimoni(testimoni) {
   document.getElementById("jumlahTestimoni").textContent = testimoni.length;
   if (testimoni.length === 0) {
-    document.getElementById("daftarTestimoni").innerHTML = `<div class="empty-state">Belum ada testimoni.</div>`;
-  } else {
-    let html = `<table><tr><th>No</th><th>Nama</th><th>Pesan</th></tr>`;
-    testimoni.forEach((t, i) => {
-      html += `<tr>
-        <td>${i+1}</td>
-        <td>${t.nama || "-"}</td>
-        <td>${t.pesan || "-"}</td>
-      </tr>`;
-    });
-    html += `</table>`;
-    document.getElementById("daftarTestimoni").innerHTML = html;
+    tampilkanStatus("daftarTestimoni", "Belum ada testimoni.");
+    return;
+  }
+  let html = `<table><tr><th>No</th><th>Nama</th><th>Pesan</th><th>Status</th><th>Aksi</th></tr>`;
+  testimoni.forEach((t, i) => {
+    html += `<tr>
+      <td>${i+1}</td>
+      <td>${escapeHTML(t.nama)}</td>
+      <td>${escapeHTML(t.pesan)}</td>
+      <td><span class="status-badge ${t.tampil ? "status-done" : "status-pending"}">${t.tampil ? "Tampil" : "Menunggu"}</span></td>
+      <td style="white-space:nowrap;">
+        <button class="btn btn-primary" onclick="ubahTampilTestimoni(${t.id}, ${!t.tampil}, this)">
+          <i class="fa-solid ${t.tampil ? "fa-eye-slash" : "fa-eye"}"></i> ${t.tampil ? "Sembunyikan" : "Tampilkan"}
+        </button>
+        <button class="btn btn-danger" data-label="testimoni dari ${escapeHTML(t.nama)}" onclick="hapusData('testimoni', ${t.id}, this)"><i class="fa-solid fa-trash"></i></button>
+      </td>
+    </tr>`;
+  });
+  html += `</table>`;
+  document.getElementById("daftarTestimoni").innerHTML = html;
+}
+
+const SUMBER_DATA = [
+  { url: "api/mitra.php", wadah: "daftarMitra", render: renderMitra },
+  { url: "api/pesanan.php", wadah: "daftarPesanan", render: renderPesanan },
+  { url: "api/panduan.php", wadah: "daftarPanduan", render: renderPanduan },
+  { url: "api/testimoni.php?semua=1", wadah: "daftarTestimoni", render: renderTestimoni }
+];
+
+async function muatData() {
+  const hasil = await Promise.allSettled(SUMBER_DATA.map(s => apiRequest(s.url)));
+  if (hasil.some(h => h.status === "rejected" && h.reason.status === 401)) {
+    alert("Silakan login terlebih dahulu!");
+    keLogin();
+    return;
+  }
+  hasil.forEach((h, i) => {
+    const sumber = SUMBER_DATA[i];
+    if (h.status === "fulfilled") sumber.render(h.value.data);
+    else tampilkanStatus(sumber.wadah, "Gagal memuat data: " + h.reason.message, true);
+  });
+}
+
+// Jalankan PUT/DELETE lalu muat ulang tabel
+async function jalankanAksi(aksi, elemen) {
+  if (elemen) elemen.disabled = true;
+  try {
+    await aksi();
+    await muatData();
+  } catch (err) {
+    if (err.status === 401) return keLogin();
+    alert(err.message);
+    if (elemen) elemen.disabled = false;
   }
 }
 
-// Catat pembeli panduan
-function catatPembeliPanduan() {
-  const list = JSON.parse(localStorage.getItem("pembeliPanduan") || "[]");
-  list.unshift({ waktu: new Date().toLocaleString("id-ID") });
-  localStorage.setItem("pembeliPanduan", JSON.stringify(list));
+function ubahStatusPesanan(id, select) {
+  jalankanAksi(() => apiRequest(`api/pesanan.php?id=${id}`, { method: "PUT", body: { status: select.value } }), select);
+}
+
+function ubahTampilTestimoni(id, tampil, tombol) {
+  jalankanAksi(() => apiRequest(`api/testimoni.php?id=${id}`, { method: "PUT", body: { tampil } }), tombol);
+}
+
+function hapusData(jenis, id, tombol) {
+  if (!confirm(`Hapus ${tombol.dataset.label}?`)) return;
+  jalankanAksi(() => apiRequest(`api/${jenis}.php?id=${id}`, { method: "DELETE" }), tombol);
 }
 
 // Jalankan saat dibuka
+SUMBER_DATA.forEach(s => tampilkanStatus(s.wadah, "Memuat data..."));
 muatData();
 </script>
 

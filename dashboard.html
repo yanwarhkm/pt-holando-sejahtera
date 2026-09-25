@@ -58,12 +58,120 @@
     .status-sah { color: #2c5f2d; font-weight: 600; }
     .status-tidak { color: #c62828; font-weight: 600; }
 
+    /* --- PESANAN --- */
+    .konten { min-width: 0; }
+    .halaman[hidden] { display: none; }
+    .pesanan-toolbar { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .pesanan-cari { position: relative; flex: 1 1 260px; }
+    .pesanan-cari i { position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); color: #999; }
+    .pesanan-cari input, #filterStatus, #filterProduk {
+      width: 100%; height: 42px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.9rem; background: white;
+    }
+    .pesanan-cari input { padding: 0 0.85rem 0 2.4rem; }
+    #filterStatus, #filterProduk { flex: 0 0 160px; padding: 0 0.75rem; }
+    .pesanan-cari input:focus, #filterStatus:focus, #filterProduk:focus { outline: none; border-color: var(--hijau); box-shadow: 0 0 0 3px rgba(44,95,45,0.12); }
+    .pesanan-info { color: #777; font-size: 0.85rem; margin-bottom: 0.5rem; }
+    .pesanan-info.gagal { color: #c62828; }
+    .tabel-pesanan td { vertical-align: middle; }
+    .kode-pesanan { font-family: ui-monospace, Consolas, monospace; font-weight: 700; color: var(--gelap); white-space: nowrap; }
+    .status-pill { display: inline-block; padding: 0.25rem 0.7rem; border-radius: 20px; font-size: 0.78rem; font-weight: 700; white-space: nowrap; }
+    .status-baru { background: #FFF3E0; color: #E65100; }
+    .status-diproses { background: #E3F2FD; color: #1565C0; }
+    .status-selesai { background: #e6f4ea; color: #2c5f2d; }
+    .status-batal { background: #FFEBEE; color: #C62828; }
+    .aksi-grup { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .btn-aksi {
+      display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 0.8rem;
+      border: 1px solid transparent; border-radius: 8px; font-size: 0.82rem; font-weight: 600;
+      cursor: pointer; transition: 0.2s; white-space: nowrap;
+    }
+    .btn-aksi:disabled { opacity: 0.6; cursor: wait; }
+    .btn-garis { background: white; border-color: #ddd; color: var(--gelap); }
+    .btn-garis:hover { border-color: var(--hijau); color: var(--hijau); }
+    .btn-proses { background: #1565C0; color: white; }
+    .btn-selesai { background: var(--hijau); color: white; }
+    .btn-batal { background: white; border-color: #f1c0c0; color: #c62828; }
+    .btn-proses:hover, .btn-selesai:hover { filter: brightness(1.1); }
+    .btn-batal:hover { background: #FFEBEE; }
+
+    /* Detail pesanan */
+    .modal { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: 1rem; background: rgba(0,0,0,0.45); }
+    .modal[hidden] { display: none; }
+    .modal-isi { width: min(640px, 100%); max-height: 90vh; overflow-y: auto; }
+    .modal-kepala { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .modal-kepala h3 { margin: 0; }
+    .modal-tutup { border: 0; background: transparent; font-size: 1.6rem; line-height: 1; color: #777; cursor: pointer; }
+    .detail-grid { display: grid; grid-template-columns: 140px 1fr; gap: 0.5rem 1rem; margin-bottom: 1.25rem; font-size: 0.9rem; }
+    .detail-grid dt { color: #777; }
+    .detail-grid dd { color: var(--gelap); overflow-wrap: anywhere; }
+    .detail-item td:nth-child(n+2), .detail-item th:nth-child(n+2) { text-align: right; white-space: nowrap; }
+    .detail-item tfoot td { font-weight: 700; border-bottom: 0; }
+    .detail-aksi { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid #eee; align-items: center; }
+    .detail-aksi p { color: #777; font-size: 0.85rem; }
+
+    /* Produk */
+    .produk-sel { display: flex; align-items: center; gap: 0.75rem; min-width: 0; }
+    .produk-thumb { width: 44px; height: 44px; flex-shrink: 0; border-radius: 8px; object-fit: cover; background: #f5f5f5; }
+    .produk-nama { font-weight: 600; color: var(--gelap); }
+    .produk-sub { color: #777; font-size: 0.8rem; }
+    .stok-rendah { color: #E65100; font-weight: 600; }
+    .stok-nol { color: #c62828; font-weight: 700; }
+    .status-aktif { background: #e6f4ea; color: #2c5f2d; }
+    .status-nonaktif { background: #eceff1; color: #546e7a; }
+    .btn-hapus { background: white; border-color: #f1c0c0; color: #c62828; padding: 0.45rem 0.6rem; }
+    .btn-hapus:hover { background: #FFEBEE; }
+    .form-produk { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem 1rem; }
+    .form-produk label { display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.85rem; font-weight: 600; color: #555; }
+    .form-produk .penuh { grid-column: 1 / -1; }
+    .form-produk input, .form-produk select, .form-produk textarea {
+      width: 100%; padding: 0.6rem 0.75rem; border: 1px solid #ddd; border-radius: 8px;
+      font: inherit; font-weight: 400; color: var(--gelap); background: white;
+    }
+    .form-produk input:focus, .form-produk select:focus, .form-produk textarea:focus { outline: none; border-color: var(--hijau); box-shadow: 0 0 0 3px rgba(44,95,45,0.12); }
+    .form-produk textarea { resize: vertical; }
+    .fp-bawah { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .fp-bawah img { width: 64px; height: 64px; border-radius: 8px; object-fit: cover; background: #f5f5f5; }
+    .form-produk .fp-aktif { flex-direction: row; align-items: center; gap: 0.5rem; }
+    .fp-aktif input { width: auto; }
+    .fp-pesan { color: #c62828; font-size: 0.85rem; }
+    .fp-pesan:empty { display: none; }
+    .fp-tombol { display: flex; justify-content: flex-end; gap: 0.5rem; }
+
+    /* Notifikasi */
+    .notif {
+      position: fixed; right: 1.5rem; bottom: 1.5rem; z-index: 60; max-width: min(360px, calc(100vw - 3rem));
+      padding: 0.85rem 1.1rem; border-radius: 10px; background: #263238; color: white; font-size: 0.9rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18); border-left: 4px solid #4caf50;
+    }
+    .notif.gagal { border-left-color: #e53935; }
+
     /* --- RESPONSIF HP --- */
     @media (max-width: 900px) {
       .sidebar { width: 70px; padding: 1.5rem 0.75rem; }
       .sidebar-logo span, .sidebar-menu a span { display: none; }
       .konten { margin-left: 70px; }
       .grid-bawah { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 700px) {
+      #halaman-pesanan .atasan, #halaman-produk .atasan { gap: 0.75rem; align-items: flex-start; }
+      #halaman-pesanan .atasan .btn-aksi span, #halaman-produk .atasan .btn-aksi span { display: none; }
+      #filterStatus, #filterProduk { flex: 1 1 100%; }
+      .form-produk { grid-template-columns: 1fr; }
+      .detail-grid { grid-template-columns: 1fr; gap: 0.15rem; }
+      .detail-grid dd { margin-bottom: 0.5rem; }
+      .detail-item th, .detail-item td { padding: 0.6rem 0.35rem; font-size: 0.85rem; }
+    }
+    /* Tabel pesanan menjadi kartu saat kotaknya sempit (bergantung lebar sidebar, bukan layar) */
+    #halaman-pesanan .kotak, #halaman-produk .kotak { container-type: inline-size; }
+    @container (max-width: 760px) {
+      .tabel-pesanan thead { display: none; }
+      .tabel-pesanan, .tabel-pesanan tbody, .tabel-pesanan tr, .tabel-pesanan td { display: block; width: 100%; }
+      .tabel-pesanan tr { padding: 0.75rem 0; border-bottom: 1px solid #eee; }
+      .tabel-pesanan td { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.3rem 0; border: 0; text-align: right; }
+      .tabel-pesanan td::before { content: attr(data-label); color: #777; font-weight: 600; text-align: left; }
+      .tabel-pesanan td.kosong { display: block; text-align: center; }
+      .tabel-pesanan td.kosong::before { content: none; }
+      .tabel-pesanan .aksi-grup { justify-content: flex-end; }
     }
   </style>
 </head>
@@ -76,7 +184,9 @@
       <span>Beken Seeds</span>
     </div>
     <ul class="sidebar-menu">
-      <li><a href="#" class="aktif"><i class="fa-solid fa-chart-pie"></i> <span>Dashboard</span></a></li>
+      <li><a href="#dashboard" class="aktif" data-halaman="dashboard" title="Dashboard"><i class="fa-solid fa-chart-pie"></i> <span>Dashboard</span></a></li>
+      <li><a href="#pesanan" data-halaman="pesanan" title="Pesanan"><i class="fa-solid fa-clipboard-list"></i> <span>Pesanan</span></a></li>
+      <li><a href="#produk" data-halaman="produk" title="Produk"><i class="fa-solid fa-box-open"></i> <span>Produk</span></a></li>
       <li><a href="#"><i class="fa-solid fa-qrcode"></i> <span>Daftar Sertifikat</span></a></li>
       <li><a href="#"><i class="fa-solid fa-plus-circle"></i> <span>Tambah Benih</span></a></li>
       <li><a href="#"><i class="fa-solid fa-users"></i> <span>Pengguna</span></a></li>
@@ -91,6 +201,7 @@
 
   <!-- KONTEN UTAMA -->
   <main class="konten">
+   <section class="halaman" id="halaman-dashboard">
     <div class="atasan">
       <div>
         <h1>Selamat Datang, Admin! 👋</h1>
@@ -106,22 +217,22 @@
       <div class="kartu">
         <i class="fa-solid fa-file-certificate kartu-ikon"></i>
         <div class="kartu-judul">Total Sertifikat</div>
-        <div class="kartu-angka">1.248</div>
+        <div class="kartu-angka" id="statTotalKode">…</div>
       </div>
       <div class="kartu">
         <i class="fa-solid fa-check-circle kartu-ikon"></i>
         <div class="kartu-judul">Terverifikasi</div>
-        <div class="kartu-angka">1.192</div>
+        <div class="kartu-angka" id="statKodeAktif">…</div>
       </div>
       <div class="kartu">
         <i class="fa-solid fa-eye kartu-ikon"></i>
         <div class="kartu-judul">Hari Ini</div>
-        <div class="kartu-angka">38</div>
+        <div class="kartu-angka" id="statHariIni">…</div>
       </div>
       <div class="kartu">
         <i class="fa-solid fa-boxes-stacked kartu-ikon"></i>
         <div class="kartu-judul">Stok Benih</div>
-        <div class="kartu-angka">5.420</div>
+        <div class="kartu-angka" id="statStok">…</div>
       </div>
     </div>
 
@@ -137,57 +248,183 @@
               <th>Status</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>BPSB-JABAR/KNT/2026/042</td>
-              <td>10 menit lalu</td>
-              <td class="status-sah">✅ Sah</td>
-            </tr>
-            <tr>
-              <td>BPSB-JABAR/KNT/2026/041</td>
-              <td>25 menit lalu</td>
-              <td class="status-sah">✅ Sah</td>
-            </tr>
-            <tr>
-              <td>BPSB-JABAR/KNT/2026/039</td>
-              <td>1 jam lalu</td>
-              <td class="status-tidak">⚠️ Tidak Dikenal</td>
-            </tr>
-            <tr>
-              <td>BPSB-JABAR/KNT/2026/038</td>
-              <td>2 jam lalu</td>
-              <td class="status-sah">✅ Sah</td>
-            </tr>
+          <tbody id="tabelAktivitas">
+            <tr><td colspan="3" style="color:#777;">Memuat aktivitas...</td></tr>
           </tbody>
         </table>
       </div>
 
       <div class="kotak">
         <h3>Ringkasan</h3>
-        <p style="margin-bottom:1rem; color:#555;">Semua sistem berjalan normal ✅</p>
-        <ul style="list-style:none; line-height:1.8;">
-          <li><i class="fa-solid fa-check" style="color:#2c5f2d;"></i> Database tersambung</li>
-          <li><i class="fa-solid fa-check" style="color:#2c5f2d;"></i> QR Scanner aktif</li>
-          <li><i class="fa-solid fa-check" style="color:#2c5f2d;"></i> Kode manual aktif</li>
-          <li><i class="fa-solid fa-exclamation-triangle" style="color:#f59e0b;"></i> Stok menipis: Kode #039</li>
-        </ul>
+        <p style="margin-bottom:1rem; color:#555;" id="ringkasanStatus">Memeriksa sistem...</p>
+        <ul style="list-style:none; line-height:1.8;" id="ringkasanList"></ul>
         <br>
         <a href="index.html#qr-section" style="display:inline-block; background:var(--hijau); color:white; padding:0.75rem 1.25rem; border-radius:8px; text-decoration:none; font-weight:600;">
           <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Halaman Verifikasi
         </a>
       </div>
     </div>
+   </section>
+
+   <!-- HALAMAN PESANAN -->
+   <section class="halaman" id="halaman-pesanan" hidden>
+    <div class="atasan">
+      <div>
+        <h1>Pesanan</h1>
+        <p class="tanggal">Konfirmasi pesanan customer. Status <strong>Diproses</strong> atau <strong>Selesai</strong> membuka akses panduan.</p>
+      </div>
+      <button type="button" class="btn-aksi btn-garis" onclick="muatPesanan()">
+        <i class="fa-solid fa-rotate-right"></i> <span>Muat Ulang</span>
+      </button>
+    </div>
+
+    <div class="kotak">
+      <div class="pesanan-toolbar">
+        <div class="pesanan-cari">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="search" id="cariPesanan" placeholder="Cari nomor pesanan, nama, atau WhatsApp" aria-label="Cari pesanan">
+        </div>
+        <select id="filterStatus" aria-label="Filter status">
+          <option value="">Semua</option>
+          <option value="baru">Baru</option>
+          <option value="diproses">Diproses</option>
+          <option value="selesai">Selesai</option>
+          <option value="batal">Batal</option>
+        </select>
+      </div>
+      <p class="pesanan-info" id="infoPesanan">Memuat pesanan...</p>
+      <table class="tabel-pesanan">
+        <thead>
+          <tr>
+            <th>Nomor Pesanan</th>
+            <th>Customer</th>
+            <th>WhatsApp</th>
+            <th>Total</th>
+            <th>Tanggal</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="tabelPesanan"></tbody>
+      </table>
+    </div>
+   </section>
+
+   <!-- HALAMAN PRODUK -->
+   <section class="halaman" id="halaman-produk" hidden>
+    <div class="atasan">
+      <div>
+        <h1>Produk</h1>
+        <p class="tanggal">Data katalog konsumen. Produk <strong>Nonaktif</strong> tidak tampil di katalog dan tidak bisa dipesan.</p>
+      </div>
+      <button type="button" class="btn-aksi btn-selesai" onclick="bukaFormProduk()">
+        <i class="fa-solid fa-plus"></i> <span>Tambah Produk</span>
+      </button>
+    </div>
+
+    <div class="kotak">
+      <div class="pesanan-toolbar">
+        <div class="pesanan-cari">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="search" id="cariProduk" placeholder="Cari nama atau kategori produk" aria-label="Cari produk">
+        </div>
+        <select id="filterProduk" class="filter-select" aria-label="Filter status produk">
+          <option value="">Semua</option>
+          <option value="aktif">Aktif</option>
+          <option value="nonaktif">Nonaktif</option>
+          <option value="habis">Stok Habis</option>
+        </select>
+      </div>
+      <p class="pesanan-info" id="infoProduk">Memuat produk...</p>
+      <table class="tabel-pesanan tabel-produk">
+        <thead>
+          <tr>
+            <th>Produk</th>
+            <th>Kategori</th>
+            <th>Harga</th>
+            <th>Stok</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="tabelProduk"></tbody>
+      </table>
+    </div>
+   </section>
   </main>
 
-  <script>
-    // Cek Login — lindungi halaman ini
-    if (localStorage.getItem("beken_login") !== "ok") {
-      window.location.href = "login.html";
-    }
+  <!-- FORM PRODUK (tambah / edit) -->
+  <div class="modal" id="modalProduk" hidden>
+    <div class="kotak modal-isi" role="dialog" aria-modal="true" aria-labelledby="judulFormProduk">
+      <div class="modal-kepala">
+        <h3 id="judulFormProduk">Tambah Produk</h3>
+        <button type="button" class="modal-tutup" onclick="tutupFormProduk()" aria-label="Tutup">&times;</button>
+      </div>
+      <form id="formProduk" class="form-produk" novalidate>
+        <label class="penuh">Nama Produk
+          <input type="text" id="fpNama" maxlength="100" required>
+        </label>
+        <label>Kategori
+          <select id="fpKategori" required>
+            <option value="Sayuran">Sayuran</option>
+            <option value="Buah">Buah</option>
+            <option value="Umbi">Umbi</option>
+          </select>
+        </label>
+        <label>Satuan
+          <input type="text" id="fpSatuan" maxlength="20" placeholder="kg, ikat, sisir..." required>
+        </label>
+        <label>Harga (Rp)
+          <input type="number" id="fpHarga" min="1" max="100000000" step="1" required>
+        </label>
+        <label>Stok
+          <input type="number" id="fpStok" min="0" max="10000000" step="1" required>
+        </label>
+        <label class="penuh">Deskripsi
+          <textarea id="fpDeskripsi" rows="2" maxlength="255"></textarea>
+        </label>
+        <label>Gambar (nama file)
+          <input type="text" id="fpGambar" maxlength="255" placeholder="contoh: sml.jpg">
+        </label>
+        <label>Label (opsional)
+          <input type="text" id="fpBadge" maxlength="30" placeholder="Baru, Populer, Diskon...">
+        </label>
+        <div class="penuh fp-bawah">
+          <img id="fpPreview" alt="Pratinjau gambar" hidden>
+          <label class="fp-aktif"><input type="checkbox" id="fpAktif" checked> Aktif (tampil di katalog)</label>
+        </div>
+        <p class="penuh fp-pesan" id="fpPesan" role="alert"></p>
+        <div class="penuh fp-tombol">
+          <button type="button" class="btn-aksi btn-garis" onclick="tutupFormProduk()">Batal</button>
+          <button type="submit" class="btn-aksi btn-selesai" id="fpSimpan"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
+  <!-- DETAIL PESANAN -->
+  <div class="modal" id="modalPesanan" hidden>
+    <div class="kotak modal-isi" role="dialog" aria-modal="true" aria-labelledby="judulDetail">
+      <div class="modal-kepala">
+        <h3 id="judulDetail">Detail Pesanan</h3>
+        <button type="button" class="modal-tutup" onclick="tutupDetail()" aria-label="Tutup">&times;</button>
+      </div>
+      <div id="isiDetail"></div>
+    </div>
+  </div>
+
+  <!-- NOTIFIKASI -->
+  <div class="notif" id="notif" role="status" aria-live="polite" hidden></div>
+
+  <script src="js/api.js"></script>
+  <script>
     // Fungsi Keluar
-    function keluarAdmin() {
-      localStorage.removeItem("beken_login");
+    async function keluarAdmin() {
+      try {
+        await apiRequest("api/auth.php", { method: "POST", body: { action: "logout" } });
+      } catch (e) {
+        // Tetap arahkan ke login walaupun request gagal
+      }
       window.location.href = "login.html";
     }
 
@@ -197,6 +434,404 @@
     const sekarang = new Date();
     document.getElementById('tanggalSekarang').textContent = 
       hari[sekarang.getDay()] + ', ' + sekarang.getDate() + ' ' + bulan[sekarang.getMonth()] + ' ' + sekarang.getFullYear();
+
+    function waktuRelatif(value) {
+      const detik = Math.max(0, Math.floor((Date.now() - parseTanggal(value)) / 1000));
+      if (detik < 60) return 'baru saja';
+      if (detik < 3600) return Math.floor(detik / 60) + ' menit lalu';
+      if (detik < 86400) return Math.floor(detik / 3600) + ' jam lalu';
+      return formatTanggal(value, true);
+    }
+
+    function itemRingkasan(ok, teks) {
+      const ikon = ok
+        ? '<i class="fa-solid fa-check" style="color:#2c5f2d;"></i>'
+        : '<i class="fa-solid fa-exclamation-triangle" style="color:#f59e0b;"></i>';
+      return `<li>${ikon} ${escapeHTML(teks)}</li>`;
+    }
+
+    // Muat statistik dari database (GET api/dashboard.php)
+    async function muatDashboard() {
+      let data;
+      try {
+        data = (await apiRequest("api/dashboard.php")).data;
+      } catch (err) {
+        // Cek Login — lindungi halaman ini
+        if (err.status === 401) {
+          window.location.href = "login.html";
+          return;
+        }
+        document.getElementById("ringkasanStatus").textContent = "Data gagal dimuat ⚠️";
+        document.getElementById("ringkasanList").innerHTML = itemRingkasan(false, err.message);
+        document.getElementById("tabelAktivitas").innerHTML =
+          `<tr><td colspan="3" class="status-tidak">${escapeHTML(err.message)}</td></tr>`;
+        return;
+      }
+
+      const angka = n => Number(n).toLocaleString('id-ID');
+      document.getElementById("statTotalKode").textContent = angka(data.total_kode);
+      document.getElementById("statKodeAktif").textContent = angka(data.kode_aktif);
+      document.getElementById("statHariIni").textContent = angka(data.verifikasi_hari_ini);
+      document.getElementById("statStok").textContent = angka(data.total_stok);
+
+      document.getElementById("tabelAktivitas").innerHTML = data.aktivitas.length === 0
+        ? '<tr><td colspan="3" style="color:#777;">Belum ada aktivitas verifikasi.</td></tr>'
+        : data.aktivitas.map(a => `
+            <tr>
+              <td>${escapeHTML(a.kode)}</td>
+              <td>${escapeHTML(waktuRelatif(a.created_at))}</td>
+              <td class="${a.valid ? 'status-sah' : 'status-tidak'}">${a.valid ? '✅ Sah' : '⚠️ Tidak Dikenal'}</td>
+            </tr>`).join('');
+
+      let list = itemRingkasan(true, 'Database tersambung')
+        + itemRingkasan(true, 'QR Scanner aktif')
+        + itemRingkasan(true, 'Kode manual aktif');
+      if (data.stok_menipis.length === 0) {
+        list += itemRingkasan(true, 'Stok benih aman');
+      } else {
+        list += data.stok_menipis.map(p => itemRingkasan(false, `Stok menipis: ${p.nama} (${angka(p.stok)} ${p.satuan})`)).join('');
+      }
+      document.getElementById("ringkasanList").innerHTML = list;
+      document.getElementById("ringkasanStatus").textContent = data.stok_menipis.length === 0
+        ? "Semua sistem berjalan normal ✅"
+        : "Sistem berjalan normal, ada stok yang perlu diperhatikan ⚠️";
+    }
+
+    /* ================= PESANAN =================
+       Data & perubahan status lewat api/pesanan.php (admin-only).
+       Aturan transisi juga ditegakkan server; di sini hanya untuk menampilkan tombol yang relevan. */
+    const LABEL_STATUS = { baru: 'Baru', diproses: 'Diproses', selesai: 'Selesai', batal: 'Batal' };
+    const TRANSISI_STATUS = { baru: ['diproses', 'batal'], diproses: ['selesai', 'batal'], selesai: [], batal: [] };
+    const TOMBOL_STATUS = {
+      diproses: { teks: 'Proses', kelas: 'btn-proses', ikon: 'fa-gears' },
+      selesai: { teks: 'Selesai', kelas: 'btn-selesai', ikon: 'fa-check' },
+      batal: { teks: 'Batalkan', kelas: 'btn-batal', ikon: 'fa-xmark' }
+    };
+    let daftarPesanan = [];
+    let detailTerbuka = null;
+
+    const pillStatus = s => `<span class="status-pill status-${escapeHTML(s)}">${escapeHTML(LABEL_STATUS[s] || s)}</span>`;
+    const tombolTransisi = p => (TRANSISI_STATUS[p.status] || []).map(s => {
+      const t = TOMBOL_STATUS[s];
+      return `<button type="button" class="btn-aksi ${t.kelas}" onclick="ubahStatus(${p.id}, '${s}', this)"><i class="fa-solid ${t.ikon}"></i> ${t.teks}</button>`;
+    }).join('');
+
+    function notif(teks, gagal = false) {
+      const el = document.getElementById('notif');
+      el.textContent = teks;
+      el.className = 'notif' + (gagal ? ' gagal' : '');
+      el.hidden = false;
+      clearTimeout(notif.timer);
+      notif.timer = setTimeout(() => { el.hidden = true; }, 3500);
+    }
+
+    async function muatPesanan() {
+      const info = document.getElementById('infoPesanan');
+      info.className = 'pesanan-info';
+      info.textContent = 'Memuat pesanan...';
+      try {
+        daftarPesanan = (await apiRequest('api/pesanan.php')).data;
+      } catch (err) {
+        if (err.status === 401) { window.location.href = 'login.html'; return; }
+        info.className = 'pesanan-info gagal';
+        info.textContent = 'Gagal memuat pesanan: ' + err.message;
+        document.getElementById('tabelPesanan').innerHTML = '';
+        return;
+      }
+      renderPesanan();
+      if (detailTerbuka !== null) bukaDetail(detailTerbuka);
+    }
+
+    function renderPesanan() {
+      const kataKunci = document.getElementById('cariPesanan').value.trim().toLowerCase();
+      const angkaKunci = kataKunci.replace(/\D/g, '');
+      const status = document.getElementById('filterStatus').value;
+      const hasil = daftarPesanan.filter(p => {
+        if (status && p.status !== status) return false;
+        if (!kataKunci) return true;
+        return p.kode_pesanan.toLowerCase().includes(kataKunci)
+          || p.nama.toLowerCase().includes(kataKunci)
+          || (angkaKunci.length >= 3 && p.wa.replace(/\D/g, '').includes(angkaKunci));
+      });
+
+      document.getElementById('infoPesanan').textContent = daftarPesanan.length === 0
+        ? 'Belum ada pesanan.'
+        : `Menampilkan ${hasil.length} dari ${daftarPesanan.length} pesanan`;
+
+      document.getElementById('tabelPesanan').innerHTML = hasil.length === 0
+        ? `<tr><td colspan="7" class="kosong" style="color:#777; text-align:center;">${daftarPesanan.length === 0 ? 'Belum ada pesanan.' : 'Tidak ada pesanan yang cocok.'}</td></tr>`
+        : hasil.map(p => `
+            <tr>
+              <td data-label="Nomor Pesanan"><span class="kode-pesanan">${escapeHTML(p.kode_pesanan)}</span></td>
+              <td data-label="Customer">${escapeHTML(p.nama)}</td>
+              <td data-label="WhatsApp">${escapeHTML(p.wa)}</td>
+              <td data-label="Total">${formatRupiah(p.total)}</td>
+              <td data-label="Tanggal">${escapeHTML(formatTanggal(p.created_at, true))}</td>
+              <td data-label="Status">${pillStatus(p.status)}</td>
+              <td data-label="Aksi">
+                <div class="aksi-grup">
+                  <button type="button" class="btn-aksi btn-garis" onclick="bukaDetail(${p.id})"><i class="fa-solid fa-eye"></i> Detail</button>
+                  ${tombolTransisi(p)}
+                </div>
+              </td>
+            </tr>`).join('');
+    }
+
+    function bukaDetail(id) {
+      const p = daftarPesanan.find(x => x.id === id);
+      if (!p) { tutupDetail(); return; }
+      detailTerbuka = id;
+      document.getElementById('judulDetail').textContent = 'Detail Pesanan ' + p.kode_pesanan;
+      const aksi = tombolTransisi(p);
+      document.getElementById('isiDetail').innerHTML = `
+        <dl class="detail-grid">
+          <dt>Nomor Pesanan</dt><dd><span class="kode-pesanan">${escapeHTML(p.kode_pesanan)}</span></dd>
+          <dt>Customer</dt><dd>${escapeHTML(p.nama)}</dd>
+          <dt>WhatsApp</dt><dd>${escapeHTML(p.wa)}</dd>
+          <dt>Alamat Pengiriman</dt><dd>${escapeHTML(p.alamat)}</dd>
+          <dt>Metode Pembayaran</dt><dd>${escapeHTML(p.metode)}</dd>
+          <dt>Tanggal Order</dt><dd>${escapeHTML(formatTanggal(p.created_at, true))}</dd>
+          <dt>Status</dt><dd>${pillStatus(p.status)}</dd>
+        </dl>
+        <table class="detail-item">
+          <thead><tr><th>Produk</th><th>Jumlah</th><th>Harga</th><th>Subtotal</th></tr></thead>
+          <tbody>
+            ${p.items.length === 0 ? '<tr><td colspan="4" style="color:#777;">Tidak ada item.</td></tr>' : p.items.map(it => `
+              <tr>
+                <td>${escapeHTML(it.nama)}</td>
+                <td>${Number(it.jumlah).toLocaleString('id-ID')}</td>
+                <td>${formatRupiah(it.harga)}</td>
+                <td>${formatRupiah(it.subtotal)}</td>
+              </tr>`).join('')}
+          </tbody>
+          <tfoot><tr><td colspan="3">Total</td><td>${formatRupiah(p.total)}</td></tr></tfoot>
+        </table>
+        <div class="detail-aksi">
+          ${aksi || `<p>Pesanan berstatus ${escapeHTML(LABEL_STATUS[p.status])} — tidak ada perubahan status lanjutan.</p>`}
+        </div>`;
+      document.getElementById('modalPesanan').hidden = false;
+    }
+
+    function tutupDetail() {
+      detailTerbuka = null;
+      document.getElementById('modalPesanan').hidden = true;
+    }
+
+    async function ubahStatus(id, statusBaru, tombol) {
+      const p = daftarPesanan.find(x => x.id === id);
+      if (!p) return;
+      if (!confirm(`Ubah status pesanan ${p.kode_pesanan} menjadi ${LABEL_STATUS[statusBaru]}?`)) return;
+      if (tombol) tombol.disabled = true;
+      try {
+        await apiRequest(`api/pesanan.php?id=${id}`, { method: 'PUT', body: { status: statusBaru } });
+        notif(`Status pesanan ${p.kode_pesanan} diubah menjadi ${LABEL_STATUS[statusBaru]}.`);
+      } catch (err) {
+        if (err.status === 401) { window.location.href = 'login.html'; return; }
+        notif(err.message, true);
+      }
+      await muatPesanan();
+    }
+
+    document.getElementById('cariPesanan').addEventListener('input', renderPesanan);
+    document.getElementById('filterStatus').addEventListener('change', renderPesanan);
+    document.getElementById('modalPesanan').addEventListener('click', e => { if (e.target.id === 'modalPesanan') tutupDetail(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && detailTerbuka !== null) tutupDetail(); });
+
+    /* ================= PRODUK =================
+       CRUD lewat api/produk.php: GET ?semua=1, POST, PUT ?id=, DELETE ?id= (semuanya admin-only).
+       Validasi final (harga, stok, kategori, gambar) dilakukan server. */
+    const BATAS_STOK_RENDAH = 50;
+    let daftarProdukAdmin = [];
+    let produkDiedit = null;
+
+    async function muatProdukAdmin() {
+      const info = document.getElementById('infoProduk');
+      info.className = 'pesanan-info';
+      info.textContent = 'Memuat produk...';
+      try {
+        daftarProdukAdmin = (await apiRequest('api/produk.php?semua=1')).data;
+      } catch (err) {
+        if (err.status === 401) { window.location.href = 'login.html'; return; }
+        info.className = 'pesanan-info gagal';
+        info.textContent = 'Gagal memuat produk: ' + err.message;
+        document.getElementById('tabelProduk').innerHTML = '';
+        return;
+      }
+      renderProdukAdmin();
+    }
+
+    function renderProdukAdmin() {
+      const kataKunci = document.getElementById('cariProduk').value.trim().toLowerCase();
+      const filter = document.getElementById('filterProduk').value;
+      const hasil = daftarProdukAdmin.filter(p =>
+        (!kataKunci || `${p.nama} ${p.kategori}`.toLowerCase().includes(kataKunci)) &&
+        (!filter || (filter === 'aktif' && p.aktif) || (filter === 'nonaktif' && !p.aktif) || (filter === 'habis' && p.stok === 0))
+      );
+      document.getElementById('infoProduk').textContent = daftarProdukAdmin.length === 0
+        ? 'Belum ada produk.'
+        : `Menampilkan ${hasil.length} dari ${daftarProdukAdmin.length} produk`;
+
+      document.getElementById('tabelProduk').innerHTML = hasil.length === 0
+        ? `<tr><td colspan="6" class="kosong" style="color:#777; text-align:center;">${daftarProdukAdmin.length === 0 ? 'Belum ada produk. Klik "Tambah Produk".' : 'Tidak ada produk yang cocok.'}</td></tr>`
+        : hasil.map(p => {
+            const kelasStok = p.stok === 0 ? 'stok-nol' : (p.stok < BATAS_STOK_RENDAH ? 'stok-rendah' : '');
+            return `
+            <tr>
+              <td data-label="Produk">
+                <div class="produk-sel">
+                  <img class="produk-thumb" src="${escapeHTML(p.gambar)}" alt="" onerror="this.style.visibility='hidden'">
+                  <div><div class="produk-nama">${escapeHTML(p.nama)}</div><div class="produk-sub">ID ${p.id}${p.badge ? ' · ' + escapeHTML(p.badge) : ''}</div></div>
+                </div>
+              </td>
+              <td data-label="Kategori">${escapeHTML(p.kategori)}</td>
+              <td data-label="Harga">${formatRupiah(p.harga)} / ${escapeHTML(p.satuan)}</td>
+              <td data-label="Stok"><span class="${kelasStok}">${p.stok === 0 ? 'Habis' : p.stok.toLocaleString('id-ID') + ' ' + escapeHTML(p.satuan)}</span></td>
+              <td data-label="Status"><span class="status-pill ${p.aktif ? 'status-aktif' : 'status-nonaktif'}">${p.aktif ? 'Aktif' : 'Nonaktif'}</span></td>
+              <td data-label="Aksi">
+                <div class="aksi-grup">
+                  <button type="button" class="btn-aksi btn-garis" onclick="bukaFormProduk(${p.id})"><i class="fa-solid fa-pen"></i> Edit</button>
+                  <button type="button" class="btn-aksi ${p.aktif ? 'btn-batal' : 'btn-selesai'}" onclick="ubahAktifProduk(${p.id}, this)">
+                    <i class="fa-solid ${p.aktif ? 'fa-eye-slash' : 'fa-eye'}"></i> ${p.aktif ? 'Nonaktifkan' : 'Aktifkan'}
+                  </button>
+                  <button type="button" class="btn-aksi btn-hapus" onclick="hapusProduk(${p.id}, this)" title="Hapus" aria-label="Hapus ${escapeHTML(p.nama)}"><i class="fa-solid fa-trash"></i></button>
+                </div>
+              </td>
+            </tr>`;
+          }).join('');
+    }
+
+    function isiPreviewGambar() {
+      const img = document.getElementById('fpPreview');
+      const nama = document.getElementById('fpGambar').value.trim();
+      img.hidden = !nama;
+      if (nama) { img.onerror = () => { img.hidden = true; }; img.src = nama; }
+    }
+
+    function bukaFormProduk(id = null) {
+      const p = id === null ? null : daftarProdukAdmin.find(x => x.id === id);
+      produkDiedit = p ? p.id : null;
+      document.getElementById('judulFormProduk').textContent = p ? 'Edit Produk' : 'Tambah Produk';
+      document.getElementById('fpNama').value = p ? p.nama : '';
+      document.getElementById('fpKategori').value = p ? p.kategori : 'Sayuran';
+      document.getElementById('fpSatuan').value = p ? p.satuan : 'kg';
+      document.getElementById('fpHarga').value = p ? p.harga : '';
+      document.getElementById('fpStok').value = p ? p.stok : '';
+      document.getElementById('fpDeskripsi').value = p ? p.deskripsi : '';
+      document.getElementById('fpGambar').value = p ? p.gambar : '';
+      document.getElementById('fpBadge').value = p ? (p.badge || '') : '';
+      document.getElementById('fpAktif').checked = p ? p.aktif : true;
+      document.getElementById('fpPesan').textContent = '';
+      isiPreviewGambar();
+      document.getElementById('modalProduk').hidden = false;
+      document.getElementById('fpNama').focus();
+    }
+
+    function tutupFormProduk() {
+      produkDiedit = null;
+      document.getElementById('modalProduk').hidden = true;
+    }
+
+    // Validasi ringan di browser; server tetap memvalidasi ulang
+    function dataFormProduk() {
+      const angka = id => document.getElementById(id).value.trim();
+      const data = {
+        nama: document.getElementById('fpNama').value.trim(),
+        kategori: document.getElementById('fpKategori').value,
+        satuan: document.getElementById('fpSatuan').value.trim(),
+        harga: angka('fpHarga'),
+        stok: angka('fpStok'),
+        deskripsi: document.getElementById('fpDeskripsi').value.trim(),
+        gambar: document.getElementById('fpGambar').value.trim(),
+        badge: document.getElementById('fpBadge').value.trim() || null,
+        aktif: document.getElementById('fpAktif').checked
+      };
+      if (data.nama.length < 3) return 'Nama produk minimal 3 karakter.';
+      if (!data.satuan) return 'Satuan wajib diisi.';
+      if (!/^\d+$/.test(data.harga) || +data.harga < 1 || +data.harga > 100000000) return 'Harga harus angka bulat antara 1 dan 100.000.000.';
+      if (!/^\d+$/.test(data.stok) || +data.stok > 10000000) return 'Stok harus angka bulat 0 atau lebih.';
+      data.harga = +data.harga;
+      data.stok = +data.stok;
+      return data;
+    }
+
+    // PUT api/produk.php mengganti seluruh field, jadi kirim data lengkap
+    const payloadProduk = p => ({
+      nama: p.nama, kategori: p.kategori, satuan: p.satuan, harga: p.harga, stok: p.stok,
+      deskripsi: p.deskripsi, gambar: p.gambar, badge: p.badge || null, aktif: p.aktif
+    });
+
+    async function simpanProduk(e) {
+      e.preventDefault();
+      const pesan = document.getElementById('fpPesan');
+      const data = dataFormProduk();
+      if (typeof data === 'string') { pesan.textContent = data; return; }
+      const tombol = document.getElementById('fpSimpan');
+      tombol.disabled = true;
+      try {
+        const res = produkDiedit === null
+          ? await apiRequest('api/produk.php', { method: 'POST', body: data })
+          : await apiRequest(`api/produk.php?id=${produkDiedit}`, { method: 'PUT', body: data });
+        tutupFormProduk();
+        notif(`${res.message} (${res.data.nama})`);
+        await muatProdukAdmin();
+      } catch (err) {
+        if (err.status === 401) { window.location.href = 'login.html'; return; }
+        pesan.textContent = err.message;
+      } finally {
+        tombol.disabled = false;
+      }
+    }
+
+    async function ubahAktifProduk(id, tombol) {
+      const p = daftarProdukAdmin.find(x => x.id === id);
+      if (!p) return;
+      const aksi = p.aktif ? 'Nonaktifkan' : 'Aktifkan';
+      if (!confirm(`${aksi} produk "${p.nama}"?${p.aktif ? '\nProduk tidak akan tampil di katalog konsumen.' : ''}`)) return;
+      tombol.disabled = true;
+      try {
+        await apiRequest(`api/produk.php?id=${id}`, { method: 'PUT', body: { ...payloadProduk(p), aktif: !p.aktif } });
+        notif(`Produk "${p.nama}" ${p.aktif ? 'dinonaktifkan' : 'diaktifkan'}.`);
+      } catch (err) {
+        if (err.status === 401) { window.location.href = 'login.html'; return; }
+        notif(err.message, true);
+      }
+      await muatProdukAdmin();
+    }
+
+    async function hapusProduk(id, tombol) {
+      const p = daftarProdukAdmin.find(x => x.id === id);
+      if (!p) return;
+      if (!confirm(`Hapus permanen produk "${p.nama}"?\nRiwayat pesanan tetap menyimpan nama & harga produk ini.\nJika hanya ingin menyembunyikan dari katalog, gunakan "Nonaktifkan".`)) return;
+      tombol.disabled = true;
+      try {
+        await apiRequest(`api/produk.php?id=${id}`, { method: 'DELETE' });
+        notif(`Produk "${p.nama}" dihapus.`);
+      } catch (err) {
+        if (err.status === 401) { window.location.href = 'login.html'; return; }
+        notif(err.message, true);
+      }
+      await muatProdukAdmin();
+    }
+
+    document.getElementById('formProduk').addEventListener('submit', simpanProduk);
+    document.getElementById('fpGambar').addEventListener('input', isiPreviewGambar);
+    document.getElementById('cariProduk').addEventListener('input', renderProdukAdmin);
+    document.getElementById('filterProduk').addEventListener('change', renderProdukAdmin);
+    document.getElementById('modalProduk').addEventListener('click', e => { if (e.target.id === 'modalProduk') tutupFormProduk(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !document.getElementById('modalProduk').hidden) tutupFormProduk(); });
+
+    /* ================= NAVIGASI SIDEBAR ================= */
+    function tampilkanHalaman() {
+      const nama = { '#pesanan': 'pesanan', '#produk': 'produk' }[location.hash] || 'dashboard';
+      document.querySelectorAll('.halaman').forEach(h => { h.hidden = h.id !== 'halaman-' + nama; });
+      document.querySelectorAll('.sidebar-menu a[data-halaman]').forEach(a => a.classList.toggle('aktif', a.dataset.halaman === nama));
+      if (nama === 'pesanan') muatPesanan();
+      if (nama === 'produk') muatProdukAdmin();
+    }
+    window.addEventListener('hashchange', tampilkanHalaman);
+    tampilkanHalaman();
+
+    muatDashboard();
   </script>
 
 </body>

@@ -225,21 +225,28 @@
     </div>
   </div>
 
+  <script src="js/api.js"></script>
   <script>
-    // ==== AKUN ADMIN ====
-    const AKUN_ADMIN = {
-      username: "admin",
-      password: "beken2026"
-    };
+    // Login diverifikasi oleh server (api/auth.php) dengan password hash di MySQL.
+    // Tidak ada username/password yang disimpan di JavaScript.
 
     // Cek jika sudah login → langsung ke dashboard
-    window.onload = function() {
-      if (localStorage.getItem("beken_login") === "ok") {
+    window.onload = async function() {
+      // "Ingat saya" hanya mengingat nama pengguna, bukan kata sandi
+      const tersimpan = localStorage.getItem("beken_username");
+      if (tersimpan) {
+        document.getElementById("username").value = tersimpan;
+        document.getElementById("ingatSandi").checked = true;
+      }
+      try {
+        await apiRequest("api/auth.php");
         window.location.href = "dashboard.html";
+      } catch (e) {
+        // Belum login — tetap di halaman ini
       }
     };
 
-    function prosesLogin(e) {
+    async function prosesLogin(e) {
       e.preventDefault();
 
       const user = document.getElementById("username").value.trim();
@@ -251,44 +258,36 @@
       // Sembunyikan pesan error
       pesan.style.display = "none";
 
+      if (!user || !pass) {
+        teks.textContent = "Nama pengguna dan kata sandi wajib diisi";
+        pesan.style.display = "flex";
+        return;
+      }
+
       // Nonaktifkan tombol
       tombol.disabled = true;
       tombol.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memproses...';
 
-      // Cek akun
-      setTimeout(() => {
-        if (user === AKUN_ADMIN.username && pass === AKUN_ADMIN.password) {
-          // BERHASIL
-          localStorage.setItem("beken_login", "ok");
-          window.location.href = "dashboard.html";
+      try {
+        await apiRequest("api/auth.php", {
+          method: "POST",
+          body: { action: "login", username: user, password: pass }
+        });
+        // BERHASIL
+        if (document.getElementById("ingatSandi").checked) {
+          localStorage.setItem("beken_username", user);
         } else {
-          // GAGAL
-          pesan.style.display = "flex";
-          if (user !== AKUN_ADMIN.username) {
-            teks.textContent = "Nama pengguna tidak ditemukan";
-          } else {
-            teks.textContent = "Kata sandi salah";
-          }
-          tombol.disabled = false;
-          tombol.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Masuk';
+          localStorage.removeItem("beken_username");
         }
-      }, 800);
+        window.location.href = "dashboard.html";
+      } catch (err) {
+        // GAGAL
+        teks.textContent = err.message;
+        pesan.style.display = "flex";
+        tombol.disabled = false;
+        tombol.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Masuk';
+      }
     }
-    function cekLogin(e) {
-  e.preventDefault();
-  
-  const user = document.getElementById("adminUser").value.trim();
-  const pass = document.getElementById("adminPass").value.trim();
-  const errorBox = document.getElementById("errorBox");
-
-  if (user === ADMIN_USERNAME && pass === ADMIN_PASSWORD) {
-    localStorage.setItem("adminSudahLogin", "ya");
-    // Langsung ke Panel Admin
-    window.location.href = "admin.html";
-  } else {
-    errorBox.style.display = "block";
-  }
-}
   </script>
 
 </body>
