@@ -24,12 +24,25 @@ CREATE TABLE IF NOT EXISTS admin (
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------
--- Katalog produk (index.html #katalog)
+-- Jenis/varietas bibit kentang (kategori katalog). Dikelola admin
+-- (dashboard.html → Bibit → Jenis Bibit). Generasi & ukuran bukan kategori.
+-- ---------------------------------------------------------
+CREATE TABLE IF NOT EXISTS kategori_bibit (
+    id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nama       VARCHAR(50) NOT NULL,
+    aktif      TINYINT(1)  NOT NULL DEFAULT 1,
+    created_at DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_kategori_bibit_nama (nama)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------
+-- Katalog bibit kentang (index.html #katalog)
 -- ---------------------------------------------------------
 CREATE TABLE IF NOT EXISTS produk (
-    id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    nama       VARCHAR(100) NOT NULL,
-    kategori   ENUM('Sayuran','Buah','Umbi') NOT NULL,
+    id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nama        VARCHAR(100) NOT NULL,
+    kategori_id INT UNSIGNED NULL,
     deskripsi  VARCHAR(255) NOT NULL DEFAULT '',
     harga      INT UNSIGNED NOT NULL,
     satuan     VARCHAR(20)  NOT NULL DEFAULT 'kg',
@@ -40,6 +53,9 @@ CREATE TABLE IF NOT EXISTS produk (
     created_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     KEY idx_produk_aktif (aktif),
+    KEY idx_produk_kategori (kategori_id),
+    CONSTRAINT fk_produk_kategori FOREIGN KEY (kategori_id) REFERENCES kategori_bibit(id)
+        ON UPDATE CASCADE,
     CONSTRAINT chk_produk_harga CHECK (harga > 0)
 ) ENGINE=InnoDB;
 
@@ -55,9 +71,14 @@ CREATE TABLE IF NOT EXISTS pesanan (
     metode_bayar  ENUM('Transfer Bank','COD (Bayar di Tempat)','Bayar via WhatsApp') NOT NULL,
     total         BIGINT UNSIGNED NOT NULL DEFAULT 0,
     status        ENUM('baru','diproses','selesai','batal') NOT NULL DEFAULT 'baru',
+    -- 1 = stok produk sudah dipotong untuk pesanan ini dan belum dikembalikan
+    stok_dipotong TINYINT(1) NOT NULL DEFAULT 0,
+    -- Token acak per percobaan checkout; mencegah pesanan ganda saat request diulang
+    checkout_token CHAR(32) NULL,
     created_at    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     UNIQUE KEY uq_pesanan_kode (kode_pesanan),
+    UNIQUE KEY uq_pesanan_checkout_token (checkout_token),
     KEY idx_pesanan_status (status),
     KEY idx_pesanan_created (created_at)
 ) ENGINE=InnoDB;
@@ -109,13 +130,14 @@ CREATE TABLE IF NOT EXISTS log_verifikasi (
 
 -- ---------------------------------------------------------
 -- Testimoni / ulasan (index.html #ulasanForm, admin.html)
--- Ulasan baru tampil = 0 sampai disetujui admin.
+-- Ulasan dari form publik langsung tampil (tampil = 1); admin dapat menyembunyikan.
 -- ---------------------------------------------------------
 CREATE TABLE IF NOT EXISTS testimoni (
     id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     nama       VARCHAR(100)  NOT NULL,
     pesan      VARCHAR(1000) NOT NULL,
-    rating     DECIMAL(2,1)  NOT NULL DEFAULT 5.0,
+    -- NULL = ulasan lama tanpa rating (jangan dianggap 5)
+    rating     DECIMAL(2,1)  NULL DEFAULT NULL,
     tampil     TINYINT(1)    NOT NULL DEFAULT 0,
     created_at DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
     KEY idx_testimoni_tampil (tampil),
@@ -171,25 +193,21 @@ CREATE TABLE IF NOT EXISTS akses_panduan (
 INSERT IGNORE INTO admin (username, password_hash, nama) VALUES
 ('admin', '$2y$10$wgbhz9SXSLaK3ZvvtMGrgOVMAjc2h1uPTuU6dNCqedOgAxCQa75Gq', 'Admin');
 
-INSERT IGNORE INTO produk (id, nama, kategori, deskripsi, harga, satuan, gambar, badge, stok) VALUES
-(1, 'Kentang Pilihan Premium', 'Sayuran', 'Kentang segar baru dipetik, ukuran seragam', 15000, 'kg',    'sml.jpg', 'Baru',    1200),
-(2, 'Wortel Segar',            'Sayuran', 'Manis, renyah, kaya vitamin A',              12000, 'kg',    'ss.jpg',  NULL,      800),
-(3, 'Pisang Cavendish',        'Buah',    'Manis lembut, siap santap',                  18000, 'sisir', 's.jpg',   'Populer', 350),
-(4, 'Bayam Segar',             'Sayuran', 'Daun hijau segar, kaya zat besi',             8000, 'ikat',  'm.jpg',   NULL,      40),
-(5, 'Alpukat Mentega',         'Buah',    'Daging tebal, manis, kaya lemak sehat',      25000, 'kg',    'l.jpg',   'Diskon',  500),
-(6, 'Ubi Jalar Madu',          'Umbi',    'Manis alami, empuk saat dimasak',            10000, 'kg',    'xl.jpg',  NULL,      900);
+-- Data awal = bibit yang dijual saat ini (varietas Granola). Deskripsi dikosongkan:
+-- isi dari admin, jangan dikarang.
+INSERT IGNORE INTO kategori_bibit (id, nama) VALUES (1, 'Granola');
+
+INSERT IGNORE INTO produk (id, nama, kategori_id, deskripsi, harga, satuan, gambar, badge, stok) VALUES
+(1, 'SM Benih Generasi 2, Granola L, Ukuran Sedang', 1, '', 15000, 'kg', 'sml.jpg', 'Baru', 1200),
+(2, 'Ss/SSS Benih Generasi 2, Granola L, Ukuran Sangat Kecil / Bibit Kecil Premium', 1, '', 12000, 'kg', 'ss.jpg', NULL, 800),
+(5, 'L Benih Generasi 2, Granola L, Ukuran Besar', 1, '', 25000, 'kg', 'l.jpg', 'Diskon', 490),
+(6, 'SM Benih Generasi 3, Granola L, Ukuran Sedang', 1, '', 10000, 'kg', 'xl.jpg', NULL, 890);
 
 INSERT IGNORE INTO kode_produk (kode, produk_id, asal, tanggal_terdaftar) VALUES
 ('TANI-001', 1, 'Bandung', '2026-09-20'),
 ('TANI-002', 2, 'Bandung', '2026-09-20'),
-('TANI-003', 3, 'Bandung', '2026-09-20'),
-('TANI-004', 4, 'Bandung', '2026-09-20'),
+('TANI-003', NULL, 'Bandung', '2026-09-20'),
+('TANI-004', NULL, 'Bandung', '2026-09-20'),
 ('TANI-005', 6, 'Bandung', '2026-09-20');
 
-INSERT INTO testimoni (nama, pesan, rating, tampil)
-SELECT * FROM (
-    SELECT 'Ibu Sari, Pembeli di Bandung' AS nama, 'Produknya selalu segar dan bersih. Harga juga sangat masuk akal. Langganan terus!' AS pesan, 5.0 AS rating, 1 AS tampil
-    UNION ALL SELECT 'Pak Budi, Restoran Sehat', 'Pengiriman cepat, kemasan rapi. Sayurannya masih segar saat sampai. Terima kasih!', 5.0, 1
-    UNION ALL SELECT 'Bu Rina, Katering Sehat', 'Sumber terpercaya untuk kebutuhan dapur harian. Kualitas stabil dan konsisten.', 4.5, 1
-) AS seed
-WHERE NOT EXISTS (SELECT 1 FROM testimoni);
+-- Tidak ada seed ulasan: ulasan hanya berasal dari pelanggan (form di index.html).

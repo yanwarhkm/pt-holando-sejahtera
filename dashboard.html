@@ -161,8 +161,9 @@
       .detail-grid dd { margin-bottom: 0.5rem; }
       .detail-item th, .detail-item td { padding: 0.6rem 0.35rem; font-size: 0.85rem; }
     }
+    .btn-aksi[hidden] { display: none; }
     /* Tabel pesanan menjadi kartu saat kotaknya sempit (bergantung lebar sidebar, bukan layar) */
-    #halaman-pesanan .kotak, #halaman-produk .kotak { container-type: inline-size; }
+    #halaman-pesanan .kotak, #halaman-produk .kotak, #modalJenis .modal-isi { container-type: inline-size; }
     @container (max-width: 760px) {
       .tabel-pesanan thead { display: none; }
       .tabel-pesanan, .tabel-pesanan tbody, .tabel-pesanan tr, .tabel-pesanan td { display: block; width: 100%; }
@@ -186,11 +187,8 @@
     <ul class="sidebar-menu">
       <li><a href="#dashboard" class="aktif" data-halaman="dashboard" title="Dashboard"><i class="fa-solid fa-chart-pie"></i> <span>Dashboard</span></a></li>
       <li><a href="#pesanan" data-halaman="pesanan" title="Pesanan"><i class="fa-solid fa-clipboard-list"></i> <span>Pesanan</span></a></li>
-      <li><a href="#produk" data-halaman="produk" title="Produk"><i class="fa-solid fa-box-open"></i> <span>Produk</span></a></li>
-      <li><a href="#"><i class="fa-solid fa-qrcode"></i> <span>Daftar Sertifikat</span></a></li>
-      <li><a href="#"><i class="fa-solid fa-plus-circle"></i> <span>Tambah Benih</span></a></li>
-      <li><a href="#"><i class="fa-solid fa-users"></i> <span>Pengguna</span></a></li>
-      <li><a href="#"><i class="fa-solid fa-cog"></i> <span>Pengaturan</span></a></li>
+      <li><a href="#produk" data-halaman="produk" title="Bibit"><i class="fa-solid fa-seedling"></i> <span>Bibit</span></a></li>
+      <li><a href="#verifikasi" data-halaman="verifikasi" title="Verifikasi"><i class="fa-solid fa-qrcode"></i> <span>Verifikasi</span></a></li>
       <li class="sidebar-bawah">
         <a href="#" onclick="keluarAdmin(); return false;">
           <i class="fa-solid fa-right-from-bracket"></i> <span>Keluar</span>
@@ -221,24 +219,24 @@
       </div>
       <div class="kartu">
         <i class="fa-solid fa-check-circle kartu-ikon"></i>
-        <div class="kartu-judul">Terverifikasi</div>
+        <div class="kartu-judul">Sertifikat Aktif</div>
         <div class="kartu-angka" id="statKodeAktif">…</div>
       </div>
       <div class="kartu">
         <i class="fa-solid fa-eye kartu-ikon"></i>
-        <div class="kartu-judul">Hari Ini</div>
+        <div class="kartu-judul">Verifikasi Hari Ini</div>
         <div class="kartu-angka" id="statHariIni">…</div>
       </div>
       <div class="kartu">
         <i class="fa-solid fa-boxes-stacked kartu-ikon"></i>
-        <div class="kartu-judul">Stok Benih</div>
+        <div class="kartu-judul">Stok Bibit</div>
         <div class="kartu-angka" id="statStok">…</div>
       </div>
     </div>
 
     <!-- TABEL AKTIVITAS -->
     <div class="grid-bawah">
-      <div class="kotak">
+      <div class="kotak" id="kotakVerifikasi">
         <h3>Aktivitas Verifikasi Terbaru</h3>
         <table>
           <thead>
@@ -259,7 +257,7 @@
         <p style="margin-bottom:1rem; color:#555;" id="ringkasanStatus">Memeriksa sistem...</p>
         <ul style="list-style:none; line-height:1.8;" id="ringkasanList"></ul>
         <br>
-        <a href="index.html#qr-section" style="display:inline-block; background:var(--hijau); color:white; padding:0.75rem 1.25rem; border-radius:8px; text-decoration:none; font-weight:600;">
+        <a href="index.html#alat" style="display:inline-block; background:var(--hijau); color:white; padding:0.75rem 1.25rem; border-radius:8px; text-decoration:none; font-weight:600;">
           <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Halaman Verifikasi
         </a>
       </div>
@@ -310,37 +308,42 @@
     </div>
    </section>
 
-   <!-- HALAMAN PRODUK -->
+   <!-- HALAMAN BIBIT (data tabel produk) -->
    <section class="halaman" id="halaman-produk" hidden>
     <div class="atasan">
       <div>
-        <h1>Produk</h1>
-        <p class="tanggal">Data katalog konsumen. Produk <strong>Nonaktif</strong> tidak tampil di katalog dan tidak bisa dipesan.</p>
+        <h1>Bibit</h1>
+        <p class="tanggal">Katalog bibit kentang untuk pelanggan. Bibit <strong>Nonaktif</strong> tidak tampil di katalog dan tidak bisa dipesan.</p>
       </div>
-      <button type="button" class="btn-aksi btn-selesai" onclick="bukaFormProduk()">
-        <i class="fa-solid fa-plus"></i> <span>Tambah Produk</span>
-      </button>
+      <div class="aksi-grup">
+        <button type="button" class="btn-aksi btn-garis" onclick="bukaJenisBibit()">
+          <i class="fa-solid fa-tags"></i> <span>Jenis Bibit</span>
+        </button>
+        <button type="button" class="btn-aksi btn-selesai" onclick="bukaFormProduk()">
+          <i class="fa-solid fa-plus"></i> <span>Tambah Bibit</span>
+        </button>
+      </div>
     </div>
 
     <div class="kotak">
       <div class="pesanan-toolbar">
         <div class="pesanan-cari">
           <i class="fa-solid fa-magnifying-glass"></i>
-          <input type="search" id="cariProduk" placeholder="Cari nama atau kategori produk" aria-label="Cari produk">
+          <input type="search" id="cariProduk" placeholder="Cari nama atau jenis bibit" aria-label="Cari bibit">
         </div>
-        <select id="filterProduk" class="filter-select" aria-label="Filter status produk">
+        <select id="filterProduk" class="filter-select" aria-label="Filter status bibit">
           <option value="">Semua</option>
           <option value="aktif">Aktif</option>
           <option value="nonaktif">Nonaktif</option>
           <option value="habis">Stok Habis</option>
         </select>
       </div>
-      <p class="pesanan-info" id="infoProduk">Memuat produk...</p>
+      <p class="pesanan-info" id="infoProduk">Memuat bibit...</p>
       <table class="tabel-pesanan tabel-produk">
         <thead>
           <tr>
-            <th>Produk</th>
-            <th>Kategori</th>
+            <th>Bibit</th>
+            <th>Jenis Bibit</th>
             <th>Harga</th>
             <th>Stok</th>
             <th>Status</th>
@@ -353,26 +356,23 @@
    </section>
   </main>
 
-  <!-- FORM PRODUK (tambah / edit) -->
+  <!-- FORM BIBIT (tambah / edit) -->
   <div class="modal" id="modalProduk" hidden>
     <div class="kotak modal-isi" role="dialog" aria-modal="true" aria-labelledby="judulFormProduk">
       <div class="modal-kepala">
-        <h3 id="judulFormProduk">Tambah Produk</h3>
+        <h3 id="judulFormProduk">Tambah Bibit</h3>
         <button type="button" class="modal-tutup" onclick="tutupFormProduk()" aria-label="Tutup">&times;</button>
       </div>
       <form id="formProduk" class="form-produk" novalidate>
-        <label class="penuh">Nama Produk
+        <label class="penuh">Nama Bibit
           <input type="text" id="fpNama" maxlength="100" required>
         </label>
-        <label>Kategori
-          <select id="fpKategori" required>
-            <option value="Sayuran">Sayuran</option>
-            <option value="Buah">Buah</option>
-            <option value="Umbi">Umbi</option>
-          </select>
+        <label>Jenis Bibit
+          <!-- Opsi dari tabel kategori_bibit (api/kategori_bibit.php) -->
+          <select id="fpKategori" required></select>
         </label>
         <label>Satuan
-          <input type="text" id="fpSatuan" maxlength="20" placeholder="kg, ikat, sisir..." required>
+          <input type="text" id="fpSatuan" maxlength="20" placeholder="kg, karung..." required>
         </label>
         <label>Harga (Rp)
           <input type="number" id="fpHarga" min="1" max="100000000" step="1" required>
@@ -399,6 +399,31 @@
           <button type="submit" class="btn-aksi btn-selesai" id="fpSimpan"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- JENIS BIBIT (kategori_bibit): lihat, tambah, ubah, aktif/nonaktif -->
+  <div class="modal" id="modalJenis" hidden>
+    <div class="kotak modal-isi" role="dialog" aria-modal="true" aria-labelledby="judulJenis">
+      <div class="modal-kepala">
+        <h3 id="judulJenis">Jenis Bibit</h3>
+        <button type="button" class="modal-tutup" onclick="tutupJenisBibit()" aria-label="Tutup">&times;</button>
+      </div>
+      <p class="pesanan-info">Isi dengan nama jenis/varietas bibit kentang sesuai label bibit. Generasi & ukuran bukan jenis. Jenis nonaktif tidak muncul di filter katalog dan tidak bisa dipilih untuk bibit baru.</p>
+      <form id="formJenis" class="form-produk" novalidate>
+        <label class="penuh"><span id="labelJenis">Tambah jenis bibit</span>
+          <input type="text" id="fjNama" maxlength="50" placeholder="Nama jenis/varietas" required>
+        </label>
+        <p class="penuh fp-pesan" id="fjPesan" role="alert"></p>
+        <div class="penuh fp-bawah" style="justify-content:flex-end; gap:0.5rem;">
+          <button type="button" class="btn-aksi btn-garis" id="fjBatal" onclick="resetFormJenis()" hidden>Batal Edit</button>
+          <button type="submit" class="btn-aksi btn-selesai" id="fjSimpan"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+        </div>
+      </form>
+      <table class="tabel-pesanan tabel-produk" style="margin-top:1rem;">
+        <thead><tr><th>Jenis</th><th>Jumlah Bibit</th><th>Status</th><th>Aksi</th></tr></thead>
+        <tbody id="tabelJenis"></tbody>
+      </table>
     </div>
   </div>
 
@@ -480,14 +505,14 @@
             <tr>
               <td>${escapeHTML(a.kode)}</td>
               <td>${escapeHTML(waktuRelatif(a.created_at))}</td>
-              <td class="${a.valid ? 'status-sah' : 'status-tidak'}">${a.valid ? '✅ Sah' : '⚠️ Tidak Dikenal'}</td>
+              <td class="${a.valid ? 'status-sah' : 'status-tidak'}">${a.valid ? '✅ Terdaftar' : '⚠️ Tidak Terdaftar'}</td>
             </tr>`).join('');
 
       let list = itemRingkasan(true, 'Database tersambung')
         + itemRingkasan(true, 'QR Scanner aktif')
         + itemRingkasan(true, 'Kode manual aktif');
       if (data.stok_menipis.length === 0) {
-        list += itemRingkasan(true, 'Stok benih aman');
+        list += itemRingkasan(true, 'Stok bibit aman');
       } else {
         list += data.stok_menipis.map(p => itemRingkasan(false, `Stok menipis: ${p.nama} (${angka(p.stok)} ${p.satuan})`)).join('');
       }
@@ -594,7 +619,7 @@
           <dt>Status</dt><dd>${pillStatus(p.status)}</dd>
         </dl>
         <table class="detail-item">
-          <thead><tr><th>Produk</th><th>Jumlah</th><th>Harga</th><th>Subtotal</th></tr></thead>
+          <thead><tr><th>Bibit</th><th>Jumlah</th><th>Harga</th><th>Subtotal</th></tr></thead>
           <tbody>
             ${p.items.length === 0 ? '<tr><td colspan="4" style="color:#777;">Tidak ada item.</td></tr>' : p.items.map(it => `
               <tr>
@@ -637,23 +662,32 @@
     document.getElementById('modalPesanan').addEventListener('click', e => { if (e.target.id === 'modalPesanan') tutupDetail(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && detailTerbuka !== null) tutupDetail(); });
 
-    /* ================= PRODUK =================
+    /* ================= BIBIT (tabel produk) =================
        CRUD lewat api/produk.php: GET ?semua=1, POST, PUT ?id=, DELETE ?id= (semuanya admin-only).
-       Validasi final (harga, stok, kategori, gambar) dilakukan server. */
+       Jenis bibit dari api/kategori_bibit.php. Validasi final (harga, stok, jenis, gambar) dilakukan server. */
     const BATAS_STOK_RENDAH = 50;
     let daftarProdukAdmin = [];
     let produkDiedit = null;
+    let daftarJenis = [];   // semua jenis bibit (aktif & nonaktif)
+    let jenisDiedit = null;
+
+    async function muatJenis() {
+      daftarJenis = (await apiRequest('api/kategori_bibit.php?semua=1')).data;
+    }
 
     async function muatProdukAdmin() {
       const info = document.getElementById('infoProduk');
       info.className = 'pesanan-info';
-      info.textContent = 'Memuat produk...';
+      info.textContent = 'Memuat bibit...';
       try {
-        daftarProdukAdmin = (await apiRequest('api/produk.php?semua=1')).data;
+        [daftarProdukAdmin] = await Promise.all([
+          apiRequest('api/produk.php?semua=1').then(r => r.data),
+          muatJenis()
+        ]);
       } catch (err) {
         if (err.status === 401) { window.location.href = 'login.html'; return; }
         info.className = 'pesanan-info gagal';
-        info.textContent = 'Gagal memuat produk: ' + err.message;
+        info.textContent = 'Gagal memuat bibit: ' + err.message;
         document.getElementById('tabelProduk').innerHTML = '';
         return;
       }
@@ -664,26 +698,26 @@
       const kataKunci = document.getElementById('cariProduk').value.trim().toLowerCase();
       const filter = document.getElementById('filterProduk').value;
       const hasil = daftarProdukAdmin.filter(p =>
-        (!kataKunci || `${p.nama} ${p.kategori}`.toLowerCase().includes(kataKunci)) &&
+        (!kataKunci || `${p.nama} ${p.kategori || ''}`.toLowerCase().includes(kataKunci)) &&
         (!filter || (filter === 'aktif' && p.aktif) || (filter === 'nonaktif' && !p.aktif) || (filter === 'habis' && p.stok === 0))
       );
       document.getElementById('infoProduk').textContent = daftarProdukAdmin.length === 0
-        ? 'Belum ada produk.'
-        : `Menampilkan ${hasil.length} dari ${daftarProdukAdmin.length} produk`;
+        ? 'Belum ada bibit.'
+        : `Menampilkan ${hasil.length} dari ${daftarProdukAdmin.length} bibit`;
 
       document.getElementById('tabelProduk').innerHTML = hasil.length === 0
-        ? `<tr><td colspan="6" class="kosong" style="color:#777; text-align:center;">${daftarProdukAdmin.length === 0 ? 'Belum ada produk. Klik "Tambah Produk".' : 'Tidak ada produk yang cocok.'}</td></tr>`
+        ? `<tr><td colspan="6" class="kosong" style="color:#777; text-align:center;">${daftarProdukAdmin.length === 0 ? 'Belum ada bibit. Klik "Tambah Bibit".' : 'Tidak ada bibit yang cocok.'}</td></tr>`
         : hasil.map(p => {
             const kelasStok = p.stok === 0 ? 'stok-nol' : (p.stok < BATAS_STOK_RENDAH ? 'stok-rendah' : '');
             return `
             <tr>
-              <td data-label="Produk">
+              <td data-label="Bibit">
                 <div class="produk-sel">
                   <img class="produk-thumb" src="${escapeHTML(p.gambar)}" alt="" onerror="this.style.visibility='hidden'">
                   <div><div class="produk-nama">${escapeHTML(p.nama)}</div><div class="produk-sub">ID ${p.id}${p.badge ? ' · ' + escapeHTML(p.badge) : ''}</div></div>
                 </div>
               </td>
-              <td data-label="Kategori">${escapeHTML(p.kategori)}</td>
+              <td data-label="Jenis Bibit">${p.kategori ? escapeHTML(p.kategori) : '<span style="color:#b45309;">Belum ditentukan</span>'}</td>
               <td data-label="Harga">${formatRupiah(p.harga)} / ${escapeHTML(p.satuan)}</td>
               <td data-label="Stok"><span class="${kelasStok}">${p.stok === 0 ? 'Habis' : p.stok.toLocaleString('id-ID') + ' ' + escapeHTML(p.satuan)}</span></td>
               <td data-label="Status"><span class="status-pill ${p.aktif ? 'status-aktif' : 'status-nonaktif'}">${p.aktif ? 'Aktif' : 'Nonaktif'}</span></td>
@@ -707,12 +741,21 @@
       if (nama) { img.onerror = () => { img.hidden = true; }; img.src = nama; }
     }
 
+    // Opsi jenis: semua jenis aktif + jenis bibit ini sendiri jika sudah dinonaktifkan
+    function isiOpsiJenis(kategoriId) {
+      const opsi = daftarJenis.filter(k => k.aktif || k.id === kategoriId);
+      document.getElementById('fpKategori').innerHTML =
+        '<option value="">— Pilih jenis bibit —</option>' +
+        opsi.map(k => `<option value="${k.id}">${escapeHTML(k.nama)}${k.aktif ? '' : ' (nonaktif)'}</option>`).join('');
+      document.getElementById('fpKategori').value = kategoriId ?? '';
+    }
+
     function bukaFormProduk(id = null) {
       const p = id === null ? null : daftarProdukAdmin.find(x => x.id === id);
       produkDiedit = p ? p.id : null;
-      document.getElementById('judulFormProduk').textContent = p ? 'Edit Produk' : 'Tambah Produk';
+      document.getElementById('judulFormProduk').textContent = p ? 'Edit Bibit' : 'Tambah Bibit';
       document.getElementById('fpNama').value = p ? p.nama : '';
-      document.getElementById('fpKategori').value = p ? p.kategori : 'Sayuran';
+      isiOpsiJenis(p ? p.kategori_id : null);
       document.getElementById('fpSatuan').value = p ? p.satuan : 'kg';
       document.getElementById('fpHarga').value = p ? p.harga : '';
       document.getElementById('fpStok').value = p ? p.stok : '';
@@ -736,7 +779,7 @@
       const angka = id => document.getElementById(id).value.trim();
       const data = {
         nama: document.getElementById('fpNama').value.trim(),
-        kategori: document.getElementById('fpKategori').value,
+        kategori_id: Number(document.getElementById('fpKategori').value) || null,
         satuan: document.getElementById('fpSatuan').value.trim(),
         harga: angka('fpHarga'),
         stok: angka('fpStok'),
@@ -745,7 +788,8 @@
         badge: document.getElementById('fpBadge').value.trim() || null,
         aktif: document.getElementById('fpAktif').checked
       };
-      if (data.nama.length < 3) return 'Nama produk minimal 3 karakter.';
+      if (data.nama.length < 3) return 'Nama bibit minimal 3 karakter.';
+      if (!data.kategori_id) return 'Pilih jenis bibit. Tambahkan jenis baru lewat tombol "Jenis Bibit" jika belum ada.';
       if (!data.satuan) return 'Satuan wajib diisi.';
       if (!/^\d+$/.test(data.harga) || +data.harga < 1 || +data.harga > 100000000) return 'Harga harus angka bulat antara 1 dan 100.000.000.';
       if (!/^\d+$/.test(data.stok) || +data.stok > 10000000) return 'Stok harus angka bulat 0 atau lebih.';
@@ -756,7 +800,7 @@
 
     // PUT api/produk.php mengganti seluruh field, jadi kirim data lengkap
     const payloadProduk = p => ({
-      nama: p.nama, kategori: p.kategori, satuan: p.satuan, harga: p.harga, stok: p.stok,
+      nama: p.nama, kategori_id: p.kategori_id, satuan: p.satuan, harga: p.harga, stok: p.stok,
       deskripsi: p.deskripsi, gambar: p.gambar, badge: p.badge || null, aktif: p.aktif
     });
 
@@ -786,11 +830,11 @@
       const p = daftarProdukAdmin.find(x => x.id === id);
       if (!p) return;
       const aksi = p.aktif ? 'Nonaktifkan' : 'Aktifkan';
-      if (!confirm(`${aksi} produk "${p.nama}"?${p.aktif ? '\nProduk tidak akan tampil di katalog konsumen.' : ''}`)) return;
+      if (!confirm(`${aksi} bibit "${p.nama}"?${p.aktif ? '\nBibit tidak akan tampil di katalog pelanggan.' : ''}`)) return;
       tombol.disabled = true;
       try {
         await apiRequest(`api/produk.php?id=${id}`, { method: 'PUT', body: { ...payloadProduk(p), aktif: !p.aktif } });
-        notif(`Produk "${p.nama}" ${p.aktif ? 'dinonaktifkan' : 'diaktifkan'}.`);
+        notif(`Bibit "${p.nama}" ${p.aktif ? 'dinonaktifkan' : 'diaktifkan'}.`);
       } catch (err) {
         if (err.status === 401) { window.location.href = 'login.html'; return; }
         notif(err.message, true);
@@ -801,17 +845,118 @@
     async function hapusProduk(id, tombol) {
       const p = daftarProdukAdmin.find(x => x.id === id);
       if (!p) return;
-      if (!confirm(`Hapus permanen produk "${p.nama}"?\nRiwayat pesanan tetap menyimpan nama & harga produk ini.\nJika hanya ingin menyembunyikan dari katalog, gunakan "Nonaktifkan".`)) return;
+      if (!confirm(`Hapus permanen bibit "${p.nama}"?\nRiwayat pesanan tetap menyimpan nama & harga bibit ini.\nJika hanya ingin menyembunyikan dari katalog, gunakan "Nonaktifkan".`)) return;
       tombol.disabled = true;
       try {
         await apiRequest(`api/produk.php?id=${id}`, { method: 'DELETE' });
-        notif(`Produk "${p.nama}" dihapus.`);
+        notif(`Bibit "${p.nama}" dihapus.`);
       } catch (err) {
         if (err.status === 401) { window.location.href = 'login.html'; return; }
         notif(err.message, true);
       }
       await muatProdukAdmin();
     }
+
+    /* ================= JENIS BIBIT (api/kategori_bibit.php) ================= */
+    function renderJenis() {
+      document.getElementById('tabelJenis').innerHTML = daftarJenis.length === 0
+        ? '<tr><td colspan="4" class="kosong" style="color:#777; text-align:center;">Belum ada jenis bibit.</td></tr>'
+        : daftarJenis.map(k => `
+          <tr>
+            <td data-label="Jenis"><strong>${escapeHTML(k.nama)}</strong></td>
+            <td data-label="Jumlah Bibit">${k.jumlah_bibit}</td>
+            <td data-label="Status"><span class="status-pill ${k.aktif ? 'status-aktif' : 'status-nonaktif'}">${k.aktif ? 'Aktif' : 'Nonaktif'}</span></td>
+            <td data-label="Aksi">
+              <div class="aksi-grup">
+                <button type="button" class="btn-aksi btn-garis" onclick="editJenis(${k.id})"><i class="fa-solid fa-pen"></i> Ubah</button>
+                <button type="button" class="btn-aksi ${k.aktif ? 'btn-batal' : 'btn-selesai'}" onclick="ubahAktifJenis(${k.id}, this)">
+                  <i class="fa-solid ${k.aktif ? 'fa-eye-slash' : 'fa-eye'}"></i> ${k.aktif ? 'Nonaktifkan' : 'Aktifkan'}
+                </button>
+              </div>
+            </td>
+          </tr>`).join('');
+    }
+
+    function resetFormJenis() {
+      jenisDiedit = null;
+      document.getElementById('fjNama').value = '';
+      document.getElementById('fjPesan').textContent = '';
+      document.getElementById('labelJenis').textContent = 'Tambah jenis bibit';
+      document.getElementById('fjBatal').hidden = true;
+    }
+
+    async function bukaJenisBibit() {
+      resetFormJenis();
+      document.getElementById('modalJenis').hidden = false;
+      try {
+        await muatJenis();
+        renderJenis();
+      } catch (err) {
+        if (err.status === 401) { window.location.href = 'login.html'; return; }
+        document.getElementById('fjPesan').textContent = err.message;
+      }
+      document.getElementById('fjNama').focus();
+    }
+
+    function tutupJenisBibit() {
+      document.getElementById('modalJenis').hidden = true;
+      muatProdukAdmin(); // nama/status jenis mungkin berubah
+    }
+
+    function editJenis(id) {
+      const k = daftarJenis.find(x => x.id === id);
+      if (!k) return;
+      jenisDiedit = k;
+      document.getElementById('fjNama').value = k.nama;
+      document.getElementById('labelJenis').textContent = 'Ubah nama jenis "' + k.nama + '"';
+      document.getElementById('fjBatal').hidden = false;
+      document.getElementById('fjPesan').textContent = '';
+      document.getElementById('fjNama').focus();
+    }
+
+    async function simpanJenis(e) {
+      e.preventDefault();
+      const nama = document.getElementById('fjNama').value.trim();
+      const pesan = document.getElementById('fjPesan');
+      if (nama.length < 2) { pesan.textContent = 'Nama jenis bibit minimal 2 karakter.'; return; }
+      const tombol = document.getElementById('fjSimpan');
+      tombol.disabled = true;
+      try {
+        const res = jenisDiedit === null
+          ? await apiRequest('api/kategori_bibit.php', { method: 'POST', body: { nama } })
+          : await apiRequest(`api/kategori_bibit.php?id=${jenisDiedit.id}`, { method: 'PUT', body: { nama, aktif: jenisDiedit.aktif } });
+        notif(`${res.message} (${nama})`);
+        resetFormJenis();
+        await muatJenis();
+        renderJenis();
+      } catch (err) {
+        if (err.status === 401) { window.location.href = 'login.html'; return; }
+        pesan.textContent = err.message;
+      } finally {
+        tombol.disabled = false;
+      }
+    }
+
+    async function ubahAktifJenis(id, tombol) {
+      const k = daftarJenis.find(x => x.id === id);
+      if (!k) return;
+      if (k.aktif && !confirm(`Nonaktifkan jenis "${k.nama}"?\nJenis ini tidak muncul di filter katalog dan tidak bisa dipilih untuk bibit baru. ${k.jumlah_bibit} bibit yang sudah memakai jenis ini tetap tampil.`)) return;
+      tombol.disabled = true;
+      try {
+        await apiRequest(`api/kategori_bibit.php?id=${id}`, { method: 'PUT', body: { nama: k.nama, aktif: !k.aktif } });
+        notif(`Jenis "${k.nama}" ${k.aktif ? 'dinonaktifkan' : 'diaktifkan'}.`);
+        await muatJenis();
+        renderJenis();
+      } catch (err) {
+        if (err.status === 401) { window.location.href = 'login.html'; return; }
+        notif(err.message, true);
+        tombol.disabled = false;
+      }
+    }
+
+    document.getElementById('formJenis').addEventListener('submit', simpanJenis);
+    document.getElementById('modalJenis').addEventListener('click', e => { if (e.target.id === 'modalJenis') tutupJenisBibit(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !document.getElementById('modalJenis').hidden) tutupJenisBibit(); });
 
     document.getElementById('formProduk').addEventListener('submit', simpanProduk);
     document.getElementById('fpGambar').addEventListener('input', isiPreviewGambar);
@@ -823,8 +968,11 @@
     /* ================= NAVIGASI SIDEBAR ================= */
     function tampilkanHalaman() {
       const nama = { '#pesanan': 'pesanan', '#produk': 'produk' }[location.hash] || 'dashboard';
+      // Menu Verifikasi = tabel aktivitas verifikasi di halaman dashboard
+      const menu = location.hash === '#verifikasi' ? 'verifikasi' : nama;
       document.querySelectorAll('.halaman').forEach(h => { h.hidden = h.id !== 'halaman-' + nama; });
-      document.querySelectorAll('.sidebar-menu a[data-halaman]').forEach(a => a.classList.toggle('aktif', a.dataset.halaman === nama));
+      document.querySelectorAll('.sidebar-menu a[data-halaman]').forEach(a => a.classList.toggle('aktif', a.dataset.halaman === menu));
+      if (menu === 'verifikasi') document.getElementById('kotakVerifikasi').scrollIntoView({ block: 'start' });
       if (nama === 'pesanan') muatPesanan();
       if (nama === 'produk') muatProdukAdmin();
     }

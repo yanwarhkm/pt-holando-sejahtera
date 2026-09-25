@@ -1,2 +1,5 @@
 # Kredensial database lokal
 config/database.php
+
+# Backup database (berisi data pelanggan & hash password) — jangan di-commit
+database/backup/

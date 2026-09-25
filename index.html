@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Platform Pertanian</title>
+    <title>Beken Seeds — Bibit Kentang untuk Budidaya</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -17,10 +17,10 @@
 <!-- NAVBAR -->
 <nav class="navbar">
     <a href="#" class="brand-wrapper">
-        <img src="WhatsApp Image 2026-09-08 at 11.19.26.jpeg" alt="Logo" class="brand-logo">
+        <img src="WhatsApp Image 2026-09-08 at 11.19.26.jpeg" alt="Logo Beken Seeds" class="brand-logo">
         <div class="brand-info">
-            <span class="brand-text">Nama Platform</span>
-            <small>Pertanian & Produk Segar</small>
+            <span class="brand-text">Beken Seeds</span>
+            <small>Bibit Kentang untuk Budidaya</small>
         </div>
     </a>
     <ul class="nav-links" id="navLinks">
@@ -46,14 +46,14 @@
 <section class="hero" id="beranda">
     <div class="hero-content">
         <div class="hero-logo-wrapper">
-            <img src="WhatsApp Image 2026-09-08 at 11.19.26.jpeg" alt="Logo" class="hero-logo">
+            <img src="WhatsApp Image 2026-09-08 at 11.19.26.jpeg" alt="Logo Beken Seeds" class="hero-logo">
         </div>
-        <span class="hero-label">🌿 Selamat Datang</span>
-        <h1>Produk Pertanian Berkualitas Langsung dari Petani</h1>
-        <p>Menyediakan sayur, buah, dan bahan pangan segar langsung dari kebun ke meja Anda. Sehat, murah, terpercaya.</p>
+        <span class="hero-label">🌱 Selamat Datang di Beken Seeds</span>
+        <h1>Bibit Kentang Berkualitas Langsung dari Penyedia</h1>
+        <p>Beken Seeds menyediakan bibit kentang untuk kebutuhan budidaya petani, dengan pilihan jenis, generasi, dan ukuran bibit sesuai rencana tanam Anda.</p>
         <div class="hero-buttons">
-            <a href="#katalog" class="hero-btn primary">Lihat Produk</a>
-            <a href="#panduan" class="hero-btn secondary">Panduan Bertani</a>
+            <a href="#katalog" class="hero-btn primary">Lihat Katalog Bibit</a>
+            <a href="#panduan" class="hero-btn secondary">Panduan Budidaya</a>
         </div>
     </div>
 </section>
@@ -61,41 +61,41 @@
 <!-- QUICK INFO -->
 <section class="quick-info">
     <div class="quick-card">
-        <i class="fas fa-leaf"></i>
+        <i class="fas fa-seedling"></i>
         <div>
-            <strong>100% Alami</strong>
-            <span>Tanpa bahan kimia berlebih</span>
+            <strong>Untuk Budidaya</strong>
+            <span>Bibit kentang untuk kebutuhan tanam</span>
         </div>
     </div>
     <div class="quick-card">
         <i class="fas fa-truck"></i>
         <div>
-            <strong>Kirim Cepat</strong>
-            <span>Segar sampai ke tangan</span>
+            <strong>Pengiriman</strong>
+            <span>Bibit dikirim ke lokasi Anda</span>
         </div>
     </div>
     <div class="quick-card">
         <i class="fas fa-handshake"></i>
         <div>
-            <strong>Dari Petani</strong>
+            <strong>Dari Penyedia</strong>
             <span>Harga langsung tanpa perantara</span>
         </div>
     </div>
     <div class="quick-card">
         <i class="fas fa-shield-alt"></i>
         <div>
-            <strong>Jaminan Mutu</strong>
-            <span>Produk terkontrol ketat</span>
+            <strong>Pilihan Jelas</strong>
+            <span>Bibit dikelompokkan per jenis, generasi & ukuran</span>
         </div>
     </div>
 </section>
 
-<!-- KATALOG PRODUK -->
+<!-- KATALOG BIBIT -->
 <section class="catalog-section" id="katalog">
     <div class="section-heading">
-        <span class="section-label">🛒 Produk Kami</span>
-        <h2>Katalog Produk Pertanian</h2>
-        <p>Pilih berbagai produk segar langsung dari kebun petani terpercaya</p>
+        <span class="section-label">🌱 Bibit Kami</span>
+        <h2>Katalog Bibit Kentang</h2>
+        <p>Temukan bibit kentang sesuai kebutuhan budidaya Anda.</p>
     </div>
     <div class="catalog-layout">
         <aside class="filter-card">
@@ -104,32 +104,26 @@
                 <button class="filter-reset-btn" id="filterReset" type="button">Reset</button>
             </div>
             <div class="filter-group">
-                <h4>Kategori</h4>
-                <label class="filter-option">
-                    <input type="checkbox" class="filter-kategori" value="semua" checked> Semua Produk
-                </label>
-                <label class="filter-option">
-                    <input type="checkbox" class="filter-kategori" value="Sayuran"> Sayuran
-                </label>
-                <label class="filter-option">
-                    <input type="checkbox" class="filter-kategori" value="Buah"> Buah-buahan
-                </label>
-                <label class="filter-option">
-                    <input type="checkbox" class="filter-kategori" value="Umbi"> Biji & Umbi
-                </label>
+                <h4>Jenis Bibit</h4>
+                <!-- Pilihan jenis diisi dari database (api/kategori_bibit.php) -->
+                <div id="filterJenis">
+                    <label class="filter-option">
+                        <input type="checkbox" class="filter-kategori" value="semua" checked> Semua Jenis
+                    </label>
+                </div>
             </div>
             <div class="filter-help">
                 <i class="fas fa-info-circle"></i>
-                <span>Produk diperbarui setiap hari sesuai hasil panen</span>
+                <span>Stok bibit diperbarui sesuai ketersediaan</span>
             </div>
         </aside>
         <div>
             <div class="catalog-toolbar">
                 <div class="catalog-search">
                     <i class="fas fa-search"></i>
-                    <input type="text" id="productSearch" placeholder="Cari produk..." aria-label="Cari produk">
+                    <input type="text" id="productSearch" placeholder="Cari bibit..." aria-label="Cari bibit">
                 </div>
-                <select class="sort-select" id="productSort" aria-label="Urutkan produk">
+                <select class="sort-select" id="productSort" aria-label="Urutkan bibit">
                     <option value="terbaru">Urutkan: Terbaru</option>
                     <option value="harga-asc">Harga: Rendah ke Tinggi</option>
                     <option value="harga-desc">Harga: Tinggi ke Rendah</option>
@@ -137,10 +131,10 @@
                 </select>
             </div>
             <div class="catalog-result-row">
-                <span id="productCount">Memuat produk...</span>
+                <span id="productCount">Memuat bibit...</span>
             </div>
             <div class="products-grid" id="productGrid">
-                <p class="data-status">Memuat produk...</p>
+                <p class="data-status">Memuat bibit...</p>
             </div>
         </div>
     </div>
@@ -150,7 +144,7 @@
 <section class="tools-section" id="alat">
     <div class="section-heading">
         <span class="section-label">🔧 Alat Bantu</span>
-        <h2>Perhitungan & Verifikasi Produk</h2>
+        <h2>Perhitungan & Verifikasi Bibit</h2>
         <p>Gunakan alat bantu di bawah untuk memudahkan estimasi dan pengecekan</p>
     </div>
     <div class="widgets-wrapper">
@@ -188,15 +182,15 @@
         <div class="checker-box">
             <div class="checker-header">
                 <i class="fas fa-qrcode tool-icon"></i>
-                <h3>Scan & Verifikasi Produk</h3>
-                <p>Pastikan produk asli dan terdaftar</p>
+                <h3>Scan & Verifikasi Sertifikat Bibit</h3>
+                <p>Baca kode QR atau periksa kode pada label/sertifikat bibit Anda</p>
             </div>
             <div class="qr-grid">
                 <div class="scanner-card">
                     <h3><i class="fas fa-camera"></i> Pemindai QR</h3>
                     <div class="scanner-placeholder" id="scannerArea">
                         <i class="fas fa-qrcode"></i>
-                        <p>Klik tombol di bawah untuk memindai kode QR produk</p>
+                        <p>Klik tombol di bawah untuk memindai kode QR pada label/sertifikat bibit</p>
                     </div>
                     <div class="scanner-buttons">
                         <button class="btn-primary" id="startScanBtn">
@@ -213,7 +207,7 @@
                 <div class="checker-card">
                     <h3><i class="fas fa-check-circle"></i> Cek Kode Manual</h3>
                     <div class="input-group">
-                        <input type="text" id="kodeProduk" class="form-input" placeholder="Masukkan kode produk" maxlength="50">
+                        <input type="text" id="kodeProduk" class="form-input" placeholder="Masukkan kode bibit" maxlength="50">
                         <button class="btn-primary" onclick="cekKode()">Periksa</button>
                     </div>
                     <p class="hint">Atau tekan <kbd>Enter</kbd> setelah mengetik kode</p>
@@ -229,9 +223,9 @@
 <!-- PANDUAN -->
 <section class="guide-section" id="panduan">
     <div class="section-heading">
-        <span class="section-label">📖 Panduan Bertani</span>
-        <h2>Teknik Bertani yang Baik & Benar</h2>
-        <p>Panduan lengkap dari persiapan lahan hingga panen untuk hasil terbaik</p>
+        <span class="section-label">📖 Panduan Budidaya</span>
+        <h2>Panduan Budidaya Kentang</h2>
+        <p>Langkah budidaya dari persiapan lahan hingga panen untuk hasil terbaik dari bibit Anda</p>
     </div>
     <div class="guide-container" id="guideContainer">
         <div class="guide-steps-grid">
@@ -253,24 +247,24 @@
             <div class="guide-card blur-content" id="guideLocked1">
                 <span class="guide-number">4</span>
                 <h3>Pemupukan</h3>
-                <p>Isi langkah ini tersedia di panduan lengkap untuk konsumen yang sudah melakukan pembelian. Silakan verifikasi pesanan Anda.</p>
+                <p>Isi langkah ini tersedia di panduan lengkap untuk pelanggan yang sudah membeli bibit. Silakan verifikasi pesanan Anda.</p>
             </div>
             <div class="guide-card blur-content" id="guideLocked2">
                 <span class="guide-number">5</span>
                 <h3>Pengendalian Hama</h3>
-                <p>Isi langkah ini tersedia di panduan lengkap untuk konsumen yang sudah melakukan pembelian. Silakan verifikasi pesanan Anda.</p>
+                <p>Isi langkah ini tersedia di panduan lengkap untuk pelanggan yang sudah membeli bibit. Silakan verifikasi pesanan Anda.</p>
             </div>
             <div class="guide-card blur-content" id="guideLocked3">
                 <span class="guide-number">6</span>
                 <h3>Panen & Pascapanen</h3>
-                <p>Isi langkah ini tersedia di panduan lengkap untuk konsumen yang sudah melakukan pembelian. Silakan verifikasi pesanan Anda.</p>
+                <p>Isi langkah ini tersedia di panduan lengkap untuk pelanggan yang sudah membeli bibit. Silakan verifikasi pesanan Anda.</p>
             </div>
         </div>
         <div class="lock-overlay" id="guideLockOverlay">
             <div class="guide-paywall-box" id="guidePaywall">
                 <i class="fas fa-lock"></i>
                 <h3>Konten Terkunci</h3>
-                <p>Panduan lengkap tersedia untuk konsumen yang sudah melakukan pembelian.</p>
+                <p>Panduan budidaya lengkap tersedia untuk pelanggan yang sudah membeli bibit.</p>
                 <form class="guide-akses-form" id="formAksesPanduan" novalidate>
                     <input type="text" id="aksesKode" placeholder="Nomor Pesanan (PSN-...)" maxlength="30" autocomplete="off" aria-label="Nomor pesanan" required>
                     <input type="tel" id="aksesWa" placeholder="No. WhatsApp saat checkout" maxlength="20" aria-label="Nomor WhatsApp saat checkout" required>
@@ -279,7 +273,7 @@
                     </button>
                 </form>
                 <p class="guide-akses-pesan" id="aksesPesan" role="status" aria-live="polite"></p>
-                <a href="#katalog" class="guide-akses-link">Belum punya pesanan? Lihat Produk <i class="fas fa-arrow-right"></i></a>
+                <a href="#katalog" class="guide-akses-link">Belum punya pesanan? Lihat Katalog Bibit <i class="fas fa-arrow-right"></i></a>
             </div>
         </div>
     </div>
@@ -289,14 +283,14 @@
 <section class="gallery-section" id="galeri">
     <div class="section-heading">
         <span class="section-label">📸 Galeri Kebun</span>
-        <h2>Dokumentasi Hasil Tani</h2>
-        <p>Lihat proses dan hasil panen dari kebun kami</p>
+        <h2>Dokumentasi Budidaya & Pembibitan</h2>
+        <p>Lihat proses pembibitan, penanaman, dan panen di kebun kami</p>
     </div>
     <div class="gallery-grid">
         <div class="gallery-card" onclick="bukaGaleri(1)">
             <img src="WhatsApp Image 2026-09-09 at 09.08.51 (1).jpeg" alt="Galeri">
             <div class="gallery-info">
-                <h3>Kebun Sayur Hijau</h3>
+                <h3>Kebun Kentang</h3>
                 <p>Desa Cihideung — 15 Sep 2026</p>
             </div>
         </div>
@@ -328,9 +322,9 @@
 <section class="farmer-section" id="kontak">
     <div class="farmer-container">
         <div class="section-heading" style="text-align:left; margin-bottom:20px;">
-            <span class="section-label">👨‍🌾 Hubungi Petani</span>
-            <h2>Pesan Langsung ke Penyedia</h2>
-            <p>Ingin pasokan rutin atau pesanan khusus? Hubungi langsung kami</p>
+            <span class="section-label">👨‍🌾 Hubungi Kami</span>
+            <h2>Pesan Bibit Langsung</h2>
+            <p>Butuh bibit dalam jumlah besar atau pesanan khusus? Hubungi kami langsung</p>
         </div>
         <div class="farmer-grid">
             <div class="farmer-card">
@@ -348,7 +342,7 @@
                     </div>
                     <div class="form-group">
                         <label>Pesan / Kebutuhan</label>
-                        <textarea id="pesanKontak" rows="3" placeholder="Jumlah, jenis produk, jadwal pengiriman..." maxlength="1000" required></textarea>
+                        <textarea id="pesanKontak" rows="3" placeholder="Jenis bibit, jumlah (kg), jadwal tanam/pengiriman..." maxlength="1000" required></textarea>
                     </div>
                     <button type="submit" class="btn-primary full-btn" id="btnKontak">
                         <i class="fas fa-paper-plane"></i> Kirim Pesan
@@ -378,15 +372,29 @@
     <div class="section-heading">
         <span class="section-label">💬 Kata Mereka</span>
         <h2>Pendapat Pelanggan</h2>
-        <p>Ulasan dari pelanggan yang sudah membeli produk kami</p>
+        <p>Ulasan dari pelanggan yang sudah membeli bibit kami</p>
     </div>
     <div class="testimonial-grid" id="testimonialGrid">
         <p class="data-status">Memuat ulasan...</p>
+    </div>
+    <div class="testimonial-more" id="testimonialMore" hidden>
+        <button type="button" class="btn-primary" id="btnUlasanLain"><i class="fas fa-chevron-down"></i> Lihat ulasan lainnya</button>
     </div>
     <div class="testimonial-form-card">
         <h3>Bagaimana pengalaman Anda?</h3>
         <p>Berikan ulasan Anda</p>
         <form id="ulasanForm">
+            <fieldset class="rating-input" id="ulasanRating">
+                <legend>Rating</legend>
+                <div class="rating-stars">
+                    <label><input type="radio" name="rating" value="1"><i class="far fa-star" aria-hidden="true"></i><span class="sr-only">Rating 1 dari 5</span></label>
+                    <label><input type="radio" name="rating" value="2"><i class="far fa-star" aria-hidden="true"></i><span class="sr-only">Rating 2 dari 5</span></label>
+                    <label><input type="radio" name="rating" value="3"><i class="far fa-star" aria-hidden="true"></i><span class="sr-only">Rating 3 dari 5</span></label>
+                    <label><input type="radio" name="rating" value="4"><i class="far fa-star" aria-hidden="true"></i><span class="sr-only">Rating 4 dari 5</span></label>
+                    <label><input type="radio" name="rating" value="5"><i class="far fa-star" aria-hidden="true"></i><span class="sr-only">Rating 5 dari 5</span></label>
+                </div>
+                <span class="rating-text" id="ratingTeks" aria-live="polite">Belum dipilih</span>
+            </fieldset>
             <input type="text" id="ulasanNama" placeholder="Nama Anda" maxlength="100" required>
             <textarea id="ulasanPesan" rows="3" placeholder="Tulis ulasan Anda..." maxlength="1000" required></textarea>
             <button type="submit" class="btn-primary" id="btnUlasan">
@@ -399,21 +407,22 @@
 <!-- FOOTER -->
 <footer>
     <div class="footer-logo">
-        <img src="WhatsApp Image 2026-09-08 at 11.19.26.jpeg" alt="Logo">
+        <img src="WhatsApp Image 2026-09-08 at 11.19.26.jpeg" alt="Logo Beken Seeds">
         <div>
-            <h3>Nama Platform</h3>
-            <span>Pertanian & Produk Segar</span>
+            <h3>Beken Seeds</h3>
+            <span>Bibit Kentang untuk Budidaya</span>
         </div>
     </div>
-    <p>Produk pertanian sehat — langsung dari kebun ke meja Anda</p>
+    <p>Bibit kentang untuk budidaya — langsung dari penyedia</p>
     <div class="footer-links">
-        <button onclick="alert('Tentang kami: platform penghubung petani & pembeli')">Tentang</button>
+        <button onclick="alert('Tentang kami: Beken Seeds, penyedia bibit kentang untuk kebutuhan budidaya')">Tentang</button>
         <button onclick="alert('Kebijakan: Transparan & Jujur')">Kebijakan</button>
         <button onclick="alert('Pembayaran: Transfer & COD')">Pembayaran</button>
         <button onclick="alert('Pengiriman: Kurir Lokal')">Pengiriman</button>
+        <a href="admin.html" class="footer-admin" rel="nofollow"><i class="fas fa-lock" aria-hidden="true"></i> Admin</a>
     </div>
     <div class="footer-bottom">
-        © 2026 Nama Platform — Semua Hak Dilindungi
+        © 2026 Beken Seeds — Semua Hak Dilindungi
     </div>
 </footer>
 
@@ -426,7 +435,7 @@
 <div class="modal-overlay" id="cartModal">
     <div class="modal-card">
         <div class="modal-header">
-            <h3><i class="fas fa-shopping-cart"></i> Keranjang Belanja</h3>
+            <h3><i class="fas fa-shopping-cart"></i> Keranjang Pesanan Bibit</h3>
             <button class="modal-close" onclick="tutupKeranjang()">&times;</button>
         </div>
         <div class="cart-items" id="cartItems">
@@ -448,7 +457,7 @@
             </select>
         </div>
         <button class="btn-wa full-btn" id="btnPesan" onclick="pesanSekarang()">
-            <i class="fab fa-whatsapp"></i> Pesan Sekarang via WhatsApp
+            <i class="fab fa-whatsapp"></i> Pesan Bibit via WhatsApp
         </button>
     </div>
 </div>
@@ -474,39 +483,60 @@
 let keranjang = [];
 // Satu-satunya sumber data katalog: GET api/produk.php (tabel produk di MySQL)
 let daftarProduk = [];
+// Token per percobaan checkout. Dipakai ulang saat request diulang (double-click,
+// timeout) agar server mengembalikan pesanan yang sama, bukan membuat pesanan baru.
+// Diganti setiap keranjang berubah atau checkout berhasil.
+let tokenCheckout = null;
+function buatTokenCheckout() {
+    const b = crypto.getRandomValues(new Uint8Array(16));
+    return Array.from(b, x => x.toString(16).padStart(2, '0')).join('');
+}
 const GAMBAR_CADANGAN = 'WhatsApp Image 2026-09-08 at 11.19.26.jpeg';
 
-// Katalog Produk (GET api/produk.php)
+// Katalog Bibit (GET api/produk.php)
 async function muatProduk() {
     const grid = document.getElementById('productGrid');
     const info = document.getElementById('productCount');
-    grid.innerHTML = '<p class="data-status"><i class="fas fa-spinner fa-spin"></i> Memuat produk...</p>';
-    info.textContent = 'Memuat produk...';
+    grid.innerHTML = '<p class="data-status"><i class="fas fa-spinner fa-spin"></i> Memuat bibit...</p>';
+    info.textContent = 'Memuat bibit...';
     try {
         const res = await apiRequest('api/produk.php');
         daftarProduk = res.data;
         renderProduk();
         perbaruiKeranjang();
     } catch (err) {
-        info.textContent = 'Produk gagal dimuat';
+        info.textContent = 'Bibit gagal dimuat';
         grid.innerHTML = `
             <div class="data-status data-error">
-                <p><i class="fas fa-exclamation-circle"></i> Gagal memuat produk. Silakan coba lagi.</p>
+                <p><i class="fas fa-exclamation-circle"></i> Gagal memuat bibit. Silakan coba lagi.</p>
                 <button class="btn-primary" onclick="muatProduk()"><i class="fas fa-rotate-right"></i> Coba Lagi</button>
             </div>`;
         tampilkanPesan('error', err.message);
     }
 }
 
-// Pencarian, filter kategori, dan urutan — semuanya terhadap data dari API
+// Jenis bibit (kategori) — hanya jenis aktif dari tabel kategori_bibit
+async function muatJenisBibit() {
+    try {
+        const res = await apiRequest('api/kategori_bibit.php');
+        document.getElementById('filterJenis').insertAdjacentHTML('beforeend', res.data.map(k => `
+                    <label class="filter-option">
+                        <input type="checkbox" class="filter-kategori" value="${k.id}"> ${escapeHTML(k.nama)}
+                    </label>`).join(''));
+    } catch (err) {
+        // Filter jenis opsional: katalog tetap bisa dipakai dengan "Semua Jenis"
+    }
+}
+
+// Pencarian, filter jenis bibit, dan urutan — semuanya terhadap data dari API
 function produkTampil() {
     const kataKunci = document.getElementById('productSearch').value.trim().toLowerCase();
-    const kategori = [...document.querySelectorAll('.filter-kategori:checked')].map(c => c.value).filter(v => v !== 'semua');
+    const kategori = [...document.querySelectorAll('.filter-kategori:checked')].map(c => Number(c.value)).filter(v => v > 0);
     const urutan = document.getElementById('productSort').value;
 
     const hasil = daftarProduk.filter(p =>
-        (kategori.length === 0 || kategori.includes(p.kategori)) &&
-        (!kataKunci || `${p.nama} ${p.kategori}`.toLowerCase().includes(kataKunci))
+        (kategori.length === 0 || kategori.includes(p.kategori_id)) &&
+        (!kataKunci || `${p.nama} ${p.kategori || ''}`.toLowerCase().includes(kataKunci))
     );
     const pembanding = {
         'terbaru': (a, b) => b.id - a.id,
@@ -521,14 +551,14 @@ function renderProduk() {
     const grid = document.getElementById('productGrid');
     const info = document.getElementById('productCount');
     if (daftarProduk.length === 0) {
-        info.textContent = 'Menampilkan 0 produk';
-        grid.innerHTML = '<p class="data-status">Belum ada produk tersedia.</p>';
+        info.textContent = 'Menampilkan 0 bibit';
+        grid.innerHTML = '<p class="data-status">Belum ada bibit tersedia.</p>';
         return;
     }
     const tampil = produkTampil();
-    info.textContent = `Menampilkan ${tampil.length} produk`;
+    info.textContent = `Menampilkan ${tampil.length} bibit`;
     if (tampil.length === 0) {
-        grid.innerHTML = '<p class="data-status">Produk tidak ditemukan. Coba ubah kata kunci atau filter.</p>';
+        grid.innerHTML = '<p class="data-status">Bibit tidak ditemukan. Coba ubah kata kunci atau filter.</p>';
         return;
     }
     grid.innerHTML = tampil.map(p => {
@@ -542,29 +572,31 @@ function renderProduk() {
                         : (p.badge ? `<span class="product-badge">${escapeHTML(p.badge)}</span>` : '')}
             </div>
             <div class="product-body">
-                <span class="product-meta">${escapeHTML(p.kategori)}</span>
+                ${p.kategori ? `<span class="product-meta">Jenis: ${escapeHTML(p.kategori)}</span>` : ''}
                 <h3 class="product-title">${escapeHTML(p.nama)}</h3>
                 <p class="product-description">${escapeHTML(p.deskripsi)}</p>
                 <strong class="product-price">${formatRupiah(p.harga)} / ${escapeHTML(p.satuan)}</strong>
-                <span class="product-stok">${habis ? 'Stok habis' : `Stok: ${p.stok.toLocaleString('id-ID')} ${escapeHTML(p.satuan)}`}</span>
+                <span class="product-stok">${habis ? 'Stok habis' : `Stok bibit: ${p.stok.toLocaleString('id-ID')} ${escapeHTML(p.satuan)}`}</span>
                 <div class="product-actions">
                     <button class="btn-add-cart"${habis ? ' disabled' : ''}>${habis ? 'Stok Habis' : 'Tambah'}</button>
-                    <button class="btn-detail"><i class="fas fa-eye"></i></button>
+                    <button class="btn-detail" title="Detail Bibit" aria-label="Detail Bibit"><i class="fas fa-eye"></i></button>
                 </div>
             </div>
         </div>`;
     }).join('');
 }
 
-// "Semua Produk" dan kategori tertentu saling eksklusif
-document.querySelectorAll('.filter-kategori').forEach(cb => cb.addEventListener('change', () => {
+// "Semua Jenis" dan jenis tertentu saling eksklusif (checkbox jenis dibuat dinamis → delegation)
+document.getElementById('filterJenis').addEventListener('change', e => {
+    const cb = e.target.closest('.filter-kategori');
+    if (!cb) return;
     const semua = document.querySelector('.filter-kategori[value="semua"]');
     const lain = [...document.querySelectorAll('.filter-kategori:not([value="semua"])')];
     if (cb === semua && semua.checked) lain.forEach(c => c.checked = false);
     if (cb !== semua && cb.checked) semua.checked = false;
     if (!lain.some(c => c.checked)) semua.checked = true;
     renderProduk();
-}));
+});
 document.getElementById('productSearch').addEventListener('input', renderProduk);
 document.getElementById('productSort').addEventListener('change', renderProduk);
 document.getElementById('filterReset').addEventListener('click', () => {
@@ -576,34 +608,64 @@ document.getElementById('filterReset').addEventListener('click', () => {
 
 // Testimoni (GET api/testimoni.php)
 function bintang(rating) {
-    let html = '';
+    // Rating dari database; NULL = ulasan lama tanpa rating (tidak dianggap 5)
+    if (rating === null || rating === undefined) {
+        return '<span class="rating-kosong">Belum ada rating</span>';
+    }
+    let html = `<span class="sr-only">Rating ${String(rating).replace('.', ',')} dari 5</span>`;
     for (let i = 1; i <= 5; i++) {
-        if (rating >= i) html += '<i class="fas fa-star"></i>';
-        else if (rating >= i - 0.5) html += '<i class="fas fa-star-half-alt"></i>';
-        else html += '<i class="far fa-star"></i>';
+        if (rating >= i) html += '<i class="fas fa-star" aria-hidden="true"></i>';
+        else if (rating >= i - 0.5) html += '<i class="fas fa-star-half-alt" aria-hidden="true"></i>';
+        else html += '<i class="far fa-star" aria-hidden="true"></i>';
     }
     return html;
 }
 
-async function muatTestimoni() {
-    const grid = document.getElementById('testimonialGrid');
-    try {
-        const res = await apiRequest('api/testimoni.php');
-        if (res.data.length === 0) {
-            grid.innerHTML = '<p class="data-status">Belum ada ulasan.</p>';
-            return;
-        }
-        grid.innerHTML = res.data.map(t => `
+// Ukuran halaman sama dengan MAKS_TESTIMONI_PUBLIK di api/testimoni.php
+const ULASAN_PER_HALAMAN = 9;
+let idUlasanTerakhir = null;
+
+function kartuUlasan(t) {
+    return `
             <div class="testimonial-card">
                 <div class="stars">${bintang(t.rating)}</div>
                 <p>"${escapeHTML(t.pesan)}"</p>
                 <strong>— ${escapeHTML(t.nama)}</strong>
             </div>
-        `).join('');
+        `;
+}
+
+// lanjutan = false → muat ulang dari ulasan terbaru; true → tambahkan halaman berikutnya
+async function muatTestimoni(lanjutan = false) {
+    const grid = document.getElementById('testimonialGrid');
+    const lainnya = document.getElementById('testimonialMore');
+    const tombol = document.getElementById('btnUlasanLain');
+    if (lanjutan) setLoading(tombol, true, 'Memuat...');
+    try {
+        const url = 'api/testimoni.php' + (lanjutan ? '?sebelum=' + encodeURIComponent(idUlasanTerakhir) : '');
+        const res = await apiRequest(url);
+        if (!lanjutan && res.data.length === 0) {
+            grid.innerHTML = '<p class="data-status">Belum ada ulasan.</p>';
+            lainnya.hidden = true;
+            return;
+        }
+        const html = res.data.map(kartuUlasan).join('');
+        if (lanjutan) grid.insertAdjacentHTML('beforeend', html);
+        else grid.innerHTML = html;
+        if (res.data.length) idUlasanTerakhir = res.data[res.data.length - 1].id;
+        lainnya.hidden = res.data.length < ULASAN_PER_HALAMAN;
     } catch (err) {
-        grid.innerHTML = `<p class="data-status data-error"><i class="fas fa-exclamation-circle"></i> Ulasan gagal dimuat: ${escapeHTML(err.message)}</p>`;
+        if (lanjutan) {
+            tampilkanPesan('error', 'Ulasan gagal dimuat: ' + err.message);
+        } else {
+            grid.innerHTML = `<p class="data-status data-error"><i class="fas fa-exclamation-circle"></i> Ulasan gagal dimuat: ${escapeHTML(err.message)}</p>`;
+            lainnya.hidden = true;
+        }
+    } finally {
+        if (lanjutan) setLoading(tombol, false);
     }
 }
+document.getElementById('btnUlasanLain').addEventListener('click', () => muatTestimoni(true));
 
 // Status loading tombol
 function setLoading(button, loading, teksLoading = 'Memproses...') {
@@ -670,7 +732,7 @@ async function cekKode() {
 
     const el = document.getElementById('verifikasiHasil');
     if (!kode) {
-        el.innerHTML = '<em>Masukkan kode produk terlebih dahulu</em>';
+        el.innerHTML = '<em>Masukkan kode bibit terlebih dahulu</em>';
         return;
     }
     if (!/^[A-Z0-9][A-Z0-9\-\/]{1,49}$/.test(kode)) {
@@ -688,14 +750,15 @@ async function cekKode() {
         return;
     }
 
+    // Ditemukan di data internal ≠ valid BPSB. Verifikasi BPSB belum terhubung.
     if (data.valid) {
         el.innerHTML = `
-            <div class="verification-valid">
+            <div class="verification-pending">
                 <div class="verification-result">
-                    <div class="verification-result-icon">✅</div>
+                    <div class="verification-result-icon"><i class="fas fa-circle-info"></i></div>
                     <div>
-                        <div class="verification-label">Status Produk</div>
-                        <strong>TERVERIFIKASI — Produk Asli</strong>
+                        <div class="verification-label">Status</div>
+                        <strong>Kode ditemukan di data internal</strong>
                         <div class="verification-code">
                             <span class="verification-label">Kode:</span>
                             <span>${escapeHTML(data.kode)}</span>
@@ -704,27 +767,257 @@ async function cekKode() {
                             <span><i class="fas fa-calendar"></i> Terdaftar: ${escapeHTML(formatTanggal(data.tanggal_terdaftar))}</span>
                             <span><i class="fas fa-map-marker-alt"></i> Asal: ${escapeHTML(data.asal || '-')}</span>
                         </div>
+                        <div class="verification-label" style="margin-top:0.75rem;">Verifikasi BPSB</div>
+                        <strong>Belum diverifikasi</strong>
+                        <p style="margin-top:4px; font-size:0.9rem;">Kode diterima, tetapi verifikasi BPSB belum tersedia.</p>
                     </div>
                 </div>
             </div>
         `;
-        tampilkanPesan('success', 'Produk terverifikasi ✅');
+        tampilkanPesan('success', 'Kode diterima. Verifikasi BPSB belum tersedia.');
     } else {
         el.innerHTML = `
             <div class="verification-invalid">
                 <div class="verification-result">
                     <div class="verification-result-icon">❌</div>
                     <div>
-                        <div class="verification-label">Status Produk</div>
-                        <strong>TIDAK TERDAFTAR — Hati-hati Barang Palsu</strong>
-                        <p style="margin-top:8px; font-size:0.9rem;">Kode <code>${escapeHTML(kode)}</code> tidak ditemukan dalam sistem kami.</p>
+                        <div class="verification-label">Status</div>
+                        <strong>Kode tidak ditemukan di data internal</strong>
+                        <p style="margin-top:8px; font-size:0.9rem;">Kode <code>${escapeHTML(kode)}</code> tidak terdaftar dalam sistem kami.</p>
+                        <div class="verification-label" style="margin-top:0.75rem;">Verifikasi BPSB</div>
+                        <strong>Belum diverifikasi</strong>
+                        <p style="margin-top:4px; font-size:0.9rem;">Verifikasi BPSB belum tersedia.</p>
                     </div>
                 </div>
             </div>
         `;
-        tampilkanPesan('error', 'Kode tidak dikenali');
+        tampilkanPesan('error', 'Kode tidak ditemukan di data internal');
     }
 }
+
+// Pemindai QR (kamera + jsQR, dimuat saat pertama kali dipakai).
+// Tahap ini hanya MEMBACA isi QR. Hasil baca bukan bukti keaslian/validitas BPSB —
+// verifikasi BPSB menunggu API/data resmi.
+const pemindai = {
+    stream: null,
+    video: null,
+    canvas: null,
+    rafId: 0,
+    batasWaktu: 0,
+    sedangMulai: false,
+    htmlAwal: document.getElementById('scannerArea').innerHTML
+};
+const BATAS_PINDAI_MS = 30000;
+
+function statusPindai(teks, jenis) {
+    const el = document.getElementById('scanStatus');
+    el.textContent = teks;
+    el.className = 'scanner-status' + (jenis ? ' scanner-' + jenis : '');
+}
+
+function tombolPindai(aktif, labelMulai = 'Mulai Pindai') {
+    const mulai = document.getElementById('startScanBtn');
+    mulai.style.display = aktif ? 'none' : '';
+    mulai.disabled = false;
+    mulai.innerHTML = `<i class="fas fa-${labelMulai === 'Mulai Pindai' ? 'play' : 'rotate-right'}"></i> ${labelMulai}`;
+    document.getElementById('stopScanBtn').style.display = aktif ? '' : 'none';
+}
+
+function muatJsQR() {
+    if (window.jsQR) return Promise.resolve();
+    return new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = 'js/vendor/jsQR.js';
+        s.onload = () => window.jsQR ? resolve() : reject(new Error('jsQR'));
+        s.onerror = () => { s.remove(); reject(new Error('jsQR')); };
+        document.head.appendChild(s);
+    });
+}
+
+async function izinKameraDitolak() {
+    try {
+        return navigator.permissions && (await navigator.permissions.query({ name: 'camera' })).state === 'denied';
+    } catch {
+        return false; // Permissions API untuk kamera tidak didukung semua browser
+    }
+}
+
+async function mulaiPindai() {
+    if (pemindai.stream || pemindai.sedangMulai) return;
+    if (!window.isSecureContext || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        statusPindai('Kamera tidak tersedia. Pemindai membutuhkan browser modern dan koneksi HTTPS.', 'error');
+        return;
+    }
+    // Jika izin sudah ditolak, jangan memicu permintaan izin lagi
+    if (await izinKameraDitolak()) {
+        statusPindai('Izin kamera ditolak. Aktifkan izin kamera untuk situs ini di pengaturan browser, lalu coba lagi.', 'error');
+        tombolPindai(false, 'Coba Lagi');
+        return;
+    }
+
+    pemindai.sedangMulai = true;
+    const mulai = document.getElementById('startScanBtn');
+    mulai.disabled = true;
+    mulai.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyiapkan...';
+    statusPindai('Meminta izin kamera...', 'active');
+
+    try {
+        await muatJsQR();
+    } catch {
+        pemindai.sedangMulai = false;
+        statusPindai('Komponen pemindai gagal dimuat. Periksa koneksi lalu coba lagi.', 'error');
+        tombolPindai(false, 'Coba Lagi');
+        return;
+    }
+    if (!pemindai.sedangMulai) return; // dibatalkan saat memuat komponen
+
+    let stream;
+    try {
+        stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } },
+            audio: false
+        });
+    } catch (err) {
+        pemindai.sedangMulai = false;
+        const nama = err && err.name;
+        if (nama === 'NotAllowedError' || nama === 'SecurityError') {
+            statusPindai('Izin kamera ditolak. Aktifkan izin kamera untuk situs ini di pengaturan browser, lalu coba lagi.', 'error');
+        } else if (nama === 'NotFoundError' || nama === 'OverconstrainedError') {
+            statusPindai('Kamera tidak ditemukan pada perangkat ini. Gunakan Cek Kode Manual.', 'error');
+        } else if (nama === 'NotReadableError' || nama === 'AbortError') {
+            statusPindai('Kamera sedang dipakai aplikasi lain atau tidak dapat diakses.', 'error');
+        } else {
+            statusPindai('Kamera tidak tersedia.', 'error');
+        }
+        tombolPindai(false, 'Coba Lagi');
+        return;
+    }
+
+    // Halaman ditutup/disembunyikan saat menunggu izin → langsung lepas kamera
+    if (!pemindai.sedangMulai) {
+        stream.getTracks().forEach(t => t.stop());
+        return;
+    }
+    pemindai.sedangMulai = false;
+    pemindai.stream = stream;
+
+    const area = document.getElementById('scannerArea');
+    const video = document.createElement('video');
+    video.setAttribute('playsinline', ''); // wajib di iOS agar tidak fullscreen
+    video.muted = true;
+    video.style.cssText = 'width:100%; height:100%; min-height:300px; object-fit:cover; display:block;';
+    video.srcObject = stream;
+    area.className = 'scanner-area';
+    area.replaceChildren(video);
+    pemindai.video = video;
+    pemindai.canvas = pemindai.canvas || document.createElement('canvas');
+
+    try {
+        await video.play();
+    } catch {
+        hentikanPindai();
+        statusPindai('Pratinjau kamera gagal ditampilkan.', 'error');
+        tombolPindai(false, 'Coba Lagi');
+        return;
+    }
+
+    tombolPindai(true);
+    statusPindai('Kamera aktif. Arahkan kamera ke kode QR pada label/sertifikat bibit.', 'active');
+    pemindai.batasWaktu = Date.now() + BATAS_PINDAI_MS;
+    pemindai.rafId = requestAnimationFrame(pindaiFrame);
+}
+
+let waktuPindaiTerakhir = 0;
+function pindaiFrame(waktu) {
+    if (!pemindai.stream) return;
+    pemindai.rafId = requestAnimationFrame(pindaiFrame);
+    if (waktu - waktuPindaiTerakhir < 150) return; // ±6 fps cukup, hemat baterai
+    waktuPindaiTerakhir = waktu;
+
+    if (Date.now() > pemindai.batasWaktu) {
+        hentikanPindai();
+        statusPindai('QR gagal dibaca. Pastikan kode QR terang, fokus, dan berada di dalam bingkai kamera.', 'error');
+        tombolPindai(false, 'Pindai Ulang');
+        return;
+    }
+
+    const video = pemindai.video;
+    if (video.readyState < video.HAVE_ENOUGH_DATA || !video.videoWidth) return;
+    // Perkecil frame agar decode ringan di perangkat low-end
+    const skala = Math.min(1, 640 / Math.max(video.videoWidth, video.videoHeight));
+    const w = Math.round(video.videoWidth * skala);
+    const h = Math.round(video.videoHeight * skala);
+    const canvas = pemindai.canvas;
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    ctx.drawImage(video, 0, 0, w, h);
+    const kode = jsQR(ctx.getImageData(0, 0, w, h).data, w, h, { inversionAttempts: 'attemptBoth' });
+    if (!kode) return;
+
+    // Hentikan dulu agar QR yang sama tidak terbaca berulang kali
+    hentikanPindai();
+    if (!kode.data) {
+        statusPindai('QR terdeteksi, tetapi isinya kosong atau tidak dapat dibaca sebagai teks.', 'error');
+        tombolPindai(false, 'Pindai Ulang');
+        return;
+    }
+    statusPindai('QR berhasil dibaca.', 'success');
+    tombolPindai(false, 'Pindai Ulang');
+    tampilkanHasilQR(kode.data);
+}
+
+function tampilkanHasilQR(isi) {
+    document.getElementById('verifikasiHasil').innerHTML = `
+        <div class="verification-pending">
+            <div class="verification-result">
+                <div class="verification-result-icon"><i class="fas fa-qrcode"></i></div>
+                <div style="min-width:0; flex:1;">
+                    <div class="verification-label">Status</div>
+                    <strong>QR berhasil dibaca</strong>
+                    <div class="verification-label" style="margin-top:0.75rem;">Isi QR</div>
+                    <div class="verification-code" style="word-break:break-all; white-space:pre-wrap;">${escapeHTML(isi)}</div>
+                    <div class="verification-label" style="margin-top:0.75rem;">Verifikasi BPSB</div>
+                    <strong>Belum diverifikasi</strong>
+                    <div class="verification-label" style="margin-top:0.75rem;">Keterangan</div>
+                    <p style="font-size:0.9rem;">Data QR berhasil dibaca, tetapi verifikasi ke sumber data BPSB belum dikonfigurasi.</p>
+                </div>
+            </div>
+        </div>
+    `;
+    tampilkanPesan('success', 'QR berhasil dibaca');
+}
+
+// Lepas kamera dan kembalikan area pemindai ke tampilan awal
+function hentikanPindai() {
+    pemindai.sedangMulai = false;
+    cancelAnimationFrame(pemindai.rafId);
+    if (pemindai.stream) pemindai.stream.getTracks().forEach(t => t.stop());
+    pemindai.stream = null;
+    if (pemindai.video) {
+        pemindai.video.srcObject = null;
+        pemindai.video = null;
+        const area = document.getElementById('scannerArea');
+        area.className = 'scanner-placeholder';
+        area.innerHTML = pemindai.htmlAwal;
+    }
+}
+
+document.getElementById('startScanBtn').addEventListener('click', mulaiPindai);
+document.getElementById('stopScanBtn').addEventListener('click', () => {
+    hentikanPindai();
+    statusPindai('Pemindaian dihentikan.');
+    tombolPindai(false);
+});
+// Kamera tidak boleh tetap menyala saat halaman ditinggalkan/disembunyikan
+window.addEventListener('pagehide', hentikanPindai);
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden && (pemindai.stream || pemindai.sedangMulai)) {
+        hentikanPindai();
+        statusPindai('Pemindaian dihentikan karena halaman tidak aktif.');
+        tombolPindai(false, 'Pindai Ulang');
+    }
+});
 
 document.getElementById('kodeProduk').addEventListener('keypress', e => {
     if (e.key === 'Enter') cekKode();
@@ -811,6 +1104,7 @@ document.getElementById('productGrid').addEventListener('click', e => {
 });
 
 function perbaruiKeranjang() {
+    tokenCheckout = null; // isi keranjang berubah → checkout berikutnya adalah pesanan baru
     const badge = document.getElementById('cartBadge');
     const items = document.getElementById('cartItems');
     const totalEl = document.getElementById('cartTotal');
@@ -831,7 +1125,7 @@ function perbaruiKeranjang() {
         return `
             <div class="cart-item-row">
                 <div class="cart-item-info">
-                    <strong>${produk ? escapeHTML(produk.nama) : 'Produk tidak tersedia'}</strong>
+                    <strong>${produk ? escapeHTML(produk.nama) : 'Bibit tidak tersedia'}</strong>
                     <span>${produk ? `${formatRupiah(produk.harga)} × ${item.jumlah}` : 'Hapus dari keranjang untuk melanjutkan'}</span>
                 </div>
                 <div class="qty-control">
@@ -887,20 +1181,22 @@ async function pesanSekarang() {
     }
 
     const tombol = document.getElementById('btnPesan');
+    if (tombol.disabled) return; // cegah klik ganda selama request berjalan
     setLoading(tombol, true, 'Menyimpan pesanan...');
+    tokenCheckout = tokenCheckout || buatTokenCheckout();
     const tabWA = bukaTabWA();
     try {
         const res = await apiRequest('api/pesanan.php', {
             method: 'POST',
             body: {
-                nama, alamat, wa, metode: bayar,
+                nama, alamat, wa, metode: bayar, checkout_token: tokenCheckout,
                 items: keranjang.map(i => ({ produk_id: i.id, jumlah: i.jumlah }))
             }
         });
         const order = res.data;
 
         // Harga & total memakai data yang sudah dihitung ulang oleh server
-        let pesan = `Halo, saya ingin memesan (No. Pesanan: ${order.kode_pesanan}):\n\n`;
+        let pesan = `Halo, saya ingin memesan bibit kentang (No. Pesanan: ${order.kode_pesanan}):\n\n`;
         order.items.forEach(i => {
             pesan += `✅ ${i.nama} — ${i.jumlah} × ${formatRupiah(i.harga)} = ${formatRupiah(i.subtotal)}\n`;
         });
@@ -926,7 +1222,7 @@ async function pesanSekarang() {
 
 // Galeri
 const galeriData = {
-    1: { img: 'WhatsApp Image 2026-09-09 at 09.08.51 (1).jpeg', title: 'Kebun Sayur Hijau', desc: 'Desa Cihideung — 15 Sep 2026' },
+    1: { img: 'WhatsApp Image 2026-09-09 at 09.08.51 (1).jpeg', title: 'Kebun Kentang', desc: 'Desa Cihideung — 15 Sep 2026' },
     2: { img: 'WhatsApp Image 2026-09-09 at 09.08.51.jpeg', title: 'Panen Kentang', desc: 'Kebun Pak Asep — 12 Sep 2026' },
     3: { img: 'FOTO.jpeg', title: 'Penanaman Bibit Baru', desc: 'Musim Kemarau — 10 Sep 2026' },
     4: { img: 'DAUN.jpeg', title: 'Pembibitan', desc: 'Rumah Bibit — 8 Sep 2026' }
@@ -978,22 +1274,48 @@ document.getElementById('kontakForm').addEventListener('submit', async function(
     }
 });
 
-// POST api/testimoni.php — ulasan tampil setelah disetujui admin
+// Rating bintang: radio button asli (bisa dipakai dengan keyboard: Tab lalu panah)
+const RATING_LABEL = ['', 'Sangat buruk', 'Buruk', 'Cukup', 'Bagus', 'Sangat bagus'];
+function perbaruiTampilanRating() {
+    const dipilih = document.querySelector('#ulasanRating input:checked');
+    const nilai = dipilih ? Number(dipilih.value) : 0;
+    document.querySelectorAll('#ulasanRating label').forEach((label, i) => {
+        const aktif = i < nilai;
+        label.classList.toggle('aktif', aktif);
+        label.querySelector('i').className = (aktif ? 'fas' : 'far') + ' fa-star';
+    });
+    // Teks angka agar rating tidak hanya ditunjukkan lewat warna
+    document.getElementById('ratingTeks').textContent = nilai ? `${nilai} dari 5 — ${RATING_LABEL[nilai]}` : 'Belum dipilih';
+    document.getElementById('ulasanRating').classList.remove('rating-error');
+}
+document.querySelectorAll('#ulasanRating input').forEach(r => r.addEventListener('change', perbaruiTampilanRating));
+
+// POST api/testimoni.php — ulasan + rating tersimpan di database dan langsung tampil
 document.getElementById('ulasanForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     const form = this;
+    const dipilih = form.querySelector('input[name="rating"]:checked');
+    const rating = dipilih ? parseInt(dipilih.value, 10) : 0;
     const nama = document.getElementById('ulasanNama').value.trim();
     const pesan = document.getElementById('ulasanPesan').value.trim();
 
+    if (!(rating >= 1 && rating <= 5)) {
+        document.getElementById('ulasanRating').classList.add('rating-error');
+        document.getElementById('ratingTeks').textContent = 'Silakan pilih rating terlebih dahulu.';
+        form.querySelector('input[name="rating"]').focus();
+        return tampilkanPesan('error', 'Silakan pilih rating terlebih dahulu.');
+    }
     if (nama.length < 2) return tampilkanPesan('error', 'Nama minimal 2 karakter.');
     if (pesan.length < 5) return tampilkanPesan('error', 'Ulasan minimal 5 karakter.');
 
     const tombol = document.getElementById('btnUlasan');
     setLoading(tombol, true, 'Mengirim...');
     try {
-        const res = await apiRequest('api/testimoni.php', { method: 'POST', body: { nama, pesan } });
+        const res = await apiRequest('api/testimoni.php', { method: 'POST', body: { nama, rating, pesan } });
         tampilkanPesan('success', res.message + ' ⭐');
         form.reset();
+        perbaruiTampilanRating();
+        await muatTestimoni(); // ambil ulang dari database, ulasan terbaru di paling atas
     } catch (err) {
         tampilkanPesan('error', err.message);
     } finally {
@@ -1077,6 +1399,7 @@ document.querySelectorAll('.modal-overlay').forEach(modal => {
 })();
 
 // Muat data dari database saat halaman dibuka
+muatJenisBibit();
 muatProduk();
 muatTestimoni();
 cekAksesPanduan();
