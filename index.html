@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platform Pertanian</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<!-- NAVBAR -->
+<nav class="navbar">
+    <a href="#" class="brand-wrapper">
+        <img src="WhatsApp Image 2026-09-08 at 11.19.26.jpeg" alt="Logo" class="brand-logo">
+        <div class="brand-info">
+            <span class="brand-text">Nama Platform</span>
+            <small>Pertanian & Produk Segar</small>
+        </div>
+    </a>
+    <ul class="nav-links" id="navLinks">
+        <li><a href="#beranda"><i class="fas fa-home"></i> Beranda</a></li>
+        <li><a href="#katalog"><i class="fas fa-shopping-bag"></i> Katalog</a></li>
+        <li><a href="#alat"><i class="fas fa-calculator"></i> Alat</a></li>
+        <li><a href="#panduan"><i class="fas fa-book"></i> Panduan</a></li>
+        <li><a href="#galeri"><i class="fas fa-images"></i> Galeri</a></li>
+        <li><a href="#kontak"><i class="fas fa-user"></i> Kontak</a></li>
+    </ul>
+    <div class="nav-actions">
+        <button class="cart-btn" id="cartBtn">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="badge" id="cartBadge">0</span>
+        </button>
+        <button class="mobile-menu-btn" id="menuBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="beranda">
+    <div class="hero-content">
+        <div class="hero-logo-wrapper">
+            <img src="WhatsApp Image 2026-09-08 at 11.19.26.jpeg" alt="Logo" class="hero-logo">
+        </div>
+        <span class="hero-label">🌿 Selamat Datang</span>
+        <h1>Produk Pertanian Berkualitas Langsung dari Petani</h1>
+        <p>Menyediakan sayur, buah, dan bahan pangan segar langsung dari kebun ke meja Anda. Sehat, murah, terpercaya.</p>
+        <div class="hero-buttons">
+            <a href="#katalog" class="hero-btn primary">Lihat Produk</a>
+            <a href="#panduan" class="hero-btn secondary">Panduan Bertani</a>
+        </div>
+    </div>
+</section>
+
+<!-- QUICK INFO -->
+<section class="quick-info">
+    <div class="quick-card">
+        <i class="fas fa-leaf"></i>
+        <div>
+            <strong>100% Alami</strong>
+            <span>Tanpa bahan kimia berlebih</span>
+        </div>
+    </div>
+    <div class="quick-card">
+        <i class="fas fa-truck"></i>
+        <div>
+            <strong>Kirim Cepat</strong>
+            <span>Segar sampai ke tangan</span>
+        </div>
+    </div>
+    <div class="quick-card">
+        <i class="fas fa-handshake"></i>
+        <div>
+            <strong>Dari Petani</strong>
+            <span>Harga langsung tanpa perantara</span>
+        </div>
+    </div>
+    <div class="quick-card">
+        <i class="fas fa-shield-alt"></i>
+        <div>
+            <strong>Jaminan Mutu</strong>
+            <span>Produk terkontrol ketat</span>
+        </div>
+    </div>
+</section>
+
+<!-- KATALOG PRODUK -->
+<section class="catalog-section" id="katalog">
+    <div class="section-heading">
+        <span class="section-label">🛒 Produk Kami</span>
+        <h2>Katalog Produk Pertanian</h2>
+        <p>Pilih berbagai produk segar langsung dari kebun petani terpercaya</p>
+    </div>
+    <div class="catalog-layout">
+        <aside class="filter-card">
+            <div class="filter-header">
+                <h3>Filter</h3>
+                <button class="filter-reset-btn">Reset</button>
+            </div>
+            <div class="filter-group">
+                <h4>Kategori</h4>
+                <label class="filter-option">
+                    <input type="checkbox" checked> Semua Produk
+                </label>
+                <label class="filter-option">
+                    <input type="checkbox"> Sayuran
+                </label>
+                <label class="filter-option">
+                    <input type="checkbox"> Buah-buahan
+                </label>
+                <label class="filter-option">
+                    <input type="checkbox"> Biji & Umbi
+                </label>
+            </div>
+            <div class="filter-help">
+                <i class="fas fa-info-circle"></i>
+                <span>Produk diperbarui setiap hari sesuai hasil panen</span>
+            </div>
+        </aside>
+        <div>
+            <div class="catalog-toolbar">
+                <div class="catalog-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Cari produk...">
+                </div>
+                <select class="sort-select">
+                    <option>Urutkan: Terbaru</option>
+                    <option>Harga: Rendah ke Tinggi</option>
+                    <option>Harga: Tinggi ke Rendah</option>
+                </select>
+            </div>
+            <div class="catalog-result-row">
+                <span>Menampilkan 6 produk</span>
+            </div>
+            <div class="products-grid">
+                <!-- Produk 1 -->
+                <div class="product-card">
+                    <div class="product-img-wrapper">
+                        <img src="sml.jpg" alt="Produk" class="product-img">
+                        <span class="product-badge">Baru</span>
+                    </div>
+                    <div class="product-body">
+                        <span class="product-meta">Sayuran</span>
+                        <h3 class="product-title">Kentang Pilihan Premium</h3>
+                        <p class="product-description">Kentang segar baru dipetik, ukuran seragam</p>
+                        <strong class="product-price">Rp 15.000 / kg</strong>
+                        <div class="product-actions">
+                            <button class="btn-add-cart">Tambah</button>
+                            <button class="btn-detail"><i class="fas fa-eye"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Produk 2 -->
+                <div class="product-card">
+                    <div class="product-img-wrapper">
+                        <img src="ss.jpg" alt="Produk" class="product-img">
+                    </div>
+                    <div class="product-body">
+                        <span class="product-meta">Sayuran</span>
+                        <h3 class="product-title">Wortel Segar</h3>
+                        <p class="product-description">Manis, renyah, kaya vitamin A</p>
+                        <strong class="product-price">Rp 12.000 / kg</strong>
+                        <div class="product-actions">
+                            <button class="btn-add-cart">Tambah</button>
+                            <button class="btn-detail"><i class="fas fa-eye"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Produk 3 -->
+                <div class="product-card">
+                    <div class="product-img-wrapper">
+                        <img src="s.jpg" alt="Produk" class="product-img">
+                        <span class="product-badge">Populer</span>
+                    </div>
+                    <div class="product-body">
+                        <span class="product-meta">Buah</span>
+                        <h3 class="product-title">Pisang Cavendish</h3>
+                        <p class="product-description">Manis lembut, siap santap</p>
+                        <strong class="product-price">Rp 18.000 / sisir</strong>
+                        <div class="product-actions">
+                            <button class="btn-add-cart">Tambah</button>
+                            <button class="btn-detail"><i class="fas fa-eye"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Produk 4 -->
+                <div class="product-card">
+                    <div class="product-img-wrapper">
+                        <img src="m.jpg" alt="Produk" class="product-img">
+                    </div>
+                    <div class="product-body">
+                        <span class="product-meta">Sayuran</span>
+                        <h3 class="product-title">Bayam Segar</h3>
+                        <p class="product-description">Daun hijau segar, kaya zat besi</p>
+                        <strong class="product-price">Rp 8.000 / ikat</strong>
+                        <div class="product-actions">
+                            <button class="btn-add-cart">Tambah</button>
+                            <button class="btn-detail"><i class="fas fa-eye"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Produk 5 -->
+                <div class="product-card">
+                    <div class="product-img-wrapper">
+                        <img src="l.jpg" alt="Produk" class="product-img">
+                        <span class="product-badge">Diskon</span>
+                    </div>
+                    <div class="product-body">
+                        <span class="product-meta">Buah</span>
+                        <h3 class="product-title">Alpukat Mentega</h3>
+                        <p class="product-description">Daging tebal, manis, kaya lemak sehat</p>
+                        <strong class="product-price">Rp 25.000 / kg</strong>
+                        <div class="product-actions">
+                            <button class="btn-add-cart">Tambah</button>
+                            <button class="btn-detail"><i class="fas fa-eye"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Produk 6 -->
+                <div class="product-card">
+                    <div class="product-img-wrapper">
+                        <img src="xl.jpg" alt="Produk" class="product-img">
+                    </div>
+                    <div class="product-body">
+                        <span class="product-meta">Umbi</span>
+                        <h3 class="product-title">Ubi Jalar Madu</h3>
+                        <p class="product-description">Manis alami, empuk saat dimasak</p>
+                        <strong class="product-price">Rp 10.000 / kg</strong>
+                        <div class="product-actions">
+                            <button class="btn-add-cart">Tambah</button>
+                            <button class="btn-detail"><i class="fas fa-eye"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ALAT & QR SCANNER -->
+<section class="tools-section" id="alat">
+    <div class="section-heading">
+        <span class="section-label">🔧 Alat Bantu</span>
+        <h2>Perhitungan & Verifikasi Produk</h2>
+        <p>Gunakan alat bantu di bawah untuk memudahkan estimasi dan pengecekan</p>
+    </div>
+    <div class="widgets-wrapper">
+        <div class="calc-box">
+            <div class="calc-header">
+                <i class="fas fa-calculator tool-icon"></i>
+                <h3>Kalkulator Panen</h3>
+                <p>Estimasi hasil panen & keuntungan</p>
+            </div>
+            <div class="calc-grid">
+                <div class="form-group">
+                    <label>Luas Lahan (m²)</label>
+                    <input type="number" id="luas" placeholder="Contoh: 100">
+                </div>
+                <div class="form-group">
+                    <label>Jumlah Bibit/m²</label>
+                    <input type="number" id="bibit" placeholder="Contoh: 3">
+                </div>
+                <div class="form-group">
+                    <label>Estimasi Hasil/kg</label>
+                    <input type="number" id="hasil" placeholder="Per tanaman">
+                </div>
+                <div class="form-group">
+                    <label>Harga Jual/kg (Rp)</label>
+                    <input type="number" id="harga" placeholder="Contoh: 15000">
+                </div>
+            </div>
+            <button class="btn-primary full-btn" onclick="hitungPanen()">
+                <i class="fas fa-calculator"></i> Hitung Estimasi
+            </button>
+            <div class="calc-result" id="hasilCalc">
+                <em>Hasil perhitungan akan muncul di sini</em>
+            </div>
+        </div>
+        <div class="checker-box">
+            <div class="checker-header">
+                <i class="fas fa-qrcode tool-icon"></i>
+                <h3>Scan & Verifikasi Produk</h3>
+                <p>Pastikan produk asli dan terdaftar</p>
+            </div>
+            <div class="qr-grid">
+                <div class="scanner-card">
+                    <h3><i class="fas fa-camera"></i> Pemindai QR</h3>
+                    <div class="scanner-placeholder" id="scannerArea">
+                        <i class="fas fa-qrcode"></i>
+                        <p>Klik tombol di bawah untuk memindai kode QR produk</p>
+                    </div>
+                    <div class="scanner-buttons">
+                        <button class="btn-primary" id="startScanBtn">
+                            <i class="fas fa-play"></i> Mulai Pindai
+                        </button>
+                        <button class="btn-primary" id="stopScanBtn" style="display:none; background: var(--danger);">
+                            <i class="fas fa-stop"></i> Hentikan
+                        </button>
+                    </div>
+                    <div class="scanner-status" id="scanStatus">
+                        Menunggu pemindaian...
+                    </div>
+                </div>
+                <div class="checker-card">
+                    <h3><i class="fas fa-check-circle"></i> Cek Kode Manual</h3>
+                    <div class="input-group">
+                        <input type="text" id="kodeProduk" class="form-input" placeholder="Masukkan kode produk">
+                        <button class="btn-primary" onclick="cekKode()">Periksa</button>
+                    </div>
+                    <p class="hint">Atau tekan <kbd>Enter</kbd> setelah mengetik kode</p>
+                    <div class="verification-result-wrapper" id="verifikasiHasil">
+                        <em>Hasil verifikasi akan muncul di sini</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PANDUAN -->
+<section class="guide-section" id="panduan">
+    <div class="section-heading">
+        <span class="section-label">📖 Panduan Bertani</span>
+        <h2>Teknik Bertani yang Baik & Benar</h2>
+        <p>Panduan lengkap dari persiapan lahan hingga panen untuk hasil terbaik</p>
+    </div>
+    <div class="guide-container" id="guideContainer">
+        <div class="guide-steps-grid">
+            <div class="guide-card">
+                <span class="guide-number">1</span>
+                <h3>Persiapan Lahan</h3>
+                <p>Pilih lahan yang mendapat sinar matahari penuh, tanah gembur, dan drainase baik. Bersihkan rumput, gemburkan tanah sedalam 20–30 cm, lalu beri pupuk kandang yang sudah difermentasi.</p>
+            </div>
+            <div class="guide-card">
+                <span class="guide-number">2</span>
+                <h3>Pemilihan Bibit</h3>
+                <p>Pilih bibit unggul yang sehat, bebas hama, dan sesuai musim. Rendam dalam air hangat selama 2–4 jam sebelum tanam agar cepat tumbuh. Jarak tanam diatur agar tanaman tidak saling berebut nutrisi.</p>
+            </div>
+            <div class="guide-card">
+                <span class="guide-number">3</span>
+                <h3>Penanaman</h3>
+                <p>Tanam pada sore hari agar tidak layu terkena panas. Siram secukupnya setelah menanam. Buat parit agar air tidak menggenang. Jaga kelembapan tanah, hindari penyiraman berlebih yang bisa membusukkan akar.</p>
+            </div>
+            <div class="guide-card blur-content" id="guideLocked1">
+                <span class="guide-number">4</span>
+                <h3>Pemupukan</h3>
+                <p>Pupuk rutin setiap 2 minggu sekali. Gunakan pupuk organik cair agar hasil lebih sehat dan ramah lingkungan. Tambahkan pupuk kandang saat tanaman mulai tumbuh besar. Hindari pemupukan berlebih.</p>
+            </div>
+            <div class="guide-card blur-content" id="guideLocked2">
+                <span class="guide-number">5</span>
+                <h3>Pengendalian Hama</h3>
+                <p>Cek tanaman secara rutin pagi dan sore. Gunakan pestisida nabati dari daun pepaya, bawang putih, atau cabai untuk mengusir hama tanpa merusak lingkungan. Pisahkan tanaman yang terserang agar tidak menular.</p>
+            </div>
+            <div class="guide-card blur-content" id="guideLocked3">
+                <span class="guide-number">6</span>
+                <h3>Panen & Pascapanen</h3>
+                <p>Panen saat buah/sayur sudah matang sempurna namun belum terlalu tua. Lakukan pagi hari setelah embun kering. Pisahkan berdasarkan ukuran dan kualitas. Simpan di tempat sejuk dan bersih agar tahan lama.</p>
+            </div>
+        </div>
+        <div class="lock-overlay" id="guideLockOverlay">
+            <div class="guide-paywall-box" id="guidePaywall">
+                <i class="fas fa-lock"></i>
+                <h3>Konten Terkunci</h3>
+                <p>Dapatkan akses penuh ke semua langkah panduan, tips rahasia, dan jadwal perawatan tanaman lengkap.</p>
+                <button class="btn-primary" style="margin-top:15px; background:white; color:var(--primary-dark);" onclick="bukaPanduan()">
+                    <i class="fas fa-unlock"></i> Buka Akses Penuh
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- GALERI -->
+<section class="gallery-section" id="galeri">
+    <div class="section-heading">
+        <span class="section-label">📸 Galeri Kebun</span>
+        <h2>Dokumentasi Hasil Tani</h2>
+        <p>Lihat proses dan hasil panen dari kebun kami</p>
+    </div>
+    <div class="gallery-grid">
+        <div class="gallery-card" onclick="bukaGaleri(1)">
+            <img src="WhatsApp Image 2026-09-09 at 09.08.51 (1).jpeg" alt="Galeri">
+            <div class="gallery-info">
+                <h3>Kebun Sayur Hijau</h3>
+                <p>Desa Cihideung — 15 Sep 2026</p>
+            </div>
+        </div>
+        <div class="gallery-card" onclick="bukaGaleri(2)">
+            <img src="WhatsApp Image 2026-09-09 at 09.08.51.jpeg" alt="Galeri">
+            <div class="gallery-info">
+                <h3>Panen Kentang</h3>
+                <p>Kebun Pak Asep — 12 Sep 2026</p>
+            </div>
+        </div>
+        <div class="gallery-card" onclick="bukaGaleri(3)">
+            <img src="FOTO.jpeg" alt="Galeri">
+            <div class="gallery-info">
+                <h3>Penanaman Bibit Baru</h3>
+                <p>Musim Kemarau — 10 Sep 2026</p>
+            </div>
+        </div>
+        <div class="gallery-card" onclick="bukaGaleri(4)">
+            <img src="DAUN.jpeg" alt="Galeri">
+            <div class="gallery-info">
+                <h3>Pembibitan</h3>
+                <p>Rumah Bibit — 8 Sep 2026</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- KONTAK PETANI -->
+<section class="farmer-section" id="kontak">
+    <div class="farmer-container">
+        <div class="section-heading" style="text-align:left; margin-bottom:20px;">
+            <span class="section-label">👨‍🌾 Hubungi Petani</span>
+            <h2>Pesan Langsung ke Penyedia</h2>
+            <p>Ingin pasokan rutin atau pesanan khusus? Hubungi langsung kami</p>
+        </div>
+        <div class="farmer-grid">
+            <div class="farmer-card">
+                <i class="fas fa-comment-dots"></i>
+                <h3>Kirim Pesan</h3>
+                <p>Isi data di bawah, kami akan segera merespons</p>
+                <form id="kontakForm">
+                    <div class="form-group">
+                        <label>Nama Lengkap</label>
+                        <input type="text" id="namaKontak" placeholder="Nama Anda" required>
+                    </div>
+                    <div class="form-group">
+                        <label>No. WhatsApp</label>
+                        <input type="tel" id="waKontak" placeholder="08xx-xxxx-xxxx" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Pesan / Kebutuhan</label>
+                        <textarea id="pesanKontak" rows="3" placeholder="Jumlah, jenis produk, jadwal pengiriman..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary full-btn">
+                        <i class="fas fa-paper-plane"></i> Kirim Pesan
+                    </button>
+                </form>
+            </div>
+            <div class="farmer-card info-card">
+                <i class="fas fa-map-marker-alt"></i>
+                <h3>Informasi Kami</h3>
+                <p>Lokasi & jam operasional</p>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> Desa Cihideung, Bandung Barat</li>
+                    <li><i class="fas fa-clock"></i> Senin–Sabtu: 06.00–17.00 WIB</li>
+                    <li><i class="fas fa-phone"></i> WhatsApp: 0812-xxxx-xxxx</li>
+                    <li><i class="fas fa-envelope"></i> tani@domain.id</li>
+                </ul>
+                <a href="https://wa.me/6" target="_blank" class="btn-wa full-btn">
+                    <i class="fab fa-whatsapp"></i> Chat Langsung via WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="testimonial-section">
+    <div class="section-heading">
+        <span class="section-label">💬 Kata Mereka</span>
+        <h2>Pendapat Pelanggan</h2>
+        <p>Ulasan dari pelanggan yang sudah membeli produk kami</p>
+    </div>
+    <div class="testimonial-grid">
+        <div class="testimonial-card">
+            <div class="stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+            </div>
+            <p>"Produknya selalu segar dan bersih. Harga juga sangat masuk akal. Langganan terus!"</p>
+            <strong>— Ibu Sari, Pembeli di Bandung</strong>
+        </div>
+        <div class="testimonial-card">
+            <div class="stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+            </div>
+            <p>"Pengiriman cepat, kemasan rapi. Sayurannya masih segar saat sampai. Terima kasih!"</p>
+            <strong>— Pak Budi, Restoran Sehat</strong>
+        </div>
+        <div class="testimonial-card">
+            <div class="stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+            </div>
+            <p>"Sumber terpercaya untuk kebutuhan dapur harian. Kualitas stabil dan konsisten."</p>
+            <strong>— Bu Rina, Katering Sehat</strong>
+        </div>
+    </div>
+    <div class="testimonial-form-card">
+        <h3>Bagaimana pengalaman Anda?</h3>
+        <p>Berikan ulasan Anda</p>
+        <form id="ulasanForm">
+            <input type="text" placeholder="Nama Anda" required>
+            <textarea rows="3" placeholder="Tulis ulasan Anda..." required></textarea>
+            <button type="submit" class="btn-primary">
+                <i class="fas fa-pen"></i> Kirim Ulasan
+            </button>
+        </form>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-logo">
+        <img src="WhatsApp Image 2026-09-08 at 11.19.26.jpeg" alt="Logo">
+        <div>
+            <h3>Nama Platform</h3>
+            <span>Pertanian & Produk Segar</span>
+        </div>
+    </div>
+    <p>Produk pertanian sehat — langsung dari kebun ke meja Anda</p>
+    <div class="footer-links">
+        <button onclick="alert('Tentang kami: platform penghubung petani & pembeli')">Tentang</button>
+        <button onclick="alert('Kebijakan: Transparan & Jujur')">Kebijakan</button>
+        <button onclick="alert('Pembayaran: Transfer & COD')">Pembayaran</button>
+        <button onclick="alert('Pengiriman: Kurir Lokal')">Pengiriman</button>
+    </div>
+    <div class="footer-bottom">
+        © 2026 Nama Platform — Semua Hak Dilindungi
+    </div>
+</footer>
+
+<!-- FLOATING WA -->
+<a href="https://wa.me/6285797187917" target="_blank" class="floating-wa">
+    <i class="fab fa-whatsapp"></i>
+</a>
+
+<!-- MODAL KERANJANG -->
+<div class="modal-overlay" id="cartModal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3><i class="fas fa-shopping-cart"></i> Keranjang Belanja</h3>
+            <button class="modal-close" onclick="tutupKeranjang()">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <p style="text-align:center; color:var(--text-muted); padding:20px;">Keranjang masih kosong</p>
+        </div>
+        <div class="cart-total-row">
+            <span>Total:</span>
+            <strong id="cartTotal">Rp 0</strong>
+        </div>
+        <div class="checkout-fields">
+            <input type="text" id="namaPenerima" placeholder="Nama Penerima">
+            <input type="text" id="alamatKirim" placeholder="Alamat Lengkap Pengiriman">
+            <input type="tel" id="waPenerima" placeholder="No. WhatsApp">
+            <select id="caraBayar">
+                <option value="">Metode Pembayaran</option>
+                <option>Transfer Bank</option>
+                <option>COD (Bayar di Tempat)</option>
+                <option>Bayar via WhatsApp</option>
+            </select>
+        </div>
+        <button class="btn-wa full-btn" onclick="pesanSekarang()">
+            <i class="fab fa-whatsapp"></i> Pesan Sekarang via WhatsApp
+        </button>
+    </div>
+</div>
+
+<!-- MODAL GALERI -->
+<div class="modal-overlay" id="galleryModal">
+    <div class="gallery-modal-inner">
+        <button class="gallery-close" onclick="tutupGaleri()">&times;</button>
+        <img src="" alt="" id="galleryImg">
+        <h3 id="galleryTitle"></h3>
+        <p id="galleryDesc"></p>
+    </div>
+</div>
+
+<!-- TOAST NOTIFIKASI -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- JAVASCRIPT -->
+<script>
+// Variabel Keranjang
+let keranjang = [];
+const hargaSatuan = {
+    'Kentang Pilihan Premium': 15000,
+    'Wortel Segar': 12000,
+    'Pisang Cavendish': 18000,
+    'Bayam Segar': 8000,
+    'Alpukat Mentega': 25000,
+    'Ubi Jalar Madu': 10000
+};
+
+// Navigasi Mobile
+document.getElementById('menuBtn').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('active');
+});
+
+// Tutup menu saat klik link
+document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+        document.getElementById('navLinks').classList.remove('active');
+    });
+});
+
+// Kalkulator Panen
+function hitungPanen() {
+    const luas = parseFloat(document.getElementById('luas').value) || 0;
+    const bibitPerM2 = parseFloat(document.getElementById('bibit').value) || 0;
+    const hasilPerTanam = parseFloat(document.getElementById('hasil').value) || 0;
+    const harga = parseFloat(document.getElementById('harga').value) || 0;
+    
+    const totalBibit = luas * bibitPerM2;
+    const totalKg = totalBibit * hasilPerTanam;
+    const pendapatan = totalKg * harga;
+    
+    document.getElementById('hasilCalc').innerHTML = `
+        <strong>Estimasi:</strong><br>
+        Jumlah tanaman: ${totalBibit.toLocaleString('id-ID')} batang<br>
+        Total hasil panen: ${totalKg.toLocaleString('id-ID')} kg<br>
+        Perkiraan pendapatan: <strong style="color:var(--primary-dark)">Rp ${pendapatan.toLocaleString('id-ID')}</strong>
+    `;
+    tampilkanPesan('success', 'Perhitungan selesai!');
+}
+
+// Cek Kode Produk
+function cekKode() {
+    const kode = document.getElementById('kodeProduk').value.trim().toUpperCase();
+    const daftarValid = ['TANI-001','TANI-002','TANI-003','TANI-004','TANI-005'];
+    
+    const el = document.getElementById('verifikasiHasil');
+    if (!kode) {
+        el.innerHTML = '<em>Masukkan kode produk terlebih dahulu</em>';
+        return;
+    }
+    if (daftarValid.includes(kode)) {
+        el.innerHTML = `
+            <div class="verification-valid">
+                <div class="verification-result">
+                    <div class="verification-result-icon">✅</div>
+                    <div>
+                        <div class="verification-label">Status Produk</div>
+                        <strong>TERVERIFIKASI — Produk Asli</strong>
+                        <div class="verification-code">
+                            <span class="verification-label">Kode:</span>
+                            <span>${kode}</span>
+                        </div>
+                        <div class="verification-meta">
+                            <span><i class="fas fa-calendar"></i> Terdaftar: 20 Sep 2026</span>
+                            <span><i class="fas fa-map-marker-alt"></i> Asal: Bandung</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        tampilkanPesan('success', 'Produk terverifikasi ✅');
+    } else {
+        el.innerHTML = `
+            <div class="verification-invalid">
+                <div class="verification-result">
+                    <div class="verification-result-icon">❌</div>
+                    <div>
+                        <div class="verification-label">Status Produk</div>
+                        <strong>TIDAK TERDAFTAR — Hati-hati Barang Palsu</strong>
+                        <p style="margin-top:8px; font-size:0.9rem;">Kode <code>${kode}</code> tidak ditemukan dalam sistem kami.</p>
+                    </div>
+                </div>
+            </div>
+        `;
+        tampilkanPesan('error', 'Kode tidak dikenali');
+    }
+}
+
+document.getElementById('kodeProduk').addEventListener('keypress', e => {
+    if (e.key === 'Enter') cekKode();
+});
+
+// Buka Panduan Penuh
+function bukaPanduan() {
+    document.getElementById('guideContainer').classList.add('unlocked');
+    document.getElementById('guidePaywall').style.display = 'none';
+    document.getElementById('guideLockOverlay').style.display = 'none';
+    document.querySelectorAll('.blur-content').forEach(el => el.style.filter = 'none');
+    tampilkanPesan('success', 'Akses penuh dibuka! Selamat membaca 📖');
+}
+
+// Keranjang
+document.querySelectorAll('.btn-add-cart').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const card = this.closest('.product-card');
+        const nama = card.querySelector('.product-title').textContent;
+        const harga = hargaSatuan[nama] || 10000;
+        keranjang.push({ nama, harga, jumlah: 1 });
+        perbaruiKeranjang();
+        tampilkanPesan('success', `${nama} ditambahkan ke keranjang`);
+    });
+});
+
+function perbaruiKeranjang() {
+    const badge = document.getElementById('cartBadge');
+    const items = document.getElementById('cartItems');
+    const totalEl = document.getElementById('cartTotal');
+    
+    badge.textContent = keranjang.reduce((sum, i) => sum + i.jumlah, 0);
+    
+    if (keranjang.length === 0) {
+        items.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding:20px;">Keranjang masih kosong</p>';
+        totalEl.textContent = 'Rp 0';
+        return;
+    }
+    
+    let total = 0;
+    items.innerHTML = keranjang.map((item, idx) => {
+        total += item.harga * item.jumlah;
+        return `
+            <div class="cart-item-row">
+                <div class="cart-item-info">
+                    <strong>${item.nama}</strong>
+                    <span>Rp ${item.harga.toLocaleString('id-ID')} × ${item.jumlah}</span>
+                </div>
+                <div class="qty-control">
+                    <button onclick="ubahJumlah(${idx}, -1)">−</button>
+                    <span>${item.jumlah}</span>
+                    <button onclick="ubahJumlah(${idx}, 1)">+</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    totalEl.textContent = `Rp ${total.toLocaleString('id-ID')}`;
+}
+
+function ubahJumlah(index, delta) {
+    keranjang[index].jumlah += delta;
+    if (keranjang[index].jumlah <= 0) keranjang.splice(index, 1);
+    perbaruiKeranjang();
+}
+
+document.getElementById('cartBtn').addEventListener('click', () => {
+    document.getElementById('cartModal').classList.add('active');
+});
+
+function tutupKeranjang() {
+    document.getElementById('cartModal').classList.remove('active');
+}
+
+function pesanSekarang() {
+    if (keranjang.length === 0) {
+        alert('Keranjang masih kosong!');
+        return;
+    }
+    const nama = document.getElementById('namaPenerima').value || 'Tidak diisi';
+    const alamat = document.getElementById('alamatKirim').value || 'Tidak diisi';
+    const wa = document.getElementById('waPenerima').value || 'Tidak diisi';
+    const bayar = document.getElementById('caraBayar').value || 'Tidak diisi';
+    
+    let pesan = 'Halo, saya ingin memesan:\n\n';
+    keranjang.forEach(i => {
+        pesan += `✅ ${i.nama} — ${i.jumlah} × Rp ${i.harga.toLocaleString('id-ID')} = Rp ${(i.harga*i.jumlah).toLocaleString('id-ID')}\n`;
+    });
+    pesan += `\n📝 Data Penerima:\nNama: ${nama}\nAlamat: ${alamat}\nWA: ${wa}\nMetode: ${bayar}`;
+    
+    const link = `https://wa.me/6285797187917?text=${encodeURIComponent(pesan)}`;
+    window.open(link, '_blank');
+    tampilkanPesan('success', 'Membuka WhatsApp...');
+}
+
+// Galeri
+const galeriData = {
+    1: { img: 'WhatsApp Image 2026-09-09 at 09.08.51 (1).jpeg', title: 'Kebun Sayur Hijau', desc: 'Desa Cihideung — 15 Sep 2026' },
+    2: { img: 'WhatsApp Image 2026-09-09 at 09.08.51.jpeg', title: 'Panen Kentang', desc: 'Kebun Pak Asep — 12 Sep 2026' },
+    3: { img: 'FOTO.jpeg', title: 'Penanaman Bibit Baru', desc: 'Musim Kemarau — 10 Sep 2026' },
+    4: { img: 'DAUN.jpeg', title: 'Pembibitan', desc: 'Rumah Bibit — 8 Sep 2026' }
+};
+
+function bukaGaleri(id) {
+    const data = galeriData[id];
+    document.getElementById('galleryImg').src = data.img;
+    document.getElementById('galleryTitle').textContent = data.title;
+    document.getElementById('galleryDesc').textContent = data.desc;
+    document.getElementById('galleryModal').classList.add('active');
+}
+
+function tutupGaleri() {
+    document.getElementById('galleryModal').classList.remove('active');
+}
+
+// Form Kontak & Ulasan
+document.getElementById('kontakForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const nama = document.getElementById('namaKontak').value;
+    const wa = document.getElementById('waKontak').value;
+    const pesan = document.getElementById('pesanKontak').value;
+    const teks = `Halo, saya ${nama}.\n\n${pesan}\n\nHubungi via WA: ${wa}`;
+    window.open(`https://wa.me/6285797187917?text=${encodeURIComponent(teks)}`, '_blank');
+    this.reset();
+    tampilkanPesan('success', 'Pesan dikirim! 📩');
+});
+
+document.getElementById('ulasanForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    tampilkanPesan('success', 'Terima kasih atas ulasan Anda! ⭐');
+    this.reset();
+});
+
+// Pesan Notifikasi
+function tampilkanPesan(jenis, teks) {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.style.borderLeft = jenis === 'success' ? '4px solid var(--success)' : '4px solid var(--danger)';
+    toast.textContent = teks;
+    container.appendChild(toast);
+    setTimeout(() => toast.remove(), 3500);
+}
+
+// Tutup modal saat klik luar
+document.querySelectorAll('.modal-overlay').forEach(modal => {
+    modal.addEventListener('click', e => {
+        if (e.target === modal) modal.classList.remove('active');
+    });
+});
+</script>
+</body>
+</html>

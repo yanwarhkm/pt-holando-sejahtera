@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Admin — Beken Seeds</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #2c5f2d 0%, #4a8f4c 100%);
+      padding: 1rem;
+    }
+
+    .login-kotak {
+      background: white;
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      animation: naik 0.4s ease-out;
+    }
+
+    @keyframes naik {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .login-logo {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .login-logo i {
+      font-size: 2.8rem;
+      color: #2c5f2d;
+      margin-bottom: 0.5rem;
+    }
+
+    .login-logo h2 {
+      color: #2c5f2d;
+      font-size: 1.4rem;
+    }
+
+    .login-logo p {
+      color: #777;
+      font-size: 0.9rem;
+      margin-top: 0.25rem;
+    }
+
+    .form-grup {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-grup label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #444;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .input-bungkus {
+      position: relative;
+    }
+
+    .input-bungkus i {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #aaa;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 0.9rem 1rem 0.9rem 2.75rem;
+      border: 2px solid #e8e8e8;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: 0.3s;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #2c5f2d;
+      box-shadow: 0 0 0 4px rgba(44, 95, 45, 0.12);
+    }
+
+    .tombol-login {
+      width: 100%;
+      padding: 0.95rem;
+      background: #2c5f2d;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 0.5rem;
+    }
+
+    .tombol-login:hover {
+      background: #245025;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(44, 95, 45, 0.3);
+    }
+
+    .tombol-login:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .pesan-salah {
+      background: #ffebee;
+      color: #c62828;
+      padding: 0.75rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      display: none;
+      font-size: 0.9rem;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .kembali-link {
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+
+    .kembali-link a {
+      color: #666;
+      text-decoration: none;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: 0.2s;
+    }
+
+    .kembali-link a:hover {
+      color: #2c5f2d;
+    }
+
+    .ingat-sandi {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0.75rem 0 1.25rem;
+      font-size: 0.85rem;
+    }
+
+    .ingat-sandi label {
+      color: #666;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+    }
+
+    .ingat-sandi a {
+      color: #2c5f2d;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-kotak">
+    <div class="login-logo">
+      <i class="fa-solid fa-seedling"></i>
+      <h2>Beken Seeds — Admin</h2>
+      <p>Silakan masuk untuk mengakses sistem</p>
+    </div>
+
+    <form id="formLogin" onsubmit="prosesLogin(event)">
+      <div class="form-grup">
+        <label for="username">Nama Pengguna</label>
+        <div class="input-bungkus">
+          <i class="fa-solid fa-user"></i>
+          <input type="text" id="username" class="form-input" placeholder="Masukkan nama pengguna" required autocomplete="username">
+        </div>
+      </div>
+
+      <div class="form-grup">
+        <label for="password">Kata Sandi</label>
+        <div class="input-bungkus">
+          <i class="fa-solid fa-lock"></i>
+          <input type="password" id="password" class="form-input" placeholder="Masukkan kata sandi" required autocomplete="current-password">
+        </div>
+      </div>
+
+      <div class="ingat-sandi">
+        <label>
+          <input type="checkbox" id="ingatSandi"> Ingat saya
+        </label>
+        <a href="#" onclick="alert('Hubungi pemilik sistem untuk reset sandi'); return false;">Lupa sandi?</a>
+      </div>
+
+      <button type="submit" id="tombolMasuk" class="tombol-login">
+        <i class="fa-solid fa-right-to-bracket"></i> Masuk
+      </button>
+
+      <div id="pesanError" class="pesan-salah">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <span id="teksError"></span>
+      </div>
+    </form>
+
+    <div class="kembali-link">
+      <a href="index.html"><i class="fa-solid fa-arrow-left"></i> Kembali ke Halaman Utama</a>
+    </div>
+  </div>
+
+  <script>
+    // ==== AKUN ADMIN ====
+    const AKUN_ADMIN = {
+      username: "admin",
+      password: "beken2026"
+    };
+
+    // Cek jika sudah login → langsung ke dashboard
+    window.onload = function() {
+      if (localStorage.getItem("beken_login") === "ok") {
+        window.location.href = "dashboard.html";
+      }
+    };
+
+    function prosesLogin(e) {
+      e.preventDefault();
+
+      const user = document.getElementById("username").value.trim();
+      const pass = document.getElementById("password").value;
+      const tombol = document.getElementById("tombolMasuk");
+      const pesan = document.getElementById("pesanError");
+      const teks = document.getElementById("teksError");
+
+      // Sembunyikan pesan error
+      pesan.style.display = "none";
+
+      // Nonaktifkan tombol
+      tombol.disabled = true;
+      tombol.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memproses...';
+
+      // Cek akun
+      setTimeout(() => {
+        if (user === AKUN_ADMIN.username && pass === AKUN_ADMIN.password) {
+          // BERHASIL
+          localStorage.setItem("beken_login", "ok");
+          window.location.href = "dashboard.html";
+        } else {
+          // GAGAL
+          pesan.style.display = "flex";
+          if (user !== AKUN_ADMIN.username) {
+            teks.textContent = "Nama pengguna tidak ditemukan";
+          } else {
+            teks.textContent = "Kata sandi salah";
+          }
+          tombol.disabled = false;
+          tombol.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Masuk';
+        }
+      }, 800);
+    }
+    function cekLogin(e) {
+  e.preventDefault();
+  
+  const user = document.getElementById("adminUser").value.trim();
+  const pass = document.getElementById("adminPass").value.trim();
+  const errorBox = document.getElementById("errorBox");
+
+  if (user === ADMIN_USERNAME && pass === ADMIN_PASSWORD) {
+    localStorage.setItem("adminSudahLogin", "ya");
+    // Langsung ke Panel Admin
+    window.location.href = "admin.html";
+  } else {
+    errorBox.style.display = "block";
+  }
+}
+  </script>
+
+</body>
+</html>

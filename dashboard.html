@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Admin — Beken Seeds</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, sans-serif; }
+    :root { --hijau: #2c5f2d; --hijaumuda: #97bc62; --abu: #f5f5f5; --gelap: #333; }
+    body { background: #f0f4f0; display: flex; min-height: 100vh; }
+
+    /* --- SIDEBAR --- */
+    .sidebar {
+      width: 260px;
+      background: linear-gradient(180deg, #2c5f2d, #3a703b);
+      color: white;
+      padding: 2rem 1.5rem;
+      position: fixed;
+      height: 100vh;
+    }
+    .sidebar-logo { font-size: 1.3rem; font-weight: 700; margin-bottom: 2.5rem; display: flex; align-items: center; gap: 0.5rem; }
+    .sidebar-menu { list-style: none; }
+    .sidebar-menu li { margin-bottom: 0.5rem; }
+    .sidebar-menu a {
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.85rem 1rem;
+      border-radius: 8px;
+      transition: 0.2s;
+    }
+    .sidebar-menu a:hover, .sidebar-menu a.aktif { background: rgba(255,255,255,0.15); color: white; }
+    .sidebar-bawah { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.2); }
+
+    /* --- KONTEN UTAMA --- */
+    .konten { margin-left: 260px; flex: 1; padding: 2rem; }
+    .atasan { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+    .atasan h1 { font-size: 1.6rem; color: var(--gelap); }
+    .tanggal { color: #777; margin-top: 0.25rem; }
+
+    /* --- KOTAK STATISTIK --- */
+    .grid-kartu { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-bottom: 2rem; }
+    .kartu { background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+    .kartu-judul { color: #777; font-size: 0.9rem; margin-bottom: 0.5rem; }
+    .kartu-angka { font-size: 2rem; font-weight: 700; color: var(--hijau); }
+    .kartu-ikon { float: right; font-size: 2.2rem; color: var(--hijaumuda); opacity: 0.4; }
+
+    /* --- TABEL --- */
+    .grid-bawah { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; }
+    .kotak { background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+    .kotak h3 { margin-bottom: 1rem; font-size: 1.1rem; color: var(--gelap); }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+    th { color: #777; font-weight: 600; }
+    .status-sah { color: #2c5f2d; font-weight: 600; }
+    .status-tidak { color: #c62828; font-weight: 600; }
+
+    /* --- RESPONSIF HP --- */
+    @media (max-width: 900px) {
+      .sidebar { width: 70px; padding: 1.5rem 0.75rem; }
+      .sidebar-logo span, .sidebar-menu a span { display: none; }
+      .konten { margin-left: 70px; }
+      .grid-bawah { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <i class="fa-solid fa-seedling"></i>
+      <span>Beken Seeds</span>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="#" class="aktif"><i class="fa-solid fa-chart-pie"></i> <span>Dashboard</span></a></li>
+      <li><a href="#"><i class="fa-solid fa-qrcode"></i> <span>Daftar Sertifikat</span></a></li>
+      <li><a href="#"><i class="fa-solid fa-plus-circle"></i> <span>Tambah Benih</span></a></li>
+      <li><a href="#"><i class="fa-solid fa-users"></i> <span>Pengguna</span></a></li>
+      <li><a href="#"><i class="fa-solid fa-cog"></i> <span>Pengaturan</span></a></li>
+      <li class="sidebar-bawah">
+        <a href="#" onclick="keluarAdmin(); return false;">
+          <i class="fa-solid fa-right-from-bracket"></i> <span>Keluar</span>
+        </a>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- KONTEN UTAMA -->
+  <main class="konten">
+    <div class="atasan">
+      <div>
+        <h1>Selamat Datang, Admin! 👋</h1>
+        <p class="tanggal" id="tanggalSekarang"></p>
+      </div>
+      <div>
+        <span style="background:#e6f4ea; color:#2c5f2d; padding:0.5rem 1rem; border-radius:20px; font-weight:600;">Online</span>
+      </div>
+    </div>
+
+    <!-- KARTU STATISTIK -->
+    <div class="grid-kartu">
+      <div class="kartu">
+        <i class="fa-solid fa-file-certificate kartu-ikon"></i>
+        <div class="kartu-judul">Total Sertifikat</div>
+        <div class="kartu-angka">1.248</div>
+      </div>
+      <div class="kartu">
+        <i class="fa-solid fa-check-circle kartu-ikon"></i>
+        <div class="kartu-judul">Terverifikasi</div>
+        <div class="kartu-angka">1.192</div>
+      </div>
+      <div class="kartu">
+        <i class="fa-solid fa-eye kartu-ikon"></i>
+        <div class="kartu-judul">Hari Ini</div>
+        <div class="kartu-angka">38</div>
+      </div>
+      <div class="kartu">
+        <i class="fa-solid fa-boxes-stacked kartu-ikon"></i>
+        <div class="kartu-judul">Stok Benih</div>
+        <div class="kartu-angka">5.420</div>
+      </div>
+    </div>
+
+    <!-- TABEL AKTIVITAS -->
+    <div class="grid-bawah">
+      <div class="kotak">
+        <h3>Aktivitas Verifikasi Terbaru</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Kode Sertifikat</th>
+              <th>Waktu</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>BPSB-JABAR/KNT/2026/042</td>
+              <td>10 menit lalu</td>
+              <td class="status-sah">✅ Sah</td>
+            </tr>
+            <tr>
+              <td>BPSB-JABAR/KNT/2026/041</td>
+              <td>25 menit lalu</td>
+              <td class="status-sah">✅ Sah</td>
+            </tr>
+            <tr>
+              <td>BPSB-JABAR/KNT/2026/039</td>
+              <td>1 jam lalu</td>
+              <td class="status-tidak">⚠️ Tidak Dikenal</td>
+            </tr>
+            <tr>
+              <td>BPSB-JABAR/KNT/2026/038</td>
+              <td>2 jam lalu</td>
+              <td class="status-sah">✅ Sah</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="kotak">
+        <h3>Ringkasan</h3>
+        <p style="margin-bottom:1rem; color:#555;">Semua sistem berjalan normal ✅</p>
+        <ul style="list-style:none; line-height:1.8;">
+          <li><i class="fa-solid fa-check" style="color:#2c5f2d;"></i> Database tersambung</li>
+          <li><i class="fa-solid fa-check" style="color:#2c5f2d;"></i> QR Scanner aktif</li>
+          <li><i class="fa-solid fa-check" style="color:#2c5f2d;"></i> Kode manual aktif</li>
+          <li><i class="fa-solid fa-exclamation-triangle" style="color:#f59e0b;"></i> Stok menipis: Kode #039</li>
+        </ul>
+        <br>
+        <a href="index.html#qr-section" style="display:inline-block; background:var(--hijau); color:white; padding:0.75rem 1.25rem; border-radius:8px; text-decoration:none; font-weight:600;">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Halaman Verifikasi
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Cek Login — lindungi halaman ini
+    if (localStorage.getItem("beken_login") !== "ok") {
+      window.location.href = "login.html";
+    }
+
+    // Fungsi Keluar
+    function keluarAdmin() {
+      localStorage.removeItem("beken_login");
+      window.location.href = "login.html";
+    }
+
+    // Tampilkan tanggal hari ini
+    const hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+    const bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+    const sekarang = new Date();
+    document.getElementById('tanggalSekarang').textContent = 
+      hari[sekarang.getDay()] + ', ' + sekarang.getDate() + ' ' + bulan[sekarang.getMonth()] + ' ' + sekarang.getFullYear();
+  </script>
+
+</body>
+</html>

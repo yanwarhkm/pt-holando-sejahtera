@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panduan Menanam Kentang</title>
+    <style>
+        :root {
+            --primary-color: #2E7D32;
+            --primary-dark: #1B5E20;
+            --primary-light: #81C784;
+            --accent-color: #F4B942;
+            --bg-main: #F4F6F4;
+            --surface: #FFFFFF;
+            --surface-soft: #EEF6EF;
+            --text-main: #263238;
+            --text-muted: #667085;
+            --border-color: #DCDDE1;
+            --shadow: 0 5px 20px rgba(0,0,0,.08);
+            --radius: 14px;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding-bottom: 90px;
+        }
+        .container {
+            width: min(900px, 92%);
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        header h1 {
+            color: var(--primary-dark);
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            margin-bottom: 8px;
+        }
+        header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+        .guide-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+        .guide-card h2 {
+            color: var(--primary-dark);
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .step {
+            margin-bottom: 22px;
+            padding-bottom: 22px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+        .step:last-child {
+            border-bottom: none;
+        }
+        .step h3 {
+            font-size: 1rem;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .step h3 span {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            font-size: .8rem;
+            font-weight: 700;
+        }
+        .step p {
+            color: var(--text-main);
+            font-size: .9rem;
+        }
+        .blur-content {
+            filter: blur(5px);
+            user-select: none;
+            pointer-events: none;
+        }
+        .lock-overlay {
+            position: relative;
+            margin: -15px;
+            padding: 30px 20px;
+            text-align: center;
+            background: linear-gradient(transparent, rgba(255,255,255,.95) 40%);
+            border-radius: var(--radius);
+            z-index: 2;
+        }
+        .lock-icon {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+        .lock-text {
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+        }
+        .paywall-box {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(46,125,50,.2);
+            margin: 30px 0;
+        }
+        .paywall-box h3 {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+        }
+        .paywall-box p {
+            opacity: .9;
+            font-size: .9rem;
+            margin-bottom: 20px;
+        }
+        .price-tag {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+        .btn-buy {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: white;
+            color: var(--primary-dark);
+            padding: 13px 28px;
+            border-radius: 10px;
+            font-weight: 800;
+            text-decoration: none;
+            transition: .25s;
+            border: none;
+            font-size: 1rem;
+        }
+        .btn-buy:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,.15);
+        }
+        .full-unlocked {
+            display: none;
+        }
+        .unlocked .blur-content,
+        .unlocked .lock-overlay {
+            filter: none;
+            user-select: auto;
+            pointer-events: auto;
+            display: block;
+        }
+        .unlocked .lock-overlay {
+            display: none;
+        }
+        .unlocked .full-unlocked {
+            display: block;
+        }
+        .unlocked .paywall-box {
+            display: none;
+        }
+        .status-badge {
+            display: inline-block;
+            background: var(--success);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: .8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        .floating-wa {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 999;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #25D366;
+            color: white;
+            font-size: 1.5rem;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,.2);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>🥔 Panduan Lengkap Menanam Kentang</h1>
+        <p>Cara menanam kentang yang sehat dan panen melimpah</p>
+    </header>
+
+    <div id="guide-wrapper" class="guide-card">
+        <!-- Badge jika sudah dibuka -->
+        <div class="full-unlocked">
+            <span class="status-badge">✅ Sudah Dibuka — Versi Lengkap</span>
+        </div>
+
+        <!-- BAGIAN GRATIS = TAMPIL SEDIKIT -->
+        <h2>📖 Panduan Singkat</h2>
+
+        <div class="step">
+            <h3><span>1</span> Pilih Bibit Kentang</h3>
+            <p>Pilih bibit kentang yang sehat, tidak berlubang, dan ukurannya sedang. Bibit yang baik berwarna cerah dan tidak busuk.</p>
+        </div>
+
+        <div class="step">
+            <h3><span>2</span> Siapkan Tanah</h3>
+            <p>Kentang menyukai tanah yang gembur, berpasir, dan kaya humus. Pastikan tanah tidak tergenang air agar umbi tidak busuk.</p>
+        </div>
+
+        <div class="step">
+            <h3><span>3</span> Penanaman</h3>
+            <p>Tanam bibit kentang sedalam 10–15 cm dengan jarak antar tanaman 30–40 cm. Letakkan tunas menghadap ke atas.</p>
+        </div>
+
+        <!-- BAGIAN TERKUNCI = DIKABURKAN -->
+        <div class="blur-content">
+            <div class="step">
+                <h3><span>4</span> Penyiraman & Pemupukan</h3>
+                <p>Siram tanaman secara teratur, jaga tanah tetap lembap tapi tidak becek. Gunakan pupuk kandang saat tanam dan pupuk organik cair setiap 2 minggu sekali agar pertumbuhan umbi maksimal. Hindari pupuk kimia berlebih agar rasa kentang tetap enak dan sehat.</p>
+            </div>
+
+            <div class="step">
+                <h3><span>5</span> Penggemburan Tanah</h3>
+                <p>Timbun tanah ke pangkal batang setinggi 15–20 cm saat tanaman mencapai tinggi 20–30 cm. Ini penting agar umbi yang tumbuh tidak terkena sinar matahari dan berubah warna menjadi hijau (beracun). Lakukan penggemburan 2–3 kali selama masa pertumbuhan.</p>
+            </div>
+
+            <div class="step">
+                <h3><span>6</span> Pencegahan Hama & Penyakit</h3>
+                <p>Hama utama kentang adalah ulat, kutu daun, dan kumbang. Cegah dengan menanam bawang merah di sekitarnya sebagai tanaman pengusir hama. Cabut tanaman yang sakit segera agar tidak menular. Gunakan pestisida alami dari air rendaman tembakau atau bawang putih.</p>
+            </div>
+
+            <div class="step">
+                <h3><span>7</span> Masa Panen</h3>
+                <p>Kentang siap dipanen saat daun mulai menguning dan mengering, biasanya 90–120 hari setelah tanam. Cek umbi di tanah, jika kulit sudah kuat dan tidak mudah lepas, berarti sudah siap. Cabut tanaman perlahan dan biarkan kentang di tanah 1–2 hari untuk mengeringkan kulit sebelum disimpan.</p>
+            </div>
+
+            <div class="step">
+                <h3><span>8</span> Penyimpanan</h3>
+                <p>Simpan kentang di tempat yang sejuk, gelap, dan berventilasi baik. Suhu ideal 4–10°C. Jangan simpan di tempat lembap atau terkena cahaya karena akan tumbuh tunas dan berubah warna menjadi hijau. Pisahkan kentang yang rusak agar tidak membusukkan yang lain.</p>
+            </div>
+        </div>
+
+        <!-- TAMPIL JIKA BELUM BELI -->
+        <div class="lock-overlay" id="lock-section">
+            <div class="lock-icon">🔒</div>
+            <p class="lock-text">Masih ada langkah lengkap Perawatan, Pencegahan Hama, Panen & Penyimpanan yang belum dibuka</p>
+        </div>
+
+        <!-- KOTAK PEMBELIAN -->
+        <div class="paywall-box" id="pay-section">
+            <h3>🔓 Buka Panduan Lengkap</h3>
+            <p>Dapatkan panduan lengkap 8 langkah terperinci + tips rahasia agar panen melimpah</p>
+            <div class="price-tag">Rp 15.000</div>
+            <button class="btn-buy" onclick="beliAkses()">
+                💳 Buka Sekarang
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Tombol WhatsApp -->
+<a href="https://wa.me/6281234567890" target="_blank" class="floating-wa">💬</a>
+
+<script>
+    // Cek apakah sudah beli
+    function cekAkses() {
+        const sudahBeli = localStorage.getItem('panduanKentangLengkap');
+        if (sudahBeli === 'ya') {
+            document.getElementById('guide-wrapper').classList.add('unlocked');
+        }
+    }
+
+    // Proses beli
+    function beliAkses() {
+        const konfirmasi = confirm('Setelah klik OK, Anda akan diarahkan ke WhatsApp untuk menyelesaikan pembayaran. Setelah dibayar, panduan akan terbuka selamanya.');
+        if (konfirmasi) {
+            // Simpan status akses
+            localStorage.setItem('panduanKentangLengkap', 'ya');
+            // Buka langsung
+            document.getElementById('guide-wrapper').classList.add('unlocked');
+            alert('✅ Terima kasih! Panduan lengkap sudah terbuka. Selamat membaca!');
+            // Buka WhatsApp (ganti nomornya ke nomor kamu)
+            window.open('https://wa.me/6281234567890?text=Halo%2C%20saya%20mau%20beli%20Panduan%20Lengkap%20Menanam%20Kentang%20Rp15.000', '_blank');
+        }
+    }
+
+    // Jalankan saat halaman dibuka
+    cekAkses();
+</script>
+
+</body>
+</html>
