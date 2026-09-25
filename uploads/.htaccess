@@ -1,0 +1,25 @@
+# Folder gambar bibit hasil upload.
+# Boleh diakses browser (agar <img> katalog tampil), TAPI tidak boleh
+# menjalankan skrip apa pun — pertahanan berlapis jika ada berkas berbahaya
+# yang lolos validasi upload.
+
+Options -Indexes -ExecCGI
+
+# Matikan mesin PHP di folder ini (mod_php)
+<IfModule mod_php.c>
+    php_admin_flag engine off
+</IfModule>
+<IfModule mod_php7.c>
+    php_admin_flag engine off
+</IfModule>
+<IfModule mod_php5.c>
+    php_admin_flag engine off
+</IfModule>
+
+# Cegah handler eksekusi untuk ekstensi skrip yang umum disalahgunakan
+RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .phar .pht .cgi .pl .py
+RemoveType .php .phtml .php3 .php4 .php5 .php7 .phar .pht
+
+<FilesMatch "(?i)\.(php|phtml|php[0-9]|phar|pht|cgi|pl|py|asp|aspx|jsp|sh|htaccess)$">
+    Require all denied
+</FilesMatch>

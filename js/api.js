@@ -14,8 +14,13 @@ async function apiRequest(url, { method = 'GET', body } = {}) {
         credentials: 'same-origin'
     };
     if (body !== undefined) {
-        options.headers['Content-Type'] = 'application/json';
-        options.body = JSON.stringify(body);
+        if (body instanceof FormData) {
+            // Biarkan browser menentukan Content-Type + boundary multipart-nya
+            options.body = body;
+        } else {
+            options.headers['Content-Type'] = 'application/json';
+            options.body = JSON.stringify(body);
+        }
     }
 
     let response;

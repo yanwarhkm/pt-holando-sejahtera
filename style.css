@@ -130,13 +130,16 @@ a { color: inherit; text-decoration: none; }
     border: 1px solid var(--border-color); border-radius: var(--radius); box-shadow: var(--shadow);
 }
 .tool-icon {
-    width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;
+    width: 48px; height: 48px; flex-shrink: 0;
+    display: inline-flex; align-items: center; justify-content: center;
     margin-bottom: 12px; border-radius: 13px; background: var(--surface-soft);
-    color: var(--primary-color); font-size: 1.2rem;
+    color: var(--primary-color); font-size: 1.35rem; line-height: 1;
+    font-style: normal; text-align: center;
 }
+.tool-icon::before { display: block; line-height: 1; }
 .calc-header h3, .checker-header h3 { color: var(--primary-dark); font-size: 1.1rem; }
 .calc-header p, .checker-header p { color: var(--text-muted); font-size: .82rem; margin-top: 3px; }
-.calc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 20px 0; }
+.calc-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin: 20px 0; }
 .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
 .form-group label { font-size: .82rem; font-weight: 700; }
 .form-group input, .form-group select, .form-group textarea,
@@ -305,15 +308,19 @@ kbd { background: #f5f5f5; padding: 0.125rem 0.5rem; border-radius: 4px; border:
     background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
     border: 1px solid var(--primary-light);
 }
-.farmer-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 20px; }
-.farmer-card { padding: 25px; background: white; border-radius: 14px; box-shadow: 0 5px 15px rgba(0,0,0,.05); }
+.farmer-grid { display: grid; grid-template-columns: 1fr; gap: 20px; max-width: 640px; margin: 0 auto; }
+.farmer-card { padding: 28px 30px; background: white; border-radius: 14px; box-shadow: 0 5px 15px rgba(0,0,0,.05); }
 .farmer-card > i { margin-bottom: 10px; color: var(--primary-color); font-size: 1.5rem; }
-.farmer-card h3 { margin-bottom: 8px; }
+.farmer-card h3 { margin-bottom: 6px; }
 .farmer-card p { margin-bottom: 18px; color: var(--text-muted); font-size: .82rem; }
 .farmer-card form { display: grid; gap: 9px; }
-.info-card ul { list-style: none; }
-.info-card li { display: flex; gap: 8px; margin: 12px 0; font-size: .85rem; }
-.info-card li i { color: var(--primary-color); }
+.info-card ul { list-style: none; margin: 0; padding: 0; }
+.info-card li { display: flex; align-items: flex-start; gap: 10px; margin: 0 0 14px; font-size: .9rem; line-height: 1.45; overflow-wrap: anywhere; }
+.info-card li:last-child { margin-bottom: 0; }
+.info-card li i { color: var(--primary-color); width: 18px; text-align: center; flex-shrink: 0; margin-top: 3px; }
+.info-card li a { color: var(--primary-color); font-weight: 600; text-decoration: none; word-break: break-word; }
+.info-card li a:hover, .info-card li a:focus { text-decoration: underline; }
+.info-card .btn-wa { margin-top: 20px; }
 
 /* TESTIMONIAL */
 .testimonial-section { width: min(1100px, 92%); }
@@ -535,7 +542,9 @@ footer > p { margin: 15px 0; opacity: .75; font-size: .8rem; }
     .gallery-info { padding: 10px; }
     .gallery-info h3 { font-size: .78rem; }
     .gallery-info p { font-size: .65rem; }
-    .farmer-grid { grid-template-columns: 1fr; }
+    .farmer-container { padding: 22px 16px; }
+    .farmer-grid { grid-template-columns: 1fr; max-width: 100%; }
+    .farmer-card { padding: 22px 20px; }
     .testimonial-grid { grid-template-columns: 1fr; }
     footer { padding-bottom: 80px; }
     .mobile-bottom-nav {
@@ -773,6 +782,9 @@ footer > p { margin: 15px 0; opacity: .75; font-size: .8rem; }
 }
 @media (max-width: 360px) {
     .hero h1 { font-size: 1.7rem; }
+    .farmer-container { padding: 18px 12px; }
+    .farmer-card { padding: 18px 15px; }
+    .info-card li { font-size: .85rem; }
 }
 
 /* ---------- AKSESIBILITAS: kurangi gerakan ---------- */

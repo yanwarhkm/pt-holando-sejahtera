@@ -129,8 +129,23 @@
     }
     .form-produk input:focus, .form-produk select:focus, .form-produk textarea:focus { outline: none; border-color: var(--hijau); box-shadow: 0 0 0 3px rgba(44,95,45,0.12); }
     .form-produk textarea { resize: vertical; }
+    /* Baris input kode + tombol Scan (modal Tambah Verifikasi) */
+    .fv-kode-baris { display: flex; gap: 0.5rem; align-items: stretch; }
+    .fv-kode-baris input { flex: 1 1 auto; min-width: 0; }
+    .fv-kode-baris .btn-aksi { flex: 0 0 auto; white-space: nowrap; }
+    .fv-scan-area { border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; }
+    .fv-scan-mount { width: 100%; min-height: 200px; max-height: 300px; background: #000; overflow: hidden; display: flex; }
+    .fv-scan-bawah { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap; padding: 0.5rem 0.6rem; }
+    .fv-scan-status { font-size: 0.78rem; color: #555; min-width: 0; }
+    @media (max-width: 480px) {
+      .fv-kode-baris { flex-wrap: wrap; }
+      .fv-kode-baris .btn-aksi { width: 100%; }
+    }
     .fp-bawah { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
-    .fp-bawah img { width: 64px; height: 64px; border-radius: 8px; object-fit: cover; background: #f5f5f5; }
+    .fp-bawah img { width: 96px; height: 96px; border-radius: 8px; object-fit: cover; background: #f5f5f5; border: 1px solid #eee; }
+    .fp-file-baris { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+    .fp-nama-file { font-weight: 500; color: #444; font-size: 0.8rem; word-break: break-all; }
+    .fp-file-info { font-weight: 400; color: #888; font-size: 0.72rem; }
     .form-produk .fp-aktif { flex-direction: row; align-items: center; gap: 0.5rem; }
     .fp-aktif input { width: auto; }
     .fp-pesan { color: #c62828; font-size: 0.85rem; }
@@ -354,6 +369,49 @@
       </table>
     </div>
    </section>
+
+   <!-- HALAMAN VERIFIKASI (data tabel kode_produk) -->
+   <section class="halaman" id="halaman-verifikasi" hidden>
+    <div class="atasan">
+      <div>
+        <h1>Verifikasi</h1>
+        <p class="tanggal">Daftarkan kode/nomor seri pada label bibit agar bisa dicocokkan saat pelanggan memindai QR. Data ini internal — bukan verifikasi BPSB resmi.</p>
+      </div>
+      <div class="aksi-grup">
+        <button type="button" class="btn-aksi btn-selesai" onclick="bukaFormVerifikasi()">
+          <i class="fa-solid fa-plus"></i> <span>Tambah Verifikasi</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="kotak">
+      <div class="pesanan-toolbar">
+        <div class="pesanan-cari">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="search" id="cariVerifikasi" placeholder="Cari kode / nomor seri" aria-label="Cari kode verifikasi">
+        </div>
+        <select id="filterVerifikasi" class="filter-select" aria-label="Filter status verifikasi">
+          <option value="">Semua</option>
+          <option value="aktif">Aktif</option>
+          <option value="dicabut">Dicabut</option>
+        </select>
+      </div>
+      <p class="pesanan-info" id="infoVerifikasi">Memuat data verifikasi...</p>
+      <table class="tabel-pesanan tabel-produk">
+        <thead>
+          <tr>
+            <th>Kode / Nomor Seri</th>
+            <th>Bibit Terkait</th>
+            <th>Asal</th>
+            <th>Terdaftar</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="tabelVerifikasi"></tbody>
+      </table>
+    </div>
+   </section>
   </main>
 
   <!-- FORM BIBIT (tambah / edit) -->
@@ -383,8 +441,14 @@
         <label class="penuh">Deskripsi
           <textarea id="fpDeskripsi" rows="2" maxlength="255"></textarea>
         </label>
-        <label>Gambar (nama file)
-          <input type="text" id="fpGambar" maxlength="255" placeholder="contoh: sml.jpg">
+        <label class="penuh">Gambar
+          <input type="file" id="fpFile" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" hidden>
+          <span class="fp-file-baris">
+            <button type="button" class="btn-aksi btn-garis" id="fpPilihGambar"><i class="fa-solid fa-image"></i> Pilih Gambar</button>
+            <span class="fp-nama-file" id="fpNamaFile">Belum ada gambar dipilih</span>
+          </span>
+          <small class="fp-file-info">JPG, PNG, atau WEBP. Maksimal 3 MB. Kosongkan untuk pakai gambar cadangan.</small>
+          <input type="hidden" id="fpGambar">
         </label>
         <label>Label (opsional)
           <input type="text" id="fpBadge" maxlength="30" placeholder="Baru, Populer, Diskon...">
@@ -427,6 +491,52 @@
     </div>
   </div>
 
+  <!-- FORM VERIFIKASI (tambah / edit kode_produk) -->
+  <div class="modal" id="modalVerifikasi" hidden>
+    <div class="kotak modal-isi" role="dialog" aria-modal="true" aria-labelledby="judulFormVerifikasi">
+      <div class="modal-kepala">
+        <h3 id="judulFormVerifikasi">Tambah Verifikasi</h3>
+        <button type="button" class="modal-tutup" onclick="tutupFormVerifikasi()" aria-label="Tutup">&times;</button>
+      </div>
+      <form id="formVerifikasi" class="form-produk" novalidate>
+        <label class="penuh">Kode / Nomor Seri
+          <span class="fv-kode-baris">
+            <input type="text" id="fvKode" maxlength="50" placeholder="Ketik atau scan kode pada label" required>
+            <button type="button" class="btn-aksi btn-garis" id="fvScanBtn" onclick="mulaiScanKode()"><i class="fa-solid fa-camera"></i> Scan</button>
+          </span>
+        </label>
+        <div class="penuh fv-scan-area" id="fvScanArea" hidden>
+          <div class="fv-scan-mount" id="fvScanMount"></div>
+          <div class="fv-scan-bawah">
+            <span class="fv-scan-status" id="fvScanStatus">Menyiapkan kamera…</span>
+            <button type="button" class="btn-aksi btn-batal" id="fvScanStop" onclick="hentikanScanKode()"><i class="fa-solid fa-stop"></i> Hentikan</button>
+          </div>
+        </div>
+        <label class="penuh">Bibit Terkait (opsional)
+          <!-- Opsi dari api/produk.php?semua=1 -->
+          <select id="fvProduk"></select>
+        </label>
+        <label>Asal (opsional)
+          <input type="text" id="fvAsal" maxlength="100" placeholder="Contoh: Bandung">
+        </label>
+        <label>Tanggal Terdaftar
+          <input type="date" id="fvTanggal" required>
+        </label>
+        <label>Status
+          <select id="fvStatus">
+            <option value="aktif">Aktif</option>
+            <option value="dicabut">Dicabut</option>
+          </select>
+        </label>
+        <p class="penuh fp-pesan" id="fvPesan" role="alert"></p>
+        <div class="penuh fp-tombol">
+          <button type="button" class="btn-aksi btn-garis" onclick="tutupFormVerifikasi()">Batal</button>
+          <button type="submit" class="btn-aksi btn-selesai" id="fvSimpan"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- DETAIL PESANAN -->
   <div class="modal" id="modalPesanan" hidden>
     <div class="kotak modal-isi" role="dialog" aria-modal="true" aria-labelledby="judulDetail">
@@ -442,6 +552,7 @@
   <div class="notif" id="notif" role="status" aria-live="polite" hidden></div>
 
   <script src="js/api.js"></script>
+  <script src="js/scanner.js"></script>
   <script>
     // Fungsi Keluar
     async function keluarAdmin() {
@@ -668,6 +779,10 @@
     const BATAS_STOK_RENDAH = 50;
     let daftarProdukAdmin = [];
     let produkDiedit = null;
+    let fileGambarBaru = null;      // File yang baru dipilih admin (belum diunggah)
+    let previewObjectUrl = null;    // object URL untuk pratinjau file baru (perlu di-revoke)
+    const MAKS_UPLOAD_MB = 3;
+    const TIPE_GAMBAR_OK = ['image/jpeg', 'image/png', 'image/webp'];
     let daftarJenis = [];   // semua jenis bibit (aktif & nonaktif)
     let jenisDiedit = null;
 
@@ -734,11 +849,46 @@
           }).join('');
     }
 
+    function bersihkanPreviewUrl() {
+      if (previewObjectUrl) { URL.revokeObjectURL(previewObjectUrl); previewObjectUrl = null; }
+    }
+
+    // Pratinjau: file baru (jika ada) diprioritaskan; jika tidak, gambar lama dari #fpGambar.
     function isiPreviewGambar() {
       const img = document.getElementById('fpPreview');
+      img.onerror = () => { img.hidden = true; };
+      if (fileGambarBaru) {
+        bersihkanPreviewUrl();
+        previewObjectUrl = URL.createObjectURL(fileGambarBaru);
+        img.src = previewObjectUrl;
+        img.hidden = false;
+        return;
+      }
       const nama = document.getElementById('fpGambar').value.trim();
       img.hidden = !nama;
-      if (nama) { img.onerror = () => { img.hidden = true; }; img.src = nama; }
+      if (nama) { img.src = nama; }
+    }
+
+    // Admin memilih berkas gambar dari perangkat (File Explorer / galeri HP).
+    function pilihFileGambar(e) {
+      const input = e.target;
+      const file = input.files && input.files[0];
+      const info = document.getElementById('fpNamaFile');
+      if (!file) { return; } // dialog dibatalkan → pertahankan pilihan sebelumnya
+      if (!TIPE_GAMBAR_OK.includes(file.type)) {
+        document.getElementById('fpPesan').textContent = 'Format gambar harus JPG, PNG, atau WEBP.';
+        input.value = '';
+        return;
+      }
+      if (file.size > MAKS_UPLOAD_MB * 1024 * 1024) {
+        document.getElementById('fpPesan').textContent = `Ukuran gambar maksimal ${MAKS_UPLOAD_MB} MB.`;
+        input.value = '';
+        return;
+      }
+      document.getElementById('fpPesan').textContent = '';
+      fileGambarBaru = file;
+      info.textContent = file.name; // tampil sebagai info saja; nama aman dibuat server
+      isiPreviewGambar();
     }
 
     // Opsi jenis: semua jenis aktif + jenis bibit ini sendiri jika sudah dinonaktifkan
@@ -760,7 +910,13 @@
       document.getElementById('fpHarga').value = p ? p.harga : '';
       document.getElementById('fpStok').value = p ? p.stok : '';
       document.getElementById('fpDeskripsi').value = p ? p.deskripsi : '';
-      document.getElementById('fpGambar').value = p ? p.gambar : '';
+      // Reset pilihan berkas; simpan nama gambar lama (dipertahankan bila tak diganti)
+      bersihkanPreviewUrl();
+      fileGambarBaru = null;
+      document.getElementById('fpFile').value = '';
+      document.getElementById('fpGambar').value = p ? (p.gambar || '') : '';
+      document.getElementById('fpNamaFile').textContent =
+        p && p.gambar ? 'Gambar saat ini tersimpan' : 'Belum ada gambar dipilih';
       document.getElementById('fpBadge').value = p ? (p.badge || '') : '';
       document.getElementById('fpAktif').checked = p ? p.aktif : true;
       document.getElementById('fpPesan').textContent = '';
@@ -771,6 +927,8 @@
 
     function tutupFormProduk() {
       produkDiedit = null;
+      bersihkanPreviewUrl();
+      fileGambarBaru = null;
       document.getElementById('modalProduk').hidden = true;
     }
 
@@ -812,6 +970,13 @@
       const tombol = document.getElementById('fpSimpan');
       tombol.disabled = true;
       try {
+        // Unggah gambar dulu bila admin memilih berkas baru; jika tidak, gambar lama dipertahankan.
+        if (fileGambarBaru) {
+          const fd = new FormData();
+          fd.append('gambar', fileGambarBaru);
+          const upload = await apiRequest('api/upload.php', { method: 'POST', body: fd });
+          data.gambar = upload.data.path;
+        }
         const res = produkDiedit === null
           ? await apiRequest('api/produk.php', { method: 'POST', body: data })
           : await apiRequest(`api/produk.php?id=${produkDiedit}`, { method: 'PUT', body: data });
@@ -959,22 +1124,211 @@
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && !document.getElementById('modalJenis').hidden) tutupJenisBibit(); });
 
     document.getElementById('formProduk').addEventListener('submit', simpanProduk);
-    document.getElementById('fpGambar').addEventListener('input', isiPreviewGambar);
+    document.getElementById('fpPilihGambar').addEventListener('click', () => document.getElementById('fpFile').click());
+    document.getElementById('fpFile').addEventListener('change', pilihFileGambar);
     document.getElementById('cariProduk').addEventListener('input', renderProdukAdmin);
     document.getElementById('filterProduk').addEventListener('change', renderProdukAdmin);
     document.getElementById('modalProduk').addEventListener('click', e => { if (e.target.id === 'modalProduk') tutupFormProduk(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && !document.getElementById('modalProduk').hidden) tutupFormProduk(); });
 
+    /* ================= VERIFIKASI (api/verifikasi.php) ================= */
+    let daftarVerifikasi = [];
+    let verifikasiDiedit = null;
+    const payloadVerifikasi = v => ({
+      kode: v.kode, produk_id: v.produk_id, asal: v.asal || '',
+      tanggal_terdaftar: v.tanggal_terdaftar, status: v.status
+    });
+
+    async function muatVerifikasi() {
+      try {
+        daftarVerifikasi = (await apiRequest('api/verifikasi.php?semua=1')).data;
+        renderVerifikasi();
+      } catch (err) {
+        if (err.status === 401) { window.location.href = 'login.html'; return; }
+        document.getElementById('infoVerifikasi').textContent = err.message;
+      }
+    }
+
+    function renderVerifikasi() {
+      const kata = document.getElementById('cariVerifikasi').value.trim().toLowerCase();
+      const filter = document.getElementById('filterVerifikasi').value;
+      const hasil = daftarVerifikasi.filter(v =>
+        (!kata || `${v.kode} ${v.produk || ''} ${v.asal || ''}`.toLowerCase().includes(kata)) &&
+        (!filter || v.status === filter)
+      );
+      document.getElementById('infoVerifikasi').textContent = daftarVerifikasi.length === 0
+        ? 'Belum ada data verifikasi.'
+        : `Menampilkan ${hasil.length} dari ${daftarVerifikasi.length} kode`;
+      document.getElementById('tabelVerifikasi').innerHTML = hasil.length === 0
+        ? `<tr><td colspan="6" class="kosong" style="color:#777; text-align:center;">${daftarVerifikasi.length === 0 ? 'Belum ada data verifikasi. Klik "Tambah Verifikasi".' : 'Tidak ada kode yang cocok.'}</td></tr>`
+        : hasil.map(v => {
+            const aktif = v.status === 'aktif';
+            return `
+            <tr>
+              <td data-label="Kode"><strong>${escapeHTML(v.kode)}</strong></td>
+              <td data-label="Bibit Terkait">${v.produk ? escapeHTML(v.produk) : '<span style="color:#999;">—</span>'}</td>
+              <td data-label="Asal">${v.asal ? escapeHTML(v.asal) : '<span style="color:#999;">—</span>'}</td>
+              <td data-label="Terdaftar">${formatTanggal(v.tanggal_terdaftar)}</td>
+              <td data-label="Status"><span class="status-pill ${aktif ? 'status-aktif' : 'status-nonaktif'}">${aktif ? 'Aktif' : 'Dicabut'}</span></td>
+              <td data-label="Aksi">
+                <div class="aksi-grup">
+                  <button type="button" class="btn-aksi btn-garis" onclick="bukaFormVerifikasi(${v.id})"><i class="fa-solid fa-pen"></i> Edit</button>
+                  <button type="button" class="btn-aksi ${aktif ? 'btn-batal' : 'btn-selesai'}" onclick="ubahStatusVerifikasi(${v.id}, this)">
+                    <i class="fa-solid ${aktif ? 'fa-ban' : 'fa-circle-check'}"></i> ${aktif ? 'Cabut' : 'Aktifkan'}
+                  </button>
+                  <button type="button" class="btn-aksi btn-hapus" onclick="hapusVerifikasi(${v.id}, this)" title="Hapus" aria-label="Hapus ${escapeHTML(v.kode)}"><i class="fa-solid fa-trash"></i></button>
+                </div>
+              </td>
+            </tr>`;
+          }).join('');
+    }
+
+    async function isiOpsiProdukVerifikasi(selectedId) {
+      let list = [];
+      try { list = (await apiRequest('api/produk.php?semua=1')).data; } catch (e) { list = []; }
+      document.getElementById('fvProduk').innerHTML =
+        '<option value="">— Tidak dikaitkan —</option>' +
+        list.map(p => `<option value="${p.id}">${escapeHTML(p.nama)}</option>`).join('');
+      document.getElementById('fvProduk').value = selectedId ?? '';
+    }
+
+    async function bukaFormVerifikasi(id = null) {
+      const v = id === null ? null : daftarVerifikasi.find(x => x.id === id);
+      verifikasiDiedit = v ? v.id : null;
+      document.getElementById('judulFormVerifikasi').textContent = v ? 'Edit Verifikasi' : 'Tambah Verifikasi';
+      document.getElementById('fvKode').value = v ? v.kode : '';
+      document.getElementById('fvAsal').value = v ? (v.asal || '') : '';
+      document.getElementById('fvTanggal').value = v ? v.tanggal_terdaftar : new Date().toISOString().slice(0, 10);
+      document.getElementById('fvStatus').value = v ? v.status : 'aktif';
+      document.getElementById('fvPesan').textContent = '';
+      hentikanScanKode();
+      document.getElementById('modalVerifikasi').hidden = false;
+      await isiOpsiProdukVerifikasi(v ? v.produk_id : null);
+      document.getElementById('fvKode').focus();
+    }
+
+    function tutupFormVerifikasi() {
+      verifikasiDiedit = null;
+      hentikanScanKode();
+      document.getElementById('modalVerifikasi').hidden = true;
+    }
+
+    /* Scan kode pada label memakai modul bersama QRScanner (js/scanner.js).
+       Hasil scan dimasukkan ke field kode APA ADANYA; admin tetap menekan Simpan. */
+    function setScanStatus(teks) { document.getElementById('fvScanStatus').textContent = teks; }
+
+    async function mulaiScanKode() {
+      if (QRScanner.aktif()) return;
+      document.getElementById('fvScanArea').hidden = false;
+      document.getElementById('fvScanBtn').disabled = true;
+      setScanStatus('Menyiapkan kamera…');
+      await QRScanner.start({
+        mountEl: document.getElementById('fvScanMount'),
+        onStatus: setScanStatus,
+        onResult: (teks) => {
+          document.getElementById('fvKode').value = String(teks || '').trim();
+          hentikanScanKode();
+          setScanStatus('Kode dimasukkan. Periksa lalu klik Simpan.');
+          document.getElementById('fvKode').focus();
+        },
+        onEnd: () => { hentikanScanKode(); },
+        onError: () => { document.getElementById('fvScanBtn').disabled = false; }
+      });
+    }
+
+    function hentikanScanKode() {
+      QRScanner.stop();
+      const area = document.getElementById('fvScanArea');
+      if (area) area.hidden = true;
+      const mount = document.getElementById('fvScanMount');
+      if (mount) mount.replaceChildren();
+      const btn = document.getElementById('fvScanBtn');
+      if (btn) btn.disabled = false;
+    }
+
+    // Validasi ringan di browser; server tetap memvalidasi ulang
+    function dataFormVerifikasi() {
+      const kode = document.getElementById('fvKode').value.trim().toUpperCase();
+      const tanggal = document.getElementById('fvTanggal').value;
+      if (kode.length < 2) return 'Kode / nomor seri minimal 2 karakter.';
+      if (!/^[A-Z0-9][A-Z0-9\-\/]{1,49}$/.test(kode)) return 'Format kode tidak valid. Contoh: BPSB-001234.';
+      if (!tanggal) return 'Tanggal terdaftar wajib diisi.';
+      return {
+        kode,
+        produk_id: Number(document.getElementById('fvProduk').value) || null,
+        asal: document.getElementById('fvAsal').value.trim(),
+        tanggal_terdaftar: tanggal,
+        status: document.getElementById('fvStatus').value
+      };
+    }
+
+    async function simpanVerifikasi(e) {
+      e.preventDefault();
+      const pesan = document.getElementById('fvPesan');
+      const data = dataFormVerifikasi();
+      if (typeof data === 'string') { pesan.textContent = data; return; }
+      const tombol = document.getElementById('fvSimpan');
+      tombol.disabled = true;
+      try {
+        const res = verifikasiDiedit === null
+          ? await apiRequest('api/verifikasi.php', { method: 'POST', body: data })
+          : await apiRequest(`api/verifikasi.php?id=${verifikasiDiedit}`, { method: 'PUT', body: data });
+        tutupFormVerifikasi();
+        notif(`${res.message} (${res.data.kode})`);
+        await muatVerifikasi();
+      } catch (err) {
+        if (err.status === 401) { window.location.href = 'login.html'; return; }
+        pesan.textContent = err.message;
+      } finally {
+        tombol.disabled = false;
+      }
+    }
+
+    async function ubahStatusVerifikasi(id, tombol) {
+      const v = daftarVerifikasi.find(x => x.id === id);
+      if (!v) return;
+      const jadi = v.status === 'aktif' ? 'dicabut' : 'aktif';
+      if (!confirm(`${jadi === 'dicabut' ? 'Cabut' : 'Aktifkan'} verifikasi "${v.kode}"?`)) return;
+      tombol.disabled = true;
+      try {
+        await apiRequest(`api/verifikasi.php?id=${id}`, { method: 'PUT', body: { ...payloadVerifikasi(v), status: jadi } });
+        notif(`Verifikasi "${v.kode}" ${jadi === 'dicabut' ? 'dicabut' : 'diaktifkan'}.`);
+      } catch (err) {
+        if (err.status === 401) { window.location.href = 'login.html'; return; }
+        notif(err.message, true);
+      }
+      await muatVerifikasi();
+    }
+
+    async function hapusVerifikasi(id, tombol) {
+      const v = daftarVerifikasi.find(x => x.id === id);
+      if (!v) return;
+      if (!confirm(`Hapus permanen kode verifikasi "${v.kode}"?`)) return;
+      tombol.disabled = true;
+      try {
+        await apiRequest(`api/verifikasi.php?id=${id}`, { method: 'DELETE' });
+        notif(`Kode "${v.kode}" dihapus.`);
+      } catch (err) {
+        if (err.status === 401) { window.location.href = 'login.html'; return; }
+        notif(err.message, true);
+      }
+      await muatVerifikasi();
+    }
+
+    document.getElementById('formVerifikasi').addEventListener('submit', simpanVerifikasi);
+    document.getElementById('cariVerifikasi').addEventListener('input', renderVerifikasi);
+    document.getElementById('filterVerifikasi').addEventListener('change', renderVerifikasi);
+    document.getElementById('modalVerifikasi').addEventListener('click', e => { if (e.target.id === 'modalVerifikasi') tutupFormVerifikasi(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !document.getElementById('modalVerifikasi').hidden) tutupFormVerifikasi(); });
+
     /* ================= NAVIGASI SIDEBAR ================= */
     function tampilkanHalaman() {
-      const nama = { '#pesanan': 'pesanan', '#produk': 'produk' }[location.hash] || 'dashboard';
-      // Menu Verifikasi = tabel aktivitas verifikasi di halaman dashboard
-      const menu = location.hash === '#verifikasi' ? 'verifikasi' : nama;
+      const nama = { '#pesanan': 'pesanan', '#produk': 'produk', '#verifikasi': 'verifikasi' }[location.hash] || 'dashboard';
       document.querySelectorAll('.halaman').forEach(h => { h.hidden = h.id !== 'halaman-' + nama; });
-      document.querySelectorAll('.sidebar-menu a[data-halaman]').forEach(a => a.classList.toggle('aktif', a.dataset.halaman === menu));
-      if (menu === 'verifikasi') document.getElementById('kotakVerifikasi').scrollIntoView({ block: 'start' });
+      document.querySelectorAll('.sidebar-menu a[data-halaman]').forEach(a => a.classList.toggle('aktif', a.dataset.halaman === nama));
       if (nama === 'pesanan') muatPesanan();
       if (nama === 'produk') muatProdukAdmin();
+      if (nama === 'verifikasi') muatVerifikasi();
     }
     window.addEventListener('hashchange', tampilkanHalaman);
     tampilkanHalaman();

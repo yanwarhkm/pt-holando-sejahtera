@@ -151,29 +151,17 @@
         <div class="calc-box">
             <div class="calc-header">
                 <i class="fas fa-calculator tool-icon"></i>
-                <h3>Kalkulator Panen</h3>
-                <p>Estimasi hasil panen & keuntungan</p>
+                <h3>Kalkulator Kebutuhan Bibit</h3>
+                <p>Hitung perkiraan kebutuhan bibit berdasarkan luas lahan</p>
             </div>
             <div class="calc-grid">
                 <div class="form-group">
-                    <label>Luas Lahan (m²)</label>
-                    <input type="number" id="luas" placeholder="Contoh: 100">
-                </div>
-                <div class="form-group">
-                    <label>Jumlah Bibit/m²</label>
-                    <input type="number" id="bibit" placeholder="Contoh: 3">
-                </div>
-                <div class="form-group">
-                    <label>Estimasi Hasil/kg</label>
-                    <input type="number" id="hasil" placeholder="Per tanaman">
-                </div>
-                <div class="form-group">
-                    <label>Harga Jual/kg (Rp)</label>
-                    <input type="number" id="harga" placeholder="Contoh: 15000">
+                    <label for="luas">Luas Lahan (m²)</label>
+                    <input type="number" id="luas" min="0" step="any" inputmode="decimal" placeholder="Contoh: 100">
                 </div>
             </div>
-            <button class="btn-primary full-btn" onclick="hitungPanen()">
-                <i class="fas fa-calculator"></i> Hitung Estimasi
+            <button class="btn-primary full-btn" onclick="hitungKebutuhanBibit()">
+                <i class="fas fa-calculator"></i> Hitung Kebutuhan Bibit
             </button>
             <div class="calc-result" id="hasilCalc">
                 <em>Hasil perhitungan akan muncul di sini</em>
@@ -203,17 +191,7 @@
                     <div class="scanner-status" id="scanStatus">
                         Menunggu pemindaian...
                     </div>
-                </div>
-                <div class="checker-card">
-                    <h3><i class="fas fa-check-circle"></i> Cek Kode Manual</h3>
-                    <div class="input-group">
-                        <input type="text" id="kodeProduk" class="form-input" placeholder="Masukkan kode bibit" maxlength="50">
-                        <button class="btn-primary" onclick="cekKode()">Periksa</button>
-                    </div>
-                    <p class="hint">Atau tekan <kbd>Enter</kbd> setelah mengetik kode</p>
-                    <div class="verification-result-wrapper" id="verifikasiHasil">
-                        <em>Hasil verifikasi akan muncul di sini</em>
-                    </div>
+                    <div class="verification-result-wrapper" id="verifikasiHasil"></div>
                 </div>
             </div>
         </div>
@@ -321,45 +299,25 @@
 <!-- KONTAK PETANI -->
 <section class="farmer-section" id="kontak">
     <div class="farmer-container">
-        <div class="section-heading" style="text-align:left; margin-bottom:20px;">
+        <div class="section-heading">
             <span class="section-label">👨‍🌾 Hubungi Kami</span>
             <h2>Pesan Bibit Langsung</h2>
             <p>Butuh bibit dalam jumlah besar atau pesanan khusus? Hubungi kami langsung</p>
         </div>
         <div class="farmer-grid">
-            <div class="farmer-card">
-                <i class="fas fa-comment-dots"></i>
-                <h3>Kirim Pesan</h3>
-                <p>Isi data di bawah, kami akan segera merespons</p>
-                <form id="kontakForm">
-                    <div class="form-group">
-                        <label>Nama Lengkap</label>
-                        <input type="text" id="namaKontak" placeholder="Nama Anda" maxlength="100" required>
-                    </div>
-                    <div class="form-group">
-                        <label>No. WhatsApp</label>
-                        <input type="tel" id="waKontak" placeholder="08xx-xxxx-xxxx" maxlength="20" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Pesan / Kebutuhan</label>
-                        <textarea id="pesanKontak" rows="3" placeholder="Jenis bibit, jumlah (kg), jadwal tanam/pengiriman..." maxlength="1000" required></textarea>
-                    </div>
-                    <button type="submit" class="btn-primary full-btn" id="btnKontak">
-                        <i class="fas fa-paper-plane"></i> Kirim Pesan
-                    </button>
-                </form>
-            </div>
             <div class="farmer-card info-card">
                 <i class="fas fa-map-marker-alt"></i>
                 <h3>Informasi Kami</h3>
-                <p>Lokasi & jam operasional</p>
+                <p>Lokasi, jam operasional & kontak</p>
                 <ul>
                     <li><i class="fas fa-map-marker-alt"></i> Desa Cihideung, Bandung Barat</li>
                     <li><i class="fas fa-clock"></i> Senin–Sabtu: 06.00–17.00 WIB</li>
-                    <li><i class="fas fa-phone"></i> WhatsApp: 0812-xxxx-xxxx</li>
+                    <li><i class="fas fa-phone"></i> WhatsApp: +62 857-9718-7917</li>
                     <li><i class="fas fa-envelope"></i> tani@domain.id</li>
+                    <li><i class="fab fa-instagram"></i> Instagram: <a href="https://www.instagram.com/kenhose.beken?stkn=cHUwaWhtN25nY2x4" target="_blank" rel="noopener noreferrer">@kenhose.beken</a></li>
+                    <li><i class="fab fa-tiktok"></i> TikTok: <a href="https://www.tiktok.com/@kenhose.beken?_r=1&amp;_t=ZS-99abnDOHkU0" target="_blank" rel="noopener noreferrer">@kenhose.beken</a></li>
                 </ul>
-                <a href="https://wa.me/6" target="_blank" class="btn-wa full-btn">
+                <a href="https://wa.me/6285797187917" target="_blank" rel="noopener noreferrer" class="btn-wa full-btn">
                     <i class="fab fa-whatsapp"></i> Chat Langsung via WhatsApp
                 </a>
             </div>
@@ -477,6 +435,7 @@
 
 <!-- JAVASCRIPT -->
 <script src="js/api.js"></script>
+<script src="js/scanner.js"></script>
 <script>
 // Keranjang hanya menyimpan { id: produk_id, jumlah }. Nama/harga untuk tampilan
 // diambil dari data produk terbaru; harga final selalu dihitung ulang server saat checkout.
@@ -706,108 +665,41 @@ document.querySelectorAll('.nav-links a').forEach(link => {
     });
 });
 
-// Kalkulator Panen
-function hitungPanen() {
-    const luas = parseFloat(document.getElementById('luas').value) || 0;
-    const bibitPerM2 = parseFloat(document.getElementById('bibit').value) || 0;
-    const hasilPerTanam = parseFloat(document.getElementById('hasil').value) || 0;
-    const harga = parseFloat(document.getElementById('harga').value) || 0;
-    
-    const totalBibit = luas * bibitPerM2;
-    const totalKg = totalBibit * hasilPerTanam;
-    const pendapatan = totalKg * harga;
-    
-    document.getElementById('hasilCalc').innerHTML = `
-        <strong>Estimasi:</strong><br>
-        Jumlah tanaman: ${totalBibit.toLocaleString('id-ID')} batang<br>
-        Total hasil panen: ${totalKg.toLocaleString('id-ID')} kg<br>
-        Perkiraan pendapatan: <strong style="color:var(--primary-dark)">Rp ${pendapatan.toLocaleString('id-ID')}</strong>
+// Kalkulator Kebutuhan Bibit
+// CATATAN: Project belum memiliki standar resmi kebutuhan bibit per m².
+// Nilai di bawah adalah PLACEHOLDER yang mudah dikonfigurasi dan MASIH PERLU
+// dikonfirmasi sebelum diperlakukan sebagai rekomendasi resmi.
+const BIBIT_PER_M2 = 5; // bibit per m² (placeholder — perlu konfirmasi)
+
+function hitungKebutuhanBibit() {
+    const el = document.getElementById('hasilCalc');
+    const luas = parseFloat(document.getElementById('luas').value);
+
+    if (!Number.isFinite(luas) || luas <= 0) {
+        el.innerHTML = '<em>Masukkan luas lahan yang valid (angka lebih dari 0).</em>';
+        tampilkanPesan('error', 'Luas lahan harus berupa angka lebih dari 0.');
+        return;
+    }
+
+    const estimasi = luas * BIBIT_PER_M2;
+    const rekomendasi = Math.ceil(estimasi); // dibulatkan ke atas untuk kebutuhan pemesanan
+
+    el.innerHTML = `
+        <strong>Hasil:</strong><br>
+        Luas lahan: ${luas.toLocaleString('id-ID')} m²<br>
+        Estimasi kebutuhan bibit: ${estimasi.toLocaleString('id-ID')} bibit<br>
+        Rekomendasi bibit: <strong style="color:var(--primary-dark)">${rekomendasi.toLocaleString('id-ID')} bibit</strong>
+        <p style="margin-top:8px; font-size:.8rem; color:var(--text-muted);">
+            *Berdasarkan asumsi ${BIBIT_PER_M2} bibit/m² yang masih perlu dikonfirmasi sebagai standar resmi.
+        </p>
     `;
     tampilkanPesan('success', 'Perhitungan selesai!');
-}
-
-// Cek Kode Produk (GET api/verifikasi.php)
-async function cekKode() {
-    const kode = document.getElementById('kodeProduk').value.trim().toUpperCase();
-
-    const el = document.getElementById('verifikasiHasil');
-    if (!kode) {
-        el.innerHTML = '<em>Masukkan kode bibit terlebih dahulu</em>';
-        return;
-    }
-    if (!/^[A-Z0-9][A-Z0-9\-\/]{1,49}$/.test(kode)) {
-        el.innerHTML = '<em>Format kode tidak valid. Gunakan huruf, angka, "-" atau "/". Contoh: TANI-001</em>';
-        return;
-    }
-
-    el.innerHTML = '<em><i class="fas fa-spinner fa-spin"></i> Memeriksa kode...</em>';
-    let data;
-    try {
-        data = (await apiRequest('api/verifikasi.php?kode=' + encodeURIComponent(kode))).data;
-    } catch (err) {
-        el.innerHTML = `<div class="verification-invalid">${escapeHTML(err.message)}</div>`;
-        tampilkanPesan('error', err.message);
-        return;
-    }
-
-    // Ditemukan di data internal ≠ valid BPSB. Verifikasi BPSB belum terhubung.
-    if (data.valid) {
-        el.innerHTML = `
-            <div class="verification-pending">
-                <div class="verification-result">
-                    <div class="verification-result-icon"><i class="fas fa-circle-info"></i></div>
-                    <div>
-                        <div class="verification-label">Status</div>
-                        <strong>Kode ditemukan di data internal</strong>
-                        <div class="verification-code">
-                            <span class="verification-label">Kode:</span>
-                            <span>${escapeHTML(data.kode)}</span>
-                        </div>
-                        <div class="verification-meta">
-                            <span><i class="fas fa-calendar"></i> Terdaftar: ${escapeHTML(formatTanggal(data.tanggal_terdaftar))}</span>
-                            <span><i class="fas fa-map-marker-alt"></i> Asal: ${escapeHTML(data.asal || '-')}</span>
-                        </div>
-                        <div class="verification-label" style="margin-top:0.75rem;">Verifikasi BPSB</div>
-                        <strong>Belum diverifikasi</strong>
-                        <p style="margin-top:4px; font-size:0.9rem;">Kode diterima, tetapi verifikasi BPSB belum tersedia.</p>
-                    </div>
-                </div>
-            </div>
-        `;
-        tampilkanPesan('success', 'Kode diterima. Verifikasi BPSB belum tersedia.');
-    } else {
-        el.innerHTML = `
-            <div class="verification-invalid">
-                <div class="verification-result">
-                    <div class="verification-result-icon">❌</div>
-                    <div>
-                        <div class="verification-label">Status</div>
-                        <strong>Kode tidak ditemukan di data internal</strong>
-                        <p style="margin-top:8px; font-size:0.9rem;">Kode <code>${escapeHTML(kode)}</code> tidak terdaftar dalam sistem kami.</p>
-                        <div class="verification-label" style="margin-top:0.75rem;">Verifikasi BPSB</div>
-                        <strong>Belum diverifikasi</strong>
-                        <p style="margin-top:4px; font-size:0.9rem;">Verifikasi BPSB belum tersedia.</p>
-                    </div>
-                </div>
-            </div>
-        `;
-        tampilkanPesan('error', 'Kode tidak ditemukan di data internal');
-    }
 }
 
 // Pemindai QR (kamera + jsQR, dimuat saat pertama kali dipakai).
 // Tahap ini hanya MEMBACA isi QR. Hasil baca bukan bukti keaslian/validitas BPSB —
 // verifikasi BPSB menunggu API/data resmi.
-const pemindai = {
-    stream: null,
-    video: null,
-    canvas: null,
-    rafId: 0,
-    batasWaktu: 0,
-    sedangMulai: false,
-    htmlAwal: document.getElementById('scannerArea').innerHTML
-};
-const BATAS_PINDAI_MS = 30000;
+const scannerAreaHtmlAwal = document.getElementById('scannerArea').innerHTML;
 
 function statusPindai(teks, jenis) {
     const el = document.getElementById('scanStatus');
@@ -823,184 +715,111 @@ function tombolPindai(aktif, labelMulai = 'Mulai Pindai') {
     document.getElementById('stopScanBtn').style.display = aktif ? '' : 'none';
 }
 
-function muatJsQR() {
-    if (window.jsQR) return Promise.resolve();
-    return new Promise((resolve, reject) => {
-        const s = document.createElement('script');
-        s.src = 'js/vendor/jsQR.js';
-        s.onload = () => window.jsQR ? resolve() : reject(new Error('jsQR'));
-        s.onerror = () => { s.remove(); reject(new Error('jsQR')); };
-        document.head.appendChild(s);
-    });
+function kembalikanAreaPindai() {
+    const area = document.getElementById('scannerArea');
+    area.className = 'scanner-placeholder';
+    area.innerHTML = scannerAreaHtmlAwal;
 }
 
-async function izinKameraDitolak() {
-    try {
-        return navigator.permissions && (await navigator.permissions.query({ name: 'camera' })).state === 'denied';
-    } catch {
-        return false; // Permissions API untuk kamera tidak didukung semua browser
-    }
-}
-
+// Scanner publik memakai modul bersama QRScanner (js/scanner.js)
 async function mulaiPindai() {
-    if (pemindai.stream || pemindai.sedangMulai) return;
-    if (!window.isSecureContext || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        statusPindai('Kamera tidak tersedia. Pemindai membutuhkan browser modern dan koneksi HTTPS.', 'error');
-        return;
-    }
-    // Jika izin sudah ditolak, jangan memicu permintaan izin lagi
-    if (await izinKameraDitolak()) {
-        statusPindai('Izin kamera ditolak. Aktifkan izin kamera untuk situs ini di pengaturan browser, lalu coba lagi.', 'error');
-        tombolPindai(false, 'Coba Lagi');
-        return;
-    }
-
-    pemindai.sedangMulai = true;
+    if (QRScanner.aktif()) return;
     const mulai = document.getElementById('startScanBtn');
     mulai.disabled = true;
     mulai.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyiapkan...';
-    statusPindai('Meminta izin kamera...', 'active');
-
-    try {
-        await muatJsQR();
-    } catch {
-        pemindai.sedangMulai = false;
-        statusPindai('Komponen pemindai gagal dimuat. Periksa koneksi lalu coba lagi.', 'error');
-        tombolPindai(false, 'Coba Lagi');
-        return;
-    }
-    if (!pemindai.sedangMulai) return; // dibatalkan saat memuat komponen
-
-    let stream;
-    try {
-        stream = await navigator.mediaDevices.getUserMedia({
-            video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } },
-            audio: false
-        });
-    } catch (err) {
-        pemindai.sedangMulai = false;
-        const nama = err && err.name;
-        if (nama === 'NotAllowedError' || nama === 'SecurityError') {
-            statusPindai('Izin kamera ditolak. Aktifkan izin kamera untuk situs ini di pengaturan browser, lalu coba lagi.', 'error');
-        } else if (nama === 'NotFoundError' || nama === 'OverconstrainedError') {
-            statusPindai('Kamera tidak ditemukan pada perangkat ini. Gunakan Cek Kode Manual.', 'error');
-        } else if (nama === 'NotReadableError' || nama === 'AbortError') {
-            statusPindai('Kamera sedang dipakai aplikasi lain atau tidak dapat diakses.', 'error');
-        } else {
-            statusPindai('Kamera tidak tersedia.', 'error');
-        }
-        tombolPindai(false, 'Coba Lagi');
-        return;
-    }
-
-    // Halaman ditutup/disembunyikan saat menunggu izin → langsung lepas kamera
-    if (!pemindai.sedangMulai) {
-        stream.getTracks().forEach(t => t.stop());
-        return;
-    }
-    pemindai.sedangMulai = false;
-    pemindai.stream = stream;
-
-    const area = document.getElementById('scannerArea');
-    const video = document.createElement('video');
-    video.setAttribute('playsinline', ''); // wajib di iOS agar tidak fullscreen
-    video.muted = true;
-    video.style.cssText = 'width:100%; height:100%; min-height:300px; object-fit:cover; display:block;';
-    video.srcObject = stream;
-    area.className = 'scanner-area';
-    area.replaceChildren(video);
-    pemindai.video = video;
-    pemindai.canvas = pemindai.canvas || document.createElement('canvas');
-
-    try {
-        await video.play();
-    } catch {
-        hentikanPindai();
-        statusPindai('Pratinjau kamera gagal ditampilkan.', 'error');
-        tombolPindai(false, 'Coba Lagi');
-        return;
-    }
-
-    tombolPindai(true);
-    statusPindai('Kamera aktif. Arahkan kamera ke kode QR pada label/sertifikat bibit.', 'active');
-    pemindai.batasWaktu = Date.now() + BATAS_PINDAI_MS;
-    pemindai.rafId = requestAnimationFrame(pindaiFrame);
+    await QRScanner.start({
+        mountEl: document.getElementById('scannerArea'),
+        onReady:  () => { document.getElementById('scannerArea').className = 'scanner-area'; tombolPindai(true); },
+        onStatus: statusPindai,
+        onResult: (teks) => { kembalikanAreaPindai(); tombolPindai(false, 'Pindai Ulang'); tampilkanHasilQR(teks); },
+        onEnd:    () => { kembalikanAreaPindai(); tombolPindai(false, 'Pindai Ulang'); },
+        onError:  () => { kembalikanAreaPindai(); tombolPindai(false, 'Coba Lagi'); }
+    });
 }
 
-let waktuPindaiTerakhir = 0;
-function pindaiFrame(waktu) {
-    if (!pemindai.stream) return;
-    pemindai.rafId = requestAnimationFrame(pindaiFrame);
-    if (waktu - waktuPindaiTerakhir < 150) return; // ±6 fps cukup, hemat baterai
-    waktuPindaiTerakhir = waktu;
+// Scanner hanya MEMBACA kode. Status verifikasi ditentukan oleh pencocokan
+// dengan database internal (api/verifikasi.php) — bukan karena QR berhasil dibaca.
+async function tampilkanHasilQR(isi) {
+    const el = document.getElementById('verifikasiHasil');
+    const kode = String(isi || '').trim();
 
-    if (Date.now() > pemindai.batasWaktu) {
-        hentikanPindai();
-        statusPindai('QR gagal dibaca. Pastikan kode QR terang, fokus, dan berada di dalam bingkai kamera.', 'error');
-        tombolPindai(false, 'Pindai Ulang');
-        return;
-    }
-
-    const video = pemindai.video;
-    if (video.readyState < video.HAVE_ENOUGH_DATA || !video.videoWidth) return;
-    // Perkecil frame agar decode ringan di perangkat low-end
-    const skala = Math.min(1, 640 / Math.max(video.videoWidth, video.videoHeight));
-    const w = Math.round(video.videoWidth * skala);
-    const h = Math.round(video.videoHeight * skala);
-    const canvas = pemindai.canvas;
-    canvas.width = w;
-    canvas.height = h;
-    const ctx = canvas.getContext('2d', { willReadFrequently: true });
-    ctx.drawImage(video, 0, 0, w, h);
-    const kode = jsQR(ctx.getImageData(0, 0, w, h).data, w, h, { inversionAttempts: 'attemptBoth' });
-    if (!kode) return;
-
-    // Hentikan dulu agar QR yang sama tidak terbaca berulang kali
-    hentikanPindai();
-    if (!kode.data) {
-        statusPindai('QR terdeteksi, tetapi isinya kosong atau tidak dapat dibaca sebagai teks.', 'error');
-        tombolPindai(false, 'Pindai Ulang');
-        return;
-    }
-    statusPindai('QR berhasil dibaca.', 'success');
-    tombolPindai(false, 'Pindai Ulang');
-    tampilkanHasilQR(kode.data);
-}
-
-function tampilkanHasilQR(isi) {
-    document.getElementById('verifikasiHasil').innerHTML = `
+    // Tahap 1: QR terbaca, sedang mencocokkan ke database
+    el.innerHTML = `
         <div class="verification-pending">
             <div class="verification-result">
                 <div class="verification-result-icon"><i class="fas fa-qrcode"></i></div>
                 <div style="min-width:0; flex:1;">
-                    <div class="verification-label">Status</div>
-                    <strong>QR berhasil dibaca</strong>
-                    <div class="verification-label" style="margin-top:0.75rem;">Isi QR</div>
-                    <div class="verification-code" style="word-break:break-all; white-space:pre-wrap;">${escapeHTML(isi)}</div>
-                    <div class="verification-label" style="margin-top:0.75rem;">Verifikasi BPSB</div>
-                    <strong>Belum diverifikasi</strong>
-                    <div class="verification-label" style="margin-top:0.75rem;">Keterangan</div>
-                    <p style="font-size:0.9rem;">Data QR berhasil dibaca, tetapi verifikasi ke sumber data BPSB belum dikonfigurasi.</p>
+                    <div class="verification-label">QR berhasil dibaca</div>
+                    <div class="verification-code" style="word-break:break-all; white-space:pre-wrap;">${escapeHTML(kode)}</div>
+                    <p style="margin-top:0.75rem; font-size:0.9rem;"><i class="fas fa-spinner fa-spin"></i> Mencocokkan dengan database verifikasi...</p>
                 </div>
             </div>
         </div>
     `;
-    tampilkanPesan('success', 'QR berhasil dibaca');
+    tampilkanPesan('success', 'QR berhasil dibaca. Mencocokkan kode...');
+
+    // Tahap 2: lookup kode ke database internal
+    let data;
+    try {
+        data = (await apiRequest('api/verifikasi.php?kode=' + encodeURIComponent(kode))).data;
+    } catch (err) {
+        el.innerHTML = `
+            <div class="verification-invalid">
+                <div class="verification-result">
+                    <div class="verification-result-icon">⚠️</div>
+                    <div style="min-width:0; flex:1;">
+                        <div class="verification-label">Data Verifikasi Tidak Ditemukan</div>
+                        <div class="verification-code" style="word-break:break-all;">${escapeHTML(kode)}</div>
+                        <p style="margin-top:8px; font-size:0.9rem;">${escapeHTML(err.message)}</p>
+                    </div>
+                </div>
+            </div>
+        `;
+        tampilkanPesan('error', err.message);
+        return;
+    }
+
+    if (data.valid) {
+        el.innerHTML = `
+            <div class="verification-pending">
+                <div class="verification-result">
+                    <div class="verification-result-icon"><i class="fas fa-circle-check" style="color:var(--primary-color);"></i></div>
+                    <div style="min-width:0; flex:1;">
+                        <div class="verification-label">✓ Data Verifikasi Ditemukan</div>
+                        <div class="verification-code">${escapeHTML(data.kode)}</div>
+                        ${data.produk ? `<div class="verification-label" style="margin-top:0.75rem;">Bibit</div><strong>${escapeHTML(data.produk)}</strong>` : ''}
+                        ${data.kategori ? `<div class="verification-label" style="margin-top:0.75rem;">Jenis / Varietas</div><strong>${escapeHTML(data.kategori)}</strong>` : ''}
+                        <div class="verification-meta" style="margin-top:0.75rem;">
+                            ${data.asal ? `<span><i class="fas fa-map-marker-alt"></i> Asal: ${escapeHTML(data.asal)}</span>` : ''}
+                            <span><i class="fas fa-calendar"></i> Terdaftar: ${escapeHTML(formatTanggal(data.tanggal_terdaftar))}</span>
+                        </div>
+                        <p style="margin-top:0.75rem; font-size:0.8rem; color:var(--text-muted);">Terdaftar pada database internal penjual. Bukan verifikasi resmi BPSB.</p>
+                    </div>
+                </div>
+            </div>
+        `;
+        tampilkanPesan('success', 'Data verifikasi ditemukan.');
+    } else {
+        el.innerHTML = `
+            <div class="verification-invalid">
+                <div class="verification-result">
+                    <div class="verification-result-icon">⚠️</div>
+                    <div style="min-width:0; flex:1;">
+                        <div class="verification-label">⚠ Data Verifikasi Tidak Ditemukan</div>
+                        <div class="verification-code" style="word-break:break-all;">${escapeHTML(data.kode || kode)}</div>
+                        <p style="margin-top:8px; font-size:0.9rem;">Kode tersebut belum terdaftar pada sistem.</p>
+                    </div>
+                </div>
+            </div>
+        `;
+        tampilkanPesan('error', 'Data verifikasi tidak ditemukan.');
+    }
 }
 
-// Lepas kamera dan kembalikan area pemindai ke tampilan awal
+// Lepas kamera (via modul) dan kembalikan area pemindai ke tampilan awal
 function hentikanPindai() {
-    pemindai.sedangMulai = false;
-    cancelAnimationFrame(pemindai.rafId);
-    if (pemindai.stream) pemindai.stream.getTracks().forEach(t => t.stop());
-    pemindai.stream = null;
-    if (pemindai.video) {
-        pemindai.video.srcObject = null;
-        pemindai.video = null;
-        const area = document.getElementById('scannerArea');
-        area.className = 'scanner-placeholder';
-        area.innerHTML = pemindai.htmlAwal;
-    }
+    QRScanner.stop();
+    kembalikanAreaPindai();
 }
 
 document.getElementById('startScanBtn').addEventListener('click', mulaiPindai);
@@ -1009,18 +828,14 @@ document.getElementById('stopScanBtn').addEventListener('click', () => {
     statusPindai('Pemindaian dihentikan.');
     tombolPindai(false);
 });
-// Kamera tidak boleh tetap menyala saat halaman ditinggalkan/disembunyikan
-window.addEventListener('pagehide', hentikanPindai);
+// QRScanner sendiri sudah melepas kamera saat halaman disembunyikan/ditinggalkan;
+// di sini hanya memperbarui tampilan tombol/status jika pemindai sedang aktif.
 document.addEventListener('visibilitychange', () => {
-    if (document.hidden && (pemindai.stream || pemindai.sedangMulai)) {
+    if (document.hidden && QRScanner.aktif()) {
         hentikanPindai();
         statusPindai('Pemindaian dihentikan karena halaman tidak aktif.');
         tombolPindai(false, 'Pindai Ulang');
     }
-});
-
-document.getElementById('kodeProduk').addEventListener('keypress', e => {
-    if (e.key === 'Enter') cekKode();
 });
 
 // Panduan Penuh — akses ditentukan server berdasarkan pesanan terkonfirmasi
@@ -1240,40 +1055,7 @@ function tutupGaleri() {
     document.getElementById('galleryModal').classList.remove('active');
 }
 
-// Form Kontak & Ulasan
-// POST api/kontak.php, lalu lanjut ke WhatsApp
-document.getElementById('kontakForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const form = this;
-    const nama = document.getElementById('namaKontak').value.trim();
-    const wa = document.getElementById('waKontak').value.trim();
-    const pesan = document.getElementById('pesanKontak').value.trim();
-
-    let error = '';
-    if (nama.length < 3) error = 'Nama lengkap minimal 3 karakter.';
-    else if (!waValid(wa)) error = 'Nomor WhatsApp tidak valid. Contoh: 081234567890.';
-    else if (pesan.length < 5) error = 'Pesan minimal 5 karakter.';
-    if (error) {
-        tampilkanPesan('error', error);
-        return;
-    }
-
-    const tombol = document.getElementById('btnKontak');
-    setLoading(tombol, true, 'Mengirim...');
-    const tabWA = bukaTabWA();
-    try {
-        await apiRequest('api/kontak.php', { method: 'POST', body: { nama, wa, pesan } });
-        arahkanKeWA(tabWA, `Halo, saya ${nama}.\n\n${pesan}\n\nHubungi via WA: ${wa}`);
-        form.reset();
-        tampilkanPesan('success', 'Pesan dikirim! 📩');
-    } catch (err) {
-        if (tabWA) tabWA.close();
-        tampilkanPesan('error', err.message);
-    } finally {
-        setLoading(tombol, false);
-    }
-});
-
+// Form Ulasan
 // Rating bintang: radio button asli (bisa dipakai dengan keyboard: Tab lalu panah)
 const RATING_LABEL = ['', 'Sangat buruk', 'Buruk', 'Cukup', 'Bagus', 'Sangat bagus'];
 function perbaruiTampilanRating() {
