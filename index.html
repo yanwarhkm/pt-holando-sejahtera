@@ -264,35 +264,9 @@
         <h2>Dokumentasi Budidaya & Pembibitan</h2>
         <p>Lihat proses pembibitan, penanaman, dan panen di kebun kami</p>
     </div>
-    <div class="gallery-grid">
-        <div class="gallery-card" onclick="bukaGaleri(1)">
-            <img src="WhatsApp Image 2026-09-09 at 09.08.51 (1).jpeg" alt="Galeri">
-            <div class="gallery-info">
-                <h3>Kebun Kentang</h3>
-                <p>Desa Cihideung — 15 Sep 2026</p>
-            </div>
-        </div>
-        <div class="gallery-card" onclick="bukaGaleri(2)">
-            <img src="WhatsApp Image 2026-09-09 at 09.08.51.jpeg" alt="Galeri">
-            <div class="gallery-info">
-                <h3>Panen Kentang</h3>
-                <p>Kebun Pak Asep — 12 Sep 2026</p>
-            </div>
-        </div>
-        <div class="gallery-card" onclick="bukaGaleri(3)">
-            <img src="FOTO.jpeg" alt="Galeri">
-            <div class="gallery-info">
-                <h3>Penanaman Bibit Baru</h3>
-                <p>Musim Kemarau — 10 Sep 2026</p>
-            </div>
-        </div>
-        <div class="gallery-card" onclick="bukaGaleri(4)">
-            <img src="DAUN.jpeg" alt="Galeri">
-            <div class="gallery-info">
-                <h3>Pembibitan</h3>
-                <p>Rumah Bibit — 8 Sep 2026</p>
-            </div>
-        </div>
+    <!-- Diisi dari api/dokumentasi.php (dikelola admin: Dashboard → Dokumentasi) -->
+    <div class="gallery-grid" id="galleryGrid">
+        <p class="data-status"><i class="fas fa-spinner fa-spin"></i> Memuat dokumentasi...</p>
     </div>
 </section>
 
@@ -1035,21 +1009,55 @@ async function pesanSekarang() {
     }
 }
 
-// Galeri
-const galeriData = {
-    1: { img: 'WhatsApp Image 2026-09-09 at 09.08.51 (1).jpeg', title: 'Kebun Kentang', desc: 'Desa Cihideung — 15 Sep 2026' },
-    2: { img: 'WhatsApp Image 2026-09-09 at 09.08.51.jpeg', title: 'Panen Kentang', desc: 'Kebun Pak Asep — 12 Sep 2026' },
-    3: { img: 'FOTO.jpeg', title: 'Penanaman Bibit Baru', desc: 'Musim Kemarau — 10 Sep 2026' },
-    4: { img: 'DAUN.jpeg', title: 'Pembibitan', desc: 'Rumah Bibit — 8 Sep 2026' }
-};
+// Galeri Dokumentasi (GET api/dokumentasi.php — hanya yang aktif, terbaru dulu dari server)
+let daftarDokumentasi = [];
+
+const keteranganDokumentasi = d => `${d.keterangan} — ${formatTanggal(d.tanggal + ' 00:00:00')}`;
+
+async function muatDokumentasi() {
+    const grid = document.getElementById('galleryGrid');
+    try {
+        daftarDokumentasi = (await apiRequest('api/dokumentasi.php')).data;
+    } catch (err) {
+        grid.innerHTML = `
+            <div class="data-status data-error">
+                <p><i class="fas fa-exclamation-circle"></i> Gagal memuat dokumentasi.</p>
+                <button class="btn-primary" onclick="muatDokumentasi()"><i class="fas fa-rotate-right"></i> Coba Lagi</button>
+            </div>`;
+        return;
+    }
+    grid.innerHTML = daftarDokumentasi.length === 0
+        ? '<p class="data-status">Belum ada dokumentasi.</p>'
+        : daftarDokumentasi.map(d => `
+        <div class="gallery-card" role="button" tabindex="0" data-id="${d.id}" aria-label="Lihat ${escapeHTML(d.judul)}">
+            <img src="${escapeHTML(d.gambar)}" alt="${escapeHTML(d.judul)}" loading="lazy" onerror="this.closest('.gallery-card').remove()">
+            <div class="gallery-info">
+                <h3>${escapeHTML(d.judul)}</h3>
+                <p>${escapeHTML(keteranganDokumentasi(d))}</p>
+            </div>
+        </div>`).join('');
+}
 
 function bukaGaleri(id) {
-    const data = galeriData[id];
-    document.getElementById('galleryImg').src = data.img;
-    document.getElementById('galleryTitle').textContent = data.title;
-    document.getElementById('galleryDesc').textContent = data.desc;
+    const data = daftarDokumentasi.find(d => d.id === id);
+    if (!data) return;
+    const img = document.getElementById('galleryImg');
+    img.src = data.gambar;
+    img.alt = data.judul;
+    document.getElementById('galleryTitle').textContent = data.judul;
+    document.getElementById('galleryDesc').textContent = keteranganDokumentasi(data);
     document.getElementById('galleryModal').classList.add('active');
 }
+
+const galleryGrid = document.getElementById('galleryGrid');
+galleryGrid.addEventListener('click', e => {
+    const card = e.target.closest('.gallery-card');
+    if (card) bukaGaleri(Number(card.dataset.id));
+});
+galleryGrid.addEventListener('keydown', e => {
+    const card = e.target.closest('.gallery-card');
+    if (card && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); bukaGaleri(Number(card.dataset.id)); }
+});
 
 function tutupGaleri() {
     document.getElementById('galleryModal').classList.remove('active');
@@ -1160,7 +1168,6 @@ document.querySelectorAll('.modal-overlay').forEach(modal => {
         { sel: '.calc-box, .checker-box', jeda: 100 },
         { sel: '.catalog-layout' },
         { sel: '.guide-container' },
-        { sel: '.gallery-card', jeda: 80 },
         { sel: '.farmer-card', jeda: 100 },
         { sel: '#testimonialGrid, .testimonial-form-card', jeda: 100 }
     ];
@@ -1183,6 +1190,7 @@ document.querySelectorAll('.modal-overlay').forEach(modal => {
 // Muat data dari database saat halaman dibuka
 muatJenisBibit();
 muatProduk();
+muatDokumentasi();
 muatTestimoni();
 cekAksesPanduan();
 </script>

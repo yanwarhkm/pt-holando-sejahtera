@@ -183,6 +183,23 @@ CREATE TABLE IF NOT EXISTS akses_panduan (
         ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
+-- ---------------------------------------------------------
+-- Galeri "Dokumentasi Budidaya & Pembibitan" (index.html #galeri).
+-- Dikelola admin (dashboard.html → Dokumentasi). Kolom gambar hanya path
+-- relatif berkas (bukan binary). Nonaktif = tidak tampil di publik.
+-- ---------------------------------------------------------
+CREATE TABLE IF NOT EXISTS dokumentasi (
+    id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    judul      VARCHAR(100) NOT NULL,
+    keterangan VARCHAR(100) NOT NULL,   -- lokasi / keterangan singkat
+    tanggal    DATE         NOT NULL,   -- tanggal dokumentasi
+    gambar     VARCHAR(255) NOT NULL,
+    aktif      TINYINT(1)   NOT NULL DEFAULT 1,
+    created_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    KEY idx_dokumentasi_tampil (aktif, tanggal)
+) ENGINE=InnoDB;
+
 -- =========================================================
 --  DATA AWAL (diambil dari data yang sebelumnya hardcoded)
 -- =========================================================
@@ -209,5 +226,15 @@ INSERT IGNORE INTO kode_produk (kode, produk_id, asal, tanggal_terdaftar) VALUES
 ('TANI-003', NULL, 'Bandung', '2026-09-20'),
 ('TANI-004', NULL, 'Bandung', '2026-09-20'),
 ('TANI-005', 6, 'Bandung', '2026-09-20');
+
+-- Dokumentasi galeri = 4 kartu yang sebelumnya hardcode di index.html (data apa adanya)
+INSERT INTO dokumentasi (judul, keterangan, tanggal, gambar)
+SELECT * FROM (
+    SELECT 'Kebun Kentang' AS judul, 'Desa Cihideung' AS keterangan, DATE('2026-09-15') AS tanggal, 'WhatsApp Image 2026-09-09 at 09.08.51 (1).jpeg' AS gambar
+    UNION ALL SELECT 'Panen Kentang', 'Kebun Pak Asep', DATE('2026-09-12'), 'WhatsApp Image 2026-09-09 at 09.08.51.jpeg'
+    UNION ALL SELECT 'Penanaman Bibit Baru', 'Musim Kemarau', DATE('2026-09-10'), 'FOTO.jpeg'
+    UNION ALL SELECT 'Pembibitan', 'Rumah Bibit', DATE('2026-09-08'), 'DAUN.jpeg'
+) AS awal
+WHERE NOT EXISTS (SELECT 1 FROM dokumentasi);
 
 -- Tidak ada seed ulasan: ulasan hanya berasal dari pelanggan (form di index.html).

@@ -64,12 +64,12 @@
     .pesanan-toolbar { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1rem; }
     .pesanan-cari { position: relative; flex: 1 1 260px; }
     .pesanan-cari i { position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); color: #999; }
-    .pesanan-cari input, #filterStatus, #filterProduk {
+    .pesanan-cari input, #filterStatus, #filterProduk, #filterDokumentasi {
       width: 100%; height: 42px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.9rem; background: white;
     }
     .pesanan-cari input { padding: 0 0.85rem 0 2.4rem; }
-    #filterStatus, #filterProduk { flex: 0 0 160px; padding: 0 0.75rem; }
-    .pesanan-cari input:focus, #filterStatus:focus, #filterProduk:focus { outline: none; border-color: var(--hijau); box-shadow: 0 0 0 3px rgba(44,95,45,0.12); }
+    #filterStatus, #filterProduk, #filterDokumentasi { flex: 0 0 160px; padding: 0 0.75rem; }
+    .pesanan-cari input:focus, #filterStatus:focus, #filterProduk:focus, #filterDokumentasi:focus { outline: none; border-color: var(--hijau); box-shadow: 0 0 0 3px rgba(44,95,45,0.12); }
     .pesanan-info { color: #777; font-size: 0.85rem; margin-bottom: 0.5rem; }
     .pesanan-info.gagal { color: #c62828; }
     .tabel-pesanan td { vertical-align: middle; }
@@ -151,6 +151,17 @@
     .fp-pesan { color: #c62828; font-size: 0.85rem; }
     .fp-pesan:empty { display: none; }
     .fp-tombol { display: flex; justify-content: flex-end; gap: 0.5rem; }
+    /* Dokumentasi: foto lanskap → thumbnail & pratinjau 4:3, teks panjang tidak keluar tabel */
+    #tabelDokumentasi .produk-thumb { width: 64px; height: 48px; }
+    #tabelDokumentasi td, #tabelDokumentasi .produk-sel > div { min-width: 0; overflow-wrap: break-word; }
+    @container (max-width: 760px) {
+      #tabelDokumentasi td.sel-utama, #tabelDokumentasi td.sel-aksi { flex-direction: column; align-items: flex-start; text-align: left; gap: 0.4rem; }
+      #tabelDokumentasi td.sel-utama .produk-sel { width: 100%; }
+      #tabelDokumentasi td.sel-aksi .aksi-grup { justify-content: flex-start; }
+      #tabelDokumentasi .btn-aksi { min-height: 36px; }
+    }
+    #fdPreview { width: 160px; height: 120px; }
+    .file-hilang { color: #c62828; font-weight: 600; }
 
     /* Notifikasi */
     .notif {
@@ -168,9 +179,9 @@
       .grid-bawah { grid-template-columns: 1fr; }
     }
     @media (max-width: 700px) {
-      #halaman-pesanan .atasan, #halaman-produk .atasan { gap: 0.75rem; align-items: flex-start; }
-      #halaman-pesanan .atasan .btn-aksi span, #halaman-produk .atasan .btn-aksi span { display: none; }
-      #filterStatus, #filterProduk { flex: 1 1 100%; }
+      #halaman-pesanan .atasan, #halaman-produk .atasan, #halaman-dokumentasi .atasan { gap: 0.75rem; align-items: flex-start; }
+      #halaman-pesanan .atasan .btn-aksi span, #halaman-produk .atasan .btn-aksi span, #halaman-dokumentasi .atasan .btn-aksi span { display: none; }
+      #filterStatus, #filterProduk, #filterDokumentasi { flex: 1 1 100%; }
       .form-produk { grid-template-columns: 1fr; }
       .detail-grid { grid-template-columns: 1fr; gap: 0.15rem; }
       .detail-grid dd { margin-bottom: 0.5rem; }
@@ -178,7 +189,7 @@
     }
     .btn-aksi[hidden] { display: none; }
     /* Tabel pesanan menjadi kartu saat kotaknya sempit (bergantung lebar sidebar, bukan layar) */
-    #halaman-pesanan .kotak, #halaman-produk .kotak, #modalJenis .modal-isi { container-type: inline-size; }
+    #halaman-pesanan .kotak, #halaman-produk .kotak, #halaman-dokumentasi .kotak, #modalJenis .modal-isi { container-type: inline-size; }
     @container (max-width: 760px) {
       .tabel-pesanan thead { display: none; }
       .tabel-pesanan, .tabel-pesanan tbody, .tabel-pesanan tr, .tabel-pesanan td { display: block; width: 100%; }
@@ -204,6 +215,7 @@
       <li><a href="#pesanan" data-halaman="pesanan" title="Pesanan"><i class="fa-solid fa-clipboard-list"></i> <span>Pesanan</span></a></li>
       <li><a href="#produk" data-halaman="produk" title="Bibit"><i class="fa-solid fa-seedling"></i> <span>Bibit</span></a></li>
       <li><a href="#verifikasi" data-halaman="verifikasi" title="Verifikasi"><i class="fa-solid fa-qrcode"></i> <span>Verifikasi</span></a></li>
+      <li><a href="#dokumentasi" data-halaman="dokumentasi" title="Dokumentasi"><i class="fa-solid fa-images"></i> <span>Dokumentasi</span></a></li>
       <li class="sidebar-bawah">
         <a href="#" onclick="keluarAdmin(); return false;">
           <i class="fa-solid fa-right-from-bracket"></i> <span>Keluar</span>
@@ -412,6 +424,48 @@
       </table>
     </div>
    </section>
+
+   <!-- HALAMAN DOKUMENTASI (tabel dokumentasi → Galeri di halaman utama) -->
+   <section class="halaman" id="halaman-dokumentasi" hidden>
+    <div class="atasan">
+      <div>
+        <h1>Dokumentasi</h1>
+        <p class="tanggal">Foto galeri "Dokumentasi Budidaya &amp; Pembibitan" di halaman utama, diurutkan dari tanggal terbaru. Dokumentasi <strong>Nonaktif</strong> tidak tampil di publik.</p>
+      </div>
+      <div class="aksi-grup">
+        <button type="button" class="btn-aksi btn-selesai" onclick="bukaFormDokumentasi()">
+          <i class="fa-solid fa-plus"></i> <span>Tambah Dokumentasi</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="kotak">
+      <div class="pesanan-toolbar">
+        <div class="pesanan-cari">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="search" id="cariDokumentasi" placeholder="Cari judul atau lokasi / keterangan" aria-label="Cari dokumentasi">
+        </div>
+        <select id="filterDokumentasi" aria-label="Filter status dokumentasi">
+          <option value="">Semua</option>
+          <option value="aktif">Aktif</option>
+          <option value="nonaktif">Nonaktif</option>
+        </select>
+      </div>
+      <p class="pesanan-info" id="infoDokumentasi">Memuat dokumentasi...</p>
+      <table class="tabel-pesanan tabel-produk">
+        <thead>
+          <tr>
+            <th>Dokumentasi</th>
+            <th>Lokasi / Keterangan</th>
+            <th>Tanggal</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="tabelDokumentasi"></tbody>
+      </table>
+    </div>
+   </section>
   </main>
 
   <!-- FORM BIBIT (tambah / edit) -->
@@ -532,6 +586,45 @@
         <div class="penuh fp-tombol">
           <button type="button" class="btn-aksi btn-garis" onclick="tutupFormVerifikasi()">Batal</button>
           <button type="submit" class="btn-aksi btn-selesai" id="fvSimpan"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- FORM DOKUMENTASI (tambah / edit) -->
+  <div class="modal" id="modalDokumentasi" hidden>
+    <div class="kotak modal-isi" role="dialog" aria-modal="true" aria-labelledby="judulFormDokumentasi">
+      <div class="modal-kepala">
+        <h3 id="judulFormDokumentasi">Tambah Dokumentasi</h3>
+        <button type="button" class="modal-tutup" onclick="tutupFormDokumentasi()" aria-label="Tutup">&times;</button>
+      </div>
+      <form id="formDokumentasi" class="form-produk" novalidate>
+        <label class="penuh">Judul
+          <input type="text" id="fdJudul" maxlength="100" placeholder="Contoh: Kebun Kentang" required>
+        </label>
+        <label>Lokasi / Keterangan
+          <input type="text" id="fdKeterangan" maxlength="100" placeholder="Contoh: Desa Cihideung" required>
+        </label>
+        <label>Tanggal Dokumentasi
+          <input type="date" id="fdTanggal" required>
+        </label>
+        <label class="penuh">Gambar
+          <input type="file" id="fdFile" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" hidden>
+          <span class="fp-file-baris">
+            <button type="button" class="btn-aksi btn-garis" id="fdPilihGambar"><i class="fa-solid fa-image"></i> Pilih Gambar</button>
+            <span class="fp-nama-file" id="fdNamaFile">Belum ada gambar dipilih</span>
+          </span>
+          <small class="fp-file-info">JPG, JPEG, PNG, atau WEBP. Maksimal 3 MB. Saat edit, kosongkan untuk tetap memakai gambar lama.</small>
+          <input type="hidden" id="fdGambar">
+        </label>
+        <div class="penuh fp-bawah">
+          <img id="fdPreview" alt="Pratinjau gambar" hidden>
+          <label class="fp-aktif"><input type="checkbox" id="fdAktif" checked> Aktif (tampil di galeri)</label>
+        </div>
+        <p class="penuh fp-pesan" id="fdPesan" role="alert"></p>
+        <div class="penuh fp-tombol">
+          <button type="button" class="btn-aksi btn-garis" onclick="tutupFormDokumentasi()">Batal</button>
+          <button type="submit" class="btn-aksi btn-selesai" id="fdSimpan"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
         </div>
       </form>
     </div>
@@ -1321,14 +1414,248 @@
     document.getElementById('modalVerifikasi').addEventListener('click', e => { if (e.target.id === 'modalVerifikasi') tutupFormVerifikasi(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && !document.getElementById('modalVerifikasi').hidden) tutupFormVerifikasi(); });
 
+    /* ================= DOKUMENTASI (api/dokumentasi.php) =================
+       Galeri publik di index.html. Gambar diunggah lewat api/upload.php (jenis=dokumentasi)
+       dengan batas & tipe yang sama seperti gambar Bibit. Validasi final dilakukan server. */
+    let daftarDokumentasi = [];
+    let dokumentasiDiedit = null;
+    let fileDokumentasiBaru = null;   // File yang baru dipilih admin (belum diunggah)
+    let previewDokumentasiUrl = null; // object URL pratinjau (perlu di-revoke)
+    const payloadDokumentasi = d => ({
+      judul: d.judul, keterangan: d.keterangan, tanggal: d.tanggal, gambar: d.gambar, aktif: d.aktif
+    });
+
+    // YYYY-MM-DD menurut jam lokal (toISOString memakai UTC → bisa mundur sehari)
+    function hariIniLokal() {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    }
+    const formatTanggalDokumentasi = tgl => formatTanggal(tgl + ' 00:00:00');
+
+    async function muatDokumentasiAdmin() {
+      const info = document.getElementById('infoDokumentasi');
+      info.className = 'pesanan-info';
+      info.textContent = 'Memuat dokumentasi...';
+      try {
+        daftarDokumentasi = (await apiRequest('api/dokumentasi.php?semua=1')).data;
+      } catch (err) {
+        if (err.status === 401) { window.location.href = 'login.html'; return; }
+        info.className = 'pesanan-info gagal';
+        info.textContent = 'Gagal memuat dokumentasi: ' + err.message;
+        document.getElementById('tabelDokumentasi').innerHTML = '';
+        return;
+      }
+      renderDokumentasiAdmin();
+    }
+
+    function renderDokumentasiAdmin() {
+      const kata = document.getElementById('cariDokumentasi').value.trim().toLowerCase();
+      const filter = document.getElementById('filterDokumentasi').value;
+      const hasil = daftarDokumentasi.filter(d =>
+        (!kata || `${d.judul} ${d.keterangan}`.toLowerCase().includes(kata)) &&
+        (!filter || (filter === 'aktif' && d.aktif) || (filter === 'nonaktif' && !d.aktif))
+      );
+      document.getElementById('infoDokumentasi').textContent = daftarDokumentasi.length === 0
+        ? 'Belum ada dokumentasi.'
+        : `Menampilkan ${hasil.length} dari ${daftarDokumentasi.length} dokumentasi`;
+
+      document.getElementById('tabelDokumentasi').innerHTML = hasil.length === 0
+        ? `<tr><td colspan="5" class="kosong" style="color:#777; text-align:center;">${daftarDokumentasi.length === 0 ? 'Belum ada dokumentasi. Klik "Tambah Dokumentasi".' : 'Tidak ada dokumentasi yang cocok.'}</td></tr>`
+        : hasil.map(d => `
+            <tr>
+              <td data-label="Dokumentasi" class="sel-utama">
+                <div class="produk-sel">
+                  <img class="produk-thumb" src="${escapeHTML(d.gambar)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+                  <div>
+                    <div class="produk-nama">${escapeHTML(d.judul)}</div>
+                    <div class="produk-sub">ID ${d.id}${d.gambar_ada ? '' : ' · <span class="file-hilang">Berkas gambar tidak ditemukan</span>'}</div>
+                  </div>
+                </div>
+              </td>
+              <td data-label="Lokasi / Keterangan">${escapeHTML(d.keterangan)}</td>
+              <td data-label="Tanggal">${formatTanggalDokumentasi(d.tanggal)}</td>
+              <td data-label="Status"><span class="status-pill ${d.aktif ? 'status-aktif' : 'status-nonaktif'}">${d.aktif ? 'Aktif' : 'Nonaktif'}</span></td>
+              <td data-label="Aksi" class="sel-aksi">
+                <div class="aksi-grup">
+                  <button type="button" class="btn-aksi btn-garis" onclick="bukaFormDokumentasi(${d.id})"><i class="fa-solid fa-pen"></i> Edit</button>
+                  <button type="button" class="btn-aksi ${d.aktif ? 'btn-batal' : 'btn-selesai'}" onclick="ubahAktifDokumentasi(${d.id}, this)">
+                    <i class="fa-solid ${d.aktif ? 'fa-eye-slash' : 'fa-eye'}"></i> ${d.aktif ? 'Nonaktifkan' : 'Aktifkan'}
+                  </button>
+                  <button type="button" class="btn-aksi btn-hapus" onclick="hapusDokumentasi(${d.id}, this)" title="Hapus" aria-label="Hapus ${escapeHTML(d.judul)}"><i class="fa-solid fa-trash"></i></button>
+                </div>
+              </td>
+            </tr>`).join('');
+    }
+
+    function bersihkanPreviewDokumentasi() {
+      if (previewDokumentasiUrl) { URL.revokeObjectURL(previewDokumentasiUrl); previewDokumentasiUrl = null; }
+    }
+
+    // Pratinjau: file baru (jika ada) diprioritaskan; jika tidak, gambar lama dari #fdGambar.
+    function isiPreviewDokumentasi() {
+      const img = document.getElementById('fdPreview');
+      img.onerror = () => { img.hidden = true; };
+      bersihkanPreviewDokumentasi();
+      if (fileDokumentasiBaru) {
+        previewDokumentasiUrl = URL.createObjectURL(fileDokumentasiBaru);
+        img.src = previewDokumentasiUrl;
+        img.hidden = false;
+        return;
+      }
+      const nama = document.getElementById('fdGambar').value.trim();
+      img.hidden = !nama;
+      if (nama) { img.src = nama; }
+    }
+
+    // Admin memilih berkas gambar dari perangkat (File Explorer / galeri HP).
+    function pilihFileDokumentasi(e) {
+      const input = e.target;
+      const file = input.files && input.files[0];
+      const pesan = document.getElementById('fdPesan');
+      if (!file) { return; } // dialog dibatalkan → pertahankan pilihan sebelumnya
+      if (!TIPE_GAMBAR_OK.includes(file.type)) {
+        pesan.textContent = 'Format gambar harus JPG, JPEG, PNG, atau WEBP.';
+        input.value = '';
+        return;
+      }
+      if (file.size > MAKS_UPLOAD_MB * 1024 * 1024) {
+        pesan.textContent = `Ukuran gambar maksimal ${MAKS_UPLOAD_MB} MB.`;
+        input.value = '';
+        return;
+      }
+      pesan.textContent = '';
+      fileDokumentasiBaru = file;
+      document.getElementById('fdNamaFile').textContent = file.name; // info saja; nama aman dibuat server
+      isiPreviewDokumentasi();
+    }
+
+    function bukaFormDokumentasi(id = null) {
+      const d = id === null ? null : daftarDokumentasi.find(x => x.id === id);
+      dokumentasiDiedit = d ? d.id : null;
+      document.getElementById('judulFormDokumentasi').textContent = d ? 'Edit Dokumentasi' : 'Tambah Dokumentasi';
+      document.getElementById('fdJudul').value = d ? d.judul : '';
+      document.getElementById('fdKeterangan').value = d ? d.keterangan : '';
+      const tanggal = document.getElementById('fdTanggal');
+      tanggal.max = hariIniLokal();
+      tanggal.value = d ? d.tanggal : hariIniLokal();
+      // Reset pilihan berkas; simpan path gambar lama (dipertahankan bila tak diganti)
+      fileDokumentasiBaru = null;
+      document.getElementById('fdFile').value = '';
+      document.getElementById('fdGambar').value = d ? d.gambar : '';
+      document.getElementById('fdNamaFile').textContent = d ? 'Gambar saat ini tersimpan' : 'Belum ada gambar dipilih';
+      document.getElementById('fdAktif').checked = d ? d.aktif : true;
+      document.getElementById('fdPesan').textContent = '';
+      isiPreviewDokumentasi();
+      document.getElementById('modalDokumentasi').hidden = false;
+      document.getElementById('fdJudul').focus();
+    }
+
+    function tutupFormDokumentasi() {
+      dokumentasiDiedit = null;
+      bersihkanPreviewDokumentasi();
+      fileDokumentasiBaru = null;
+      document.getElementById('modalDokumentasi').hidden = true;
+    }
+
+    // Validasi ringan di browser; server tetap memvalidasi ulang
+    function dataFormDokumentasi() {
+      const data = {
+        judul: document.getElementById('fdJudul').value.trim(),
+        keterangan: document.getElementById('fdKeterangan').value.trim(),
+        tanggal: document.getElementById('fdTanggal').value,
+        gambar: document.getElementById('fdGambar').value.trim(),
+        aktif: document.getElementById('fdAktif').checked
+      };
+      if (data.judul.length < 3) return 'Judul minimal 3 karakter.';
+      if (data.keterangan.length < 2) return 'Lokasi / keterangan wajib diisi.';
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(data.tanggal)) return 'Tanggal dokumentasi wajib diisi.';
+      if (data.tanggal > hariIniLokal()) return 'Tanggal dokumentasi tidak boleh melewati hari ini.';
+      if (!data.gambar && !fileDokumentasiBaru) return 'Pilih gambar dokumentasi.';
+      return data;
+    }
+
+    async function simpanDokumentasi(e) {
+      e.preventDefault();
+      const pesan = document.getElementById('fdPesan');
+      const data = dataFormDokumentasi();
+      if (typeof data === 'string') { pesan.textContent = data; return; }
+      const tombol = document.getElementById('fdSimpan');
+      tombol.disabled = true;
+      try {
+        // Unggah gambar dulu bila admin memilih berkas baru; jika tidak, gambar lama dipertahankan.
+        // Gambar lama baru dibersihkan server SETELAH data memakai gambar baru.
+        if (fileDokumentasiBaru) {
+          const fd = new FormData();
+          fd.append('jenis', 'dokumentasi');
+          fd.append('gambar', fileDokumentasiBaru);
+          const upload = await apiRequest('api/upload.php', { method: 'POST', body: fd });
+          data.gambar = upload.data.path;
+          // Jika simpan data gagal, pakai berkas yang sudah terunggah ini saat mencoba lagi
+          fileDokumentasiBaru = null;
+          document.getElementById('fdGambar').value = data.gambar;
+        }
+        const res = dokumentasiDiedit === null
+          ? await apiRequest('api/dokumentasi.php', { method: 'POST', body: data })
+          : await apiRequest(`api/dokumentasi.php?id=${dokumentasiDiedit}`, { method: 'PUT', body: data });
+        tutupFormDokumentasi();
+        notif(`${res.message} (${res.data.judul})`);
+        await muatDokumentasiAdmin();
+      } catch (err) {
+        if (err.status === 401) { window.location.href = 'login.html'; return; }
+        pesan.textContent = err.message;
+      } finally {
+        tombol.disabled = false;
+      }
+    }
+
+    async function ubahAktifDokumentasi(id, tombol) {
+      const d = daftarDokumentasi.find(x => x.id === id);
+      if (!d) return;
+      const aksi = d.aktif ? 'Nonaktifkan' : 'Aktifkan';
+      if (!confirm(`${aksi} dokumentasi "${d.judul}"?${d.aktif ? '\nDokumentasi tidak akan tampil di galeri publik.' : ''}`)) return;
+      tombol.disabled = true;
+      try {
+        await apiRequest(`api/dokumentasi.php?id=${id}`, { method: 'PUT', body: { ...payloadDokumentasi(d), aktif: !d.aktif } });
+        notif(`Dokumentasi "${d.judul}" ${d.aktif ? 'dinonaktifkan' : 'diaktifkan'}.`);
+      } catch (err) {
+        if (err.status === 401) { window.location.href = 'login.html'; return; }
+        notif(err.message, true);
+      }
+      await muatDokumentasiAdmin();
+    }
+
+    async function hapusDokumentasi(id, tombol) {
+      const d = daftarDokumentasi.find(x => x.id === id);
+      if (!d) return;
+      if (!confirm(`Hapus permanen dokumentasi "${d.judul}"?\nJika hanya ingin menyembunyikan dari galeri, gunakan "Nonaktifkan".`)) return;
+      tombol.disabled = true;
+      try {
+        await apiRequest(`api/dokumentasi.php?id=${id}`, { method: 'DELETE' });
+        notif(`Dokumentasi "${d.judul}" dihapus.`);
+      } catch (err) {
+        if (err.status === 401) { window.location.href = 'login.html'; return; }
+        notif(err.message, true);
+      }
+      await muatDokumentasiAdmin();
+    }
+
+    document.getElementById('formDokumentasi').addEventListener('submit', simpanDokumentasi);
+    document.getElementById('fdPilihGambar').addEventListener('click', () => document.getElementById('fdFile').click());
+    document.getElementById('fdFile').addEventListener('change', pilihFileDokumentasi);
+    document.getElementById('cariDokumentasi').addEventListener('input', renderDokumentasiAdmin);
+    document.getElementById('filterDokumentasi').addEventListener('change', renderDokumentasiAdmin);
+    document.getElementById('modalDokumentasi').addEventListener('click', e => { if (e.target.id === 'modalDokumentasi') tutupFormDokumentasi(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !document.getElementById('modalDokumentasi').hidden) tutupFormDokumentasi(); });
+
     /* ================= NAVIGASI SIDEBAR ================= */
     function tampilkanHalaman() {
-      const nama = { '#pesanan': 'pesanan', '#produk': 'produk', '#verifikasi': 'verifikasi' }[location.hash] || 'dashboard';
+      const nama = { '#pesanan': 'pesanan', '#produk': 'produk', '#verifikasi': 'verifikasi', '#dokumentasi': 'dokumentasi' }[location.hash] || 'dashboard';
       document.querySelectorAll('.halaman').forEach(h => { h.hidden = h.id !== 'halaman-' + nama; });
       document.querySelectorAll('.sidebar-menu a[data-halaman]').forEach(a => a.classList.toggle('aktif', a.dataset.halaman === nama));
       if (nama === 'pesanan') muatPesanan();
       if (nama === 'produk') muatProdukAdmin();
       if (nama === 'verifikasi') muatVerifikasi();
+      if (nama === 'dokumentasi') muatDokumentasiAdmin();
     }
     window.addEventListener('hashchange', tampilkanHalaman);
     tampilkanHalaman();

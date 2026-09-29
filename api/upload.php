@@ -1,9 +1,11 @@
 <?php
 /* =========================================================
-   API UPLOAD GAMBAR BIBIT (admin)
-   POST multipart/form-data, field "gambar" (satu berkas)
+   API UPLOAD GAMBAR (admin) — dipakai Bibit & Dokumentasi
+   POST multipart/form-data, field "gambar" (satu berkas),
+   field opsional "jenis" = bibit (default) | dokumentasi → awalan nama berkas
    → validasi ketat, simpan ke folder uploads/, kembalikan
-     { path: "uploads/namafile" } untuk disimpan ke kolom produk.gambar.
+     { path: "uploads/namafile" } untuk disimpan ke kolom produk.gambar /
+     dokumentasi.gambar.
 
    Prinsip:
    - Hanya nama/path hasil upload yang masuk DB — binary TIDAK disimpan di DB.
@@ -33,6 +35,16 @@ const IMAGETYPE_KE_EXT = [
     IMAGETYPE_PNG  => 'png',
     IMAGETYPE_WEBP => 'webp',
 ];
+
+// Pemakai upload → awalan nama berkas (whitelist; nilai lain ditolak)
+const AWALAN_JENIS = [
+    'bibit'       => 'bibit_',
+    'dokumentasi' => 'dokumentasi_',
+];
+$jenis = $_POST['jenis'] ?? 'bibit';
+if (!is_string($jenis) || !isset(AWALAN_JENIS[$jenis])) {
+    fail('Jenis unggahan tidak valid.', 400);
+}
 
 $file = $_FILES['gambar'] ?? null;
 if (!is_array($file) || (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
@@ -83,7 +95,7 @@ try {
 } catch (Throwable) {
     $acak = bin2hex(pack('N*', random_int(0, PHP_INT_MAX), random_int(0, PHP_INT_MAX)));
 }
-$namaFile = 'bibit_' . date('Ymd_His') . '_' . $acak . '.' . $ext;
+$namaFile = AWALAN_JENIS[$jenis] . date('Ymd_His') . '_' . $acak . '.' . $ext;
 $tujuan   = $dir . '/' . $namaFile;
 
 if (!move_uploaded_file($file['tmp_name'], $tujuan)) {
