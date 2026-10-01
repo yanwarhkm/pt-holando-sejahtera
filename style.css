@@ -193,6 +193,10 @@ a {
     background: var(--danger);
     color: white;
 
+    font-size: .65rem;
+    font-weight: 800;
+}
+
 /* CATALOG */
 .catalog-layout { display: grid; grid-template-columns: 245px 1fr; gap: 22px; align-items: start; }
 .filter-card {
@@ -4217,18 +4221,11 @@ footer > p {
         0 0 0 3px rgba(255,255,255,.45);
 }
 
+/* Warna & hover mengikuti .btn-primary (kotak akses kini berlatar putih) */
 .guide-akses-form .btn-primary {
     flex: 1 1 100%;
 
     min-height: 44px;
-
-    background: white;
-
-    color: var(--primary-dark);
-}
-
-.guide-akses-form .btn-primary:hover {
-    background: #F1F8F1;
 }
 
 .guide-akses-form .btn-primary:disabled {
@@ -6075,5 +6072,164 @@ footer > p {
 
     .guide-paywall-box h3 {
         font-size: 21px;
+    }
+}
+
+
+/* =========================================================
+   RINGKASAN STANDAR PRODUKSI (BERANDA)
+   Bab 1–3 publik + daftar isi Bab 4. Isi Bab 4 tidak ada di
+   beranda, jadi kartu tidak perlu dipotong/diblur lagi.
+========================================================= */
+
+.guide-container.guide-ringkasan,
+.guide-container.guide-ringkasan:not(.unlocked) {
+    display: block;
+
+    max-height: none;
+
+    overflow: visible;
+}
+
+.guide-container.guide-ringkasan::after {
+    display: none;
+}
+
+.guide-container.guide-ringkasan > .guide-steps-grid {
+    max-height: none;
+
+    overflow: visible;
+}
+
+.guide-baca-bab {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    margin-top: 16px;
+
+    color: var(--primary-color);
+
+    font-size: .9rem;
+    font-weight: 700;
+
+    text-decoration: none;
+}
+
+.guide-baca-bab:hover {
+    color: var(--primary-dark);
+
+    text-decoration: underline;
+}
+
+.guide-bab4 {
+    margin-top: 24px;
+
+    padding: 20px;
+
+    border: 1px dashed rgba(46,125,50,.35);
+    border-radius: var(--radius);
+
+    background: var(--surface-soft);
+}
+
+.guide-bab4 h3 {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin: 0 0 12px;
+
+    color: var(--primary-dark);
+
+    font-size: 1rem;
+    line-height: 1.35;
+}
+
+.guide-bab4-list {
+    display: grid;
+
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    gap: 6px 16px;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+.guide-bab4-list a {
+    display: flex;
+
+    align-items: baseline;
+
+    gap: 8px;
+
+    padding: 6px 8px;
+
+    border-radius: 8px;
+
+    color: var(--text-main);
+
+    font-size: .88rem;
+
+    text-decoration: none;
+
+    overflow-wrap: anywhere;
+}
+
+.guide-bab4-list a:hover {
+    background: white;
+
+    color: var(--primary-dark);
+}
+
+.guide-bab4-list span {
+    min-width: 2.6em;
+
+    color: var(--primary-color);
+
+    font-weight: 800;
+}
+
+.guide-ringkasan .guide-paywall-box {
+    width: 100%;
+
+    max-width: 700px;
+}
+
+.guide-paywall-box[hidden] {
+    display: none;
+}
+
+/* Tombol memakai gaya .btn-primary yang sudah ada */
+.guide-akses-aktif .guide-baca-lengkap {
+    margin-top: 16px;
+
+    text-decoration: none;
+}
+
+.guide-akses-aktif .guide-baca-lengkap i {
+    font-size: inherit;
+}
+
+@media (max-width: 900px) {
+    .guide-bab4-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 560px) {
+    .guide-bab4 {
+        padding: 16px 12px;
+    }
+
+    .guide-bab4-list {
+        grid-template-columns: minmax(0, 1fr);
     }
 }

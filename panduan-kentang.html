@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panduan Budidaya Kentang — Beken Seeds</title>
+    <title>Standar Teknologi Produksi G2–G3 — Beken Seeds</title>
+    <meta name="description" content="Standar Teknologi Produksi G2–G3 Petani, PT. Kentang Hollando Sejahtera (No. 005/KHS/SP.PRD- Rev.2).">
     <style>
         :root {
             --primary-color: #2E7D32;
@@ -19,6 +20,11 @@
             --shadow: 0 5px 20px rgba(0,0,0,.08);
             --radius: 14px;
             --success: #2E7D32;
+            --warning-bg: #FFF8E1;
+            --warning-text: #7A5200;
+            --warning-border: #F4B942;
+            --danger-bg: #FFEBEE;
+            --danger-text: #B71C1C;
         }
         * {
             box-sizing: border-box;
@@ -26,190 +32,276 @@
             padding: 0;
             font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         }
+        html { scroll-behavior: smooth; scroll-padding-top: 16px; }
         body {
             background: var(--bg-main);
             color: var(--text-main);
             line-height: 1.6;
             padding-bottom: 90px;
+            overflow-wrap: break-word;
         }
+        a { color: var(--primary-color); }
         .container {
-            width: min(900px, 92%);
+            width: 100%;
+            max-width: 1160px;
             margin: 0 auto;
-            padding: 30px 20px;
+            padding: 24px 16px;
         }
-        header {
-            text-align: center;
-            margin-bottom: 40px;
+        .back-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            margin-bottom: 16px; font-size: .9rem; font-weight: 700; text-decoration: none;
         }
-        header h1 {
-            color: var(--primary-dark);
-            font-size: clamp(1.8rem, 4vw, 2.5rem);
-            margin-bottom: 8px;
-        }
-        header p {
-            color: var(--text-muted);
-            font-size: 1rem;
-        }
-        .guide-card {
-            background: white;
-            border-radius: var(--radius);
-            padding: 30px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border-color);
-            margin-bottom: 25px;
-        }
-        .guide-card h2 {
-            color: var(--primary-dark);
-            font-size: 1.3rem;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .step {
-            margin-bottom: 22px;
-            padding-bottom: 22px;
-            border-bottom: 1px dashed var(--border-color);
-        }
-        .step:last-child {
-            border-bottom: none;
-        }
-        .step h3 {
-            font-size: 1rem;
-            color: var(--primary-color);
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .step h3 span {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 26px;
-            height: 26px;
-            background: var(--primary-color);
+
+        /* ---------- Header dokumen ---------- */
+        .doc-header {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
             color: white;
-            border-radius: 50%;
-            font-size: .8rem;
-            font-weight: 700;
-        }
-        .step p {
-            color: var(--text-main);
-            font-size: .9rem;
-        }
-        .blur-content {
-            filter: blur(5px);
-            user-select: none;
-            pointer-events: none;
-        }
-        .lock-overlay {
-            position: relative;
-            margin: -15px;
-            padding: 30px 20px;
-            text-align: center;
-            background: linear-gradient(transparent, rgba(255,255,255,.95) 40%);
             border-radius: var(--radius);
-            z-index: 2;
+            padding: 28px 24px;
+            box-shadow: 0 10px 30px rgba(46,125,50,.2);
+            margin-bottom: 24px;
         }
-        .lock-icon {
-            font-size: 2.5rem;
-            color: var(--accent-color);
-            margin-bottom: 10px;
+        .doc-header .doc-kicker {
+            font-size: .8rem; font-weight: 700; letter-spacing: .06em;
+            text-transform: uppercase; opacity: .85;
         }
-        .lock-text {
-            font-weight: 700;
+        .doc-header h1 {
+            font-size: clamp(1.4rem, 4vw, 2.1rem);
+            line-height: 1.25;
+            margin: 6px 0 4px;
+        }
+        .doc-header .doc-company { font-weight: 600; opacity: .95; }
+        .doc-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .doc-meta div {
+            background: rgba(255,255,255,.12);
+            border: 1px solid rgba(255,255,255,.2);
+            border-radius: 10px;
+            padding: 10px 12px;
+            min-width: 0;
+        }
+        .doc-meta dt { font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; opacity: .8; }
+        .doc-meta dd { font-weight: 700; font-size: .95rem; }
+        .doc-note { margin-top: 14px; font-size: .82rem; opacity: .85; }
+
+        /* ---------- Layout + daftar isi ---------- */
+        .doc-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; }
+        .toc {
+            position: sticky; top: 0; z-index: 20;
+            background: var(--surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        .toc summary {
+            cursor: pointer; list-style: none;
+            padding: 12px 16px; font-weight: 800; color: var(--primary-dark);
+            display: flex; justify-content: space-between; align-items: center; gap: 8px;
+        }
+        .toc summary::-webkit-details-marker { display: none; }
+        .toc summary::after { content: "▾"; transition: transform .2s; }
+        .toc[open] summary::after { transform: rotate(180deg); }
+        .toc ol {
+            list-style: none;
+            padding: 0 8px 12px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        .toc li a {
+            display: flex; gap: 8px; align-items: baseline;
+            padding: 6px 8px; border-radius: 8px;
+            color: var(--text-main); text-decoration: none; font-size: .88rem;
+        }
+        .toc li a:hover, .toc li a.aktif { background: var(--surface-soft); color: var(--primary-dark); }
+        .toc li a .toc-no { font-weight: 800; color: var(--primary-color); min-width: 2.4em; }
+        .toc li.toc-sub a { padding-left: 20px; }
+        .toc .toc-kunci { margin-left: auto; font-size: .75rem; }
+        .unlocked .toc .toc-kunci { display: none; }
+
+        @media (min-width: 960px) {
+            .doc-layout { grid-template-columns: 260px minmax(0, 1fr); align-items: start; }
+            .toc { top: 16px; }
+            .toc summary { cursor: default; pointer-events: none; }
+            .toc summary::after { display: none; }
+            .toc ol { max-height: calc(100vh - 90px); }
+        }
+
+        /* ---------- Isi dokumen ---------- */
+        .doc-section {
+            background: var(--surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 24px 22px;
+            margin-bottom: 20px;
+            min-width: 0;
+        }
+        .doc-section > h2 {
             color: var(--primary-dark);
-            margin-bottom: 15px;
+            font-size: 1.25rem;
+            margin-bottom: 12px;
+            display: flex; gap: 10px; align-items: baseline;
         }
+        .doc-section h3 {
+            color: var(--primary-color);
+            font-size: 1.05rem;
+            margin: 22px 0 10px;
+        }
+        .doc-section h2 + h3, .doc-section h3:first-child { margin-top: 0; }
+        .doc-section h4 { font-size: .95rem; margin: 18px 0 8px; color: var(--text-main); }
+        .doc-section p { font-size: .93rem; margin-bottom: 10px; }
+        .doc-section ul, .doc-section ol.isi { padding-left: 20px; margin-bottom: 12px; font-size: .93rem; }
+        .doc-section li { margin-bottom: 6px; }
+        .doc-section li strong { color: var(--primary-dark); }
+        .sec-no { color: var(--primary-color); }
+
+        .param-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 10px;
+            margin: 12px 0 14px;
+        }
+        .param-card {
+            background: var(--surface-soft);
+            border: 1px solid rgba(46,125,50,.14);
+            border-radius: 12px;
+            padding: 12px 14px;
+            min-width: 0;
+        }
+        .param-card .param-label { font-size: .75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .04em; }
+        .param-card .param-nilai { font-size: 1.15rem; font-weight: 800; color: var(--primary-dark); line-height: 1.3; margin: 2px 0; }
+        .param-card .param-ket { font-size: .8rem; color: var(--text-muted); }
+
+        .hst-list { list-style: none; padding: 0 !important; margin: 12px 0 14px; display: grid; gap: 10px; }
+        .hst-list li {
+            display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: start;
+            background: var(--surface-soft); border-radius: 12px; padding: 12px 14px; margin: 0;
+        }
+        .badge-hst {
+            display: inline-block;
+            background: var(--primary-color); color: white;
+            border-radius: 50px; padding: 3px 12px;
+            font-size: .78rem; font-weight: 800; white-space: nowrap;
+        }
+        .hst-list .hst-judul { font-weight: 800; color: var(--primary-dark); display: block; }
+
+        .callout {
+            border-left: 4px solid var(--primary-color);
+            background: var(--surface-soft);
+            border-radius: 0 10px 10px 0;
+            padding: 12px 14px;
+            margin: 12px 0 14px;
+            font-size: .88rem;
+        }
+        .callout strong { display: block; margin-bottom: 2px; }
+        .callout-kimia { border-left-color: #C62828; background: var(--danger-bg); color: #5D1A1A; }
+        .callout-penting { border-left-color: var(--accent-color); background: var(--warning-bg); color: #5C4300; }
+
+        .review {
+            display: block;
+            border: 1px dashed var(--warning-border);
+            background: #FFFDF5;
+            color: var(--warning-text);
+            border-radius: 10px;
+            padding: 8px 12px;
+            margin: 8px 0 14px;
+            font-size: .8rem;
+        }
+        .review b { margin-right: 4px; }
+
+        .tabel-wrap {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 10px 0 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+        }
+        .tabel-wrap table { width: 100%; border-collapse: collapse; font-size: .85rem; min-width: 420px; }
+        .tabel-wrap caption { text-align: left; font-weight: 700; padding: 10px 12px; color: var(--primary-dark); }
+        .tabel-wrap th, .tabel-wrap td { padding: 8px 12px; border-top: 1px solid var(--border-color); text-align: left; vertical-align: top; }
+        .tabel-wrap thead th { background: var(--surface-soft); color: var(--primary-dark); font-weight: 800; }
+        .tabel-wrap tbody tr:nth-child(even) td { background: #FAFBFA; }
+        .tabel-catatan { font-size: .8rem !important; color: var(--text-muted); }
+
+        /* ---------- Accordion Bab 4 ---------- */
+        .bab-tools { display: flex; gap: 8px; flex-wrap: wrap; margin: 4px 0 14px; }
+        .bab-tools[hidden] { display: none; }
+        .btn-kecil {
+            border: 1px solid var(--primary-color); background: white; color: var(--primary-dark);
+            border-radius: 50px; padding: 6px 14px; font-weight: 700; font-size: .82rem; cursor: pointer;
+        }
+        .btn-kecil:hover { background: var(--surface-soft); }
+        .bab {
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            background: white;
+            min-width: 0;
+        }
+        .bab > summary {
+            cursor: pointer; list-style: none;
+            padding: 14px 16px;
+            display: flex; gap: 10px; align-items: center;
+            font-weight: 800; color: var(--primary-dark);
+        }
+        .bab > summary::-webkit-details-marker { display: none; }
+        .bab > summary::after { content: "＋"; margin-left: auto; color: var(--primary-color); }
+        .bab[open] > summary::after { content: "－"; }
+        .bab[open] > summary { border-bottom: 1px solid var(--border-color); }
+        .bab-isi { padding: 14px 16px 6px; min-width: 0; }
+        .bab-terkunci {
+            display: flex; gap: 10px; align-items: center;
+            border: 1px dashed var(--border-color); border-radius: 12px;
+            padding: 12px 16px; margin-bottom: 8px;
+            color: var(--text-muted); font-weight: 700; background: #FAFBFA;
+        }
+        .bab-terkunci .sec-no, .bab > summary .sec-no { min-width: 2.6em; }
+
+        .org-grup { margin-top: 18px; }
+        .org-grup > h4 { font-size: 1rem; color: var(--primary-dark); margin-bottom: 10px; }
+        .org-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+        @media (min-width: 1100px) { .org-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+        .org {
+            border: 1px solid rgba(46,125,50,.16); border-radius: 12px;
+            padding: 14px 16px; background: var(--surface-soft); min-width: 0;
+        }
+        .org h5 { font-size: .98rem; color: var(--text-main); line-height: 1.35; }
+        .org .org-latin { font-style: italic; color: var(--text-muted); font-size: .85rem; margin-bottom: 8px; }
+        .org dl { font-size: .86rem; }
+        .org dt { font-weight: 800; color: var(--primary-dark); margin-top: 8px; }
+        .org dd { margin: 0; }
+        .org-bahan {
+            margin-top: 10px; padding: 10px 12px; border-radius: 10px;
+            background: white; border: 1px solid #F3C4C4; font-size: .84rem;
+        }
+        .org-bahan b { color: #8E2424; }
+        .org-bahan ul { margin: 4px 0 0; padding-left: 18px; }
+        .org-bahan .org-catatan { font-size: .78rem; color: var(--text-muted); margin: 6px 0 0; }
+
+        /* ---------- Kotak akses ---------- */
         .paywall-box {
             background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
             color: white;
-            padding: 30px;
+            padding: 26px 20px;
             border-radius: 15px;
             text-align: center;
             box-shadow: 0 10px 30px rgba(46,125,50,.2);
-            margin: 30px 0;
+            margin: 16px 0 4px;
         }
-        .paywall-box h3 {
-            font-size: 1.3rem;
-            margin-bottom: 8px;
-        }
-        .paywall-box p {
-            opacity: .9;
-            font-size: .9rem;
-            margin-bottom: 20px;
-        }
-        .price-tag {
-            font-size: 1.8rem;
-            font-weight: 800;
-            margin-bottom: 20px;
-        }
+        .paywall-box h3 { font-size: 1.2rem; margin-bottom: 8px; color: white; }
+        .paywall-box p { opacity: .92; font-size: .9rem; margin-bottom: 16px; }
         .btn-buy {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            background: white;
-            color: var(--primary-dark);
-            padding: 13px 28px;
-            border-radius: 10px;
-            font-weight: 800;
-            text-decoration: none;
-            transition: .25s;
-            border: none;
-            font-size: 1rem;
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            background: white; color: var(--primary-dark);
+            padding: 13px 28px; border-radius: 10px;
+            font-weight: 800; text-decoration: none; transition: .25s; border: none; font-size: 1rem;
         }
-        .btn-buy:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,.15);
-        }
-        .full-unlocked {
-            display: none;
-        }
-        .unlocked .blur-content,
-        .unlocked .lock-overlay {
-            filter: none;
-            user-select: auto;
-            pointer-events: auto;
-            display: block;
-        }
-        .unlocked .lock-overlay {
-            display: none;
-        }
-        .unlocked .full-unlocked {
-            display: block;
-        }
-        .unlocked .paywall-box {
-            display: none;
-        }
-        .status-badge {
-            display: inline-block;
-            background: var(--success);
-            color: white;
-            padding: 6px 14px;
-            border-radius: 50px;
-            font-size: .8rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-        .floating-wa {
-            position: fixed;
-            right: 20px;
-            bottom: 20px;
-            z-index: 999;
-            width: 56px;
-            height: 56px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background: #25D366;
-            color: white;
-            font-size: 1.5rem;
-            text-decoration: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,.2);
-        }
+        .btn-buy:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,.15); }
         .akses-form { display: grid; gap: 10px; max-width: 420px; margin: 0 auto 12px; }
         .akses-form input {
             width: 100%; padding: 12px 14px; border: 0; border-radius: 10px;
@@ -223,98 +315,178 @@
             max-width: 420px; margin: 0 auto 12px !important; padding: 10px 12px;
             border-radius: 8px; font-size: .88rem !important; opacity: 1 !important;
         }
-        .akses-warning { background: #FFF8E1; color: #7A5200; }
-        .akses-error { background: #FFEBEE; color: #B71C1C; }
+        .akses-warning { background: var(--warning-bg); color: var(--warning-text); }
+        .akses-error { background: var(--danger-bg); color: var(--danger-text); }
         .akses-info { font-size: .8rem !important; margin-bottom: 10px !important; }
         .btn-link { color: white; font-weight: 700; font-size: .9rem; text-decoration: underline; }
+        .status-badge {
+            display: inline-block; background: var(--success); color: white;
+            padding: 6px 14px; border-radius: 50px; font-size: .8rem; font-weight: 700; margin-bottom: 12px;
+        }
+        .status-badge[hidden] { display: none; }
+        .unlocked .paywall-box, .unlocked .bab-terkunci { display: none; }
+
+        .floating-wa {
+            position: fixed; right: 20px; bottom: 20px; z-index: 999;
+            width: 56px; height: 56px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; background: #25D366; color: white;
+            font-size: 1.5rem; text-decoration: none; box-shadow: 0 5px 15px rgba(0,0,0,.2);
+        }
+
+        @media (max-width: 480px) {
+            .doc-header { padding: 22px 16px; }
+            .doc-section { padding: 18px 14px; }
+            .bab-isi { padding: 12px 12px 4px; }
+            .hst-list li { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+            .badge-hst { justify-self: start; white-space: normal; }
+            .doc-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>🥔 Panduan Lengkap Budidaya Kentang</h1>
-        <p>Langkah budidaya dari pemilihan bibit hingga panen dan penyimpanan</p>
+<div class="container" id="guide-wrapper">
+    <a href="index.html#panduan" class="back-link">← Kembali ke Beranda</a>
+
+    <!-- HEADER DOKUMEN -->
+    <header class="doc-header">
+        <div class="doc-kicker">Panduan Produksi · Beken Seeds</div>
+        <h1>Standar Teknologi Produksi G2–G3 Petani</h1>
+        <div class="doc-company">PT. Kentang Hollando Sejahtera</div>
+        <dl class="doc-meta">
+            <div><dt>No. Dokumen</dt><dd>005/KHS/SP.PRD- Rev.2</dd></div>
+            <div><dt>Tanggal</dt><dd>20 Februari 2026</dd></div>
+            <div><dt>Dibuat</dt><dd>Faulus DFS</dd></div>
+            <div><dt>Disetujui</dt><dd>Djoko Tribawono</dd></div>
+            <div><dt>Revisi</dt><dd>2</dd></div>
+        </dl>
+        <p class="doc-note">Dokumen standar internal PT. Kentang Hollando Sejahtera untuk produksi benih kentang G2 ke G3 di tingkat petani.</p>
     </header>
 
-    <div id="guide-wrapper" class="guide-card">
-        <!-- Badge jika sudah dibuka -->
-        <div class="full-unlocked">
-            <span class="status-badge">✅ Sudah Dibuka — Versi Lengkap</span>
-        </div>
+    <div class="doc-layout">
+        <!-- DAFTAR ISI -->
+        <nav aria-label="Daftar isi">
+            <details class="toc" id="toc" open>
+                <summary>📑 Daftar Isi</summary>
+                <ol>
+                    <li><a href="#bab-1"><span class="toc-no">1</span> Tujuan</a></li>
+                    <li><a href="#bab-2"><span class="toc-no">2</span> Ruang Lingkup</a></li>
+                    <li><a href="#bab-3"><span class="toc-no">3</span> Uraian Umum</a></li>
+                    <li class="toc-sub"><a href="#bab-3-1"><span class="toc-no">3.1</span> Syarat Tumbuh</a></li>
+                    <li class="toc-sub"><a href="#bab-3-2"><span class="toc-no">3.2</span> Seleksi Lahan &amp; Petani</a></li>
+                    <li class="toc-sub"><a href="#bab-3-3"><span class="toc-no">3.3</span> Standar Sertifikasi</a></li>
+                    <li><a href="#bab-4"><span class="toc-no">4</span> Teknologi Produksi Benih</a></li>
+                    <li class="toc-sub"><a href="#bab-4-1"><span class="toc-no">4.1</span> Persiapan Lahan <span class="toc-kunci">🔒</span></a></li>
+                    <li class="toc-sub"><a href="#bab-4-2"><span class="toc-no">4.2</span> Pemupukan Dasar <span class="toc-kunci">🔒</span></a></li>
+                    <li class="toc-sub"><a href="#bab-4-3"><span class="toc-no">4.3</span> Cara Tanam <span class="toc-kunci">🔒</span></a></li>
+                    <li class="toc-sub"><a href="#bab-4-4"><span class="toc-no">4.4</span> Pembumbunan <span class="toc-kunci">🔒</span></a></li>
+                    <li class="toc-sub"><a href="#bab-4-5"><span class="toc-no">4.5</span> Penyiangan <span class="toc-kunci">🔒</span></a></li>
+                    <li class="toc-sub"><a href="#bab-4-6"><span class="toc-no">4.6</span> Pemupukan Susulan <span class="toc-kunci">🔒</span></a></li>
+                    <li class="toc-sub"><a href="#bab-4-7"><span class="toc-no">4.7</span> Penyiraman <span class="toc-kunci">🔒</span></a></li>
+                    <li class="toc-sub"><a href="#bab-4-8"><span class="toc-no">4.8</span> Pengendalian OPT <span class="toc-kunci">🔒</span></a></li>
+                    <li class="toc-sub"><a href="#bab-4-9"><span class="toc-no">4.9</span> Rouging <span class="toc-kunci">🔒</span></a></li>
+                    <li class="toc-sub"><a href="#bab-4-10"><span class="toc-no">4.10</span> Panen <span class="toc-kunci">🔒</span></a></li>
+                    <li class="toc-sub"><a href="#bab-4-11"><span class="toc-no">4.11</span> Pasca Panen <span class="toc-kunci">🔒</span></a></li>
+                    <li class="toc-sub"><a href="#bab-4-12"><span class="toc-no">4.12</span> Hama &amp; Penyakit <span class="toc-kunci">🔒</span></a></li>
+                </ol>
+            </details>
+        </nav>
 
-        <!-- BAGIAN GRATIS = TAMPIL SEDIKIT -->
-        <h2>📖 Panduan Singkat</h2>
+        <main>
+            <!-- BAB 1–3: PUBLIK -->
+            <section class="doc-section" id="bab-1">
+                <h2><span class="sec-no">1.</span> Tujuan</h2>
+                <p>Standarisasi proses produksi kentang G2 ke G3 di tingkat petani sehingga dapat menghasilkan kentang yang berkualitas dengan hasil yang menguntungkan.</p>
+            </section>
 
-        <div class="step">
-            <h3><span>1</span> Pilih Bibit Kentang</h3>
-            <p>Pilih bibit kentang yang sehat, tidak berlubang, dan ukurannya sedang. Bibit yang baik berwarna cerah dan tidak busuk.</p>
-        </div>
+            <section class="doc-section" id="bab-2">
+                <h2><span class="sec-no">2.</span> Ruang Lingkup</h2>
+                <p>Produksi benih kentang G2 ke G3 ini meliputi perbanyakan benih kentang dengan proses produksi di lahan dengan menggunakan media tanah yang subur dan sesuai dengan standar.</p>
+            </section>
 
-        <div class="step">
-            <h3><span>2</span> Siapkan Tanah</h3>
-            <p>Kentang menyukai tanah yang gembur, berpasir, dan kaya humus. Pastikan tanah tidak tergenang air agar umbi tidak busuk.</p>
-        </div>
+            <section class="doc-section" id="bab-3">
+                <h2><span class="sec-no">3.</span> Uraian Umum</h2>
 
-        <div class="step">
-            <h3><span>3</span> Penanaman</h3>
-            <p>Tanam bibit kentang sedalam 10–15 cm dengan jarak antar tanaman 30–40 cm. Letakkan tunas menghadap ke atas.</p>
-        </div>
+                <h3 id="bab-3-1">3.1 Syarat Tumbuh Tanaman Kentang</h3>
+                <p>Tanaman kentang tidak menghendaki kekeringan, meskipun sangat peka terhadap air yang berlebih, terutama air yang menggenang. Jika terlalu kering maka suhu tanaman akan menjadi panas dan kelembabannya akan turun. Umbi kentang memerlukan suhu dingin dengan kelembaban yang tinggi.</p>
+                <p>Daerah yang cocok untuk budidaya kentang adalah di daerah pegunungan dengan ketinggian antara 1.000–3.000 mdpl, di mana suhu lingkungan pada ketinggian tersebut relatif dingin dan sangat berpengaruh dalam proses budidaya kentang. Penggunaan media tanam yang baik juga sangat berpengaruh, pada kondisi iklim mikro tertentu maka akan membutuhkan jenis media tanam yang berbeda. Adapun kondisi iklim mikro yang ideal untuk kentang adalah pada kondisi:</p>
+                <div class="param-grid">
+                    <div class="param-card"><div class="param-label">Ketinggian</div><div class="param-nilai">1.000–3.000 mdpl</div><div class="param-ket">Daerah pegunungan</div></div>
+                    <div class="param-card"><div class="param-label">Suhu</div><div class="param-nilai">15–22°C</div><div class="param-ket">Optimalnya 18–20°C</div></div>
+                    <div class="param-card"><div class="param-label">Kelembaban udara</div><div class="param-nilai">80%–90%</div></div>
+                    <div class="param-card"><div class="param-label">Penyinaran matahari</div><div class="param-nilai">Tidak ternaungi</div></div>
+                    <div class="param-card"><div class="param-label">Pengairan</div><div class="param-nilai">Normal</div><div class="param-ket">Dan bersih dari penyakit</div></div>
+                    <div class="param-card"><div class="param-label">Kemiringan lahan</div><div class="param-nilai">Maks. 30°</div></div>
+                    <div class="param-card"><div class="param-label">pH tanah</div><div class="param-nilai">6–6,5</div></div>
+                </div>
+                <p class="review"><b>⚠ Perlu konfirmasi client:</b> <span>Kemiringan lahan tertulis "max. 30°" (derajat) di dokumen. Mohon pastikan satuannya derajat, bukan persen.</span></p>
 
-        <!-- BAGIAN TERKUNCI = DIKABURKAN
-             Isi asli tidak ada di HTML; dikirim server (api/akses_panduan.php)
-             hanya untuk konsumen dengan pesanan terverifikasi. -->
-        <div class="blur-content" id="langkahTerkunci" aria-hidden="true">
-            <div class="step">
-                <h3><span>4</span> Penyiraman & Pemupukan</h3>
-                <p>Isi langkah ini tersedia di panduan lengkap untuk pelanggan yang sudah membeli bibit di Beken Seeds. Silakan verifikasi pesanan Anda.</p>
-            </div>
+                <h3 id="bab-3-2">3.2 Seleksi Lahan &amp; Petani</h3>
+                <p>Seleksi lahan &amp; petani bertujuan untuk mengoptimalkan pertumbuhan &amp; produktivitas tanaman kentang sehingga menghasilkan umbi kentang sesuai dengan standar mutu yang telah ditetapkan. Beberapa hal yang harus diperhatikan dalam melakukan seleksi lahan &amp; petani, meliputi:</p>
+                <ul>
+                    <li><strong>Kompetensi petani:</strong> Petani memiliki kompetensi dan pengetahuan tentang standar budidaya dan pembibitan kentang.</li>
+                    <li><strong>Modal:</strong> Petani memiliki modal/kondisi keuangan yang memadai.</li>
+                    <li><strong>Infrastruktur:</strong> Petani memiliki infrastruktur produksi benih kentang yang layak dan memadai (akses jalan, gudang, dan sistem pengairan).</li>
+                    <li><strong>Rotasi lahan:</strong> Lahan yang digunakan untuk produksi benih kentang sudah dirotasi 2 (dua) musim dengan tanaman non-solanaceae atau lahan diberakan minimal 9 (sembilan) bulan.</li>
+                    <li><strong>Uji tanah &amp; NSK:</strong> Pengambilan sampel tanah untuk dilakukan uji lab; memastikan tanah bebas dari Nematoda Sista Kentang (NSK).</li>
+                </ul>
 
-            <div class="step">
-                <h3><span>5</span> Penggemburan Tanah</h3>
-                <p>Isi langkah ini tersedia di panduan lengkap untuk pelanggan yang sudah membeli bibit di Beken Seeds. Silakan verifikasi pesanan Anda.</p>
-            </div>
+                <h3 id="bab-3-3">3.3 Standar Sertifikasi Benih Kentang</h3>
+                <p>Sertifikasi kelulusan benih kentang ditentukan oleh lembaga sertifikasi (BPSB etc). Dalam memproduksi benih kentang G2 ke G3 di lahan dilakukan paling sedikit 2 kali, meliputi:</p>
+                <ul class="hst-list">
+                    <li><span class="badge-hst">Sebelum tanam</span><div><span class="hst-judul">Inspek Pra Tanam</span>Pemeriksaan pendahuluan dilakukan sebelum tanam (kebenaran lokasi dan benih).</div></li>
+                    <li><span class="badge-hst">30–40 HST</span><div><span class="hst-judul">Inspek Tanam — pemeriksaan ke-1</span>Pemeriksaan pertanaman pada fase vegetatif.</div></li>
+                    <li><span class="badge-hst">50–70 HST</span><div><span class="hst-judul">Inspek Tanam — pemeriksaan ke-2</span>Pemeriksaan pertanaman pada fase generatif.</div></li>
+                </ul>
+            </section>
 
-            <div class="step">
-                <h3><span>6</span> Pencegahan Hama & Penyakit</h3>
-                <p>Isi langkah ini tersedia di panduan lengkap untuk pelanggan yang sudah membeli bibit di Beken Seeds. Silakan verifikasi pesanan Anda.</p>
-            </div>
+            <!-- BAB 4: TERKUNCI -->
+            <section class="doc-section" id="bab-4">
+                <h2><span class="sec-no">4.</span> Teknologi Produksi Benih Kentang</h2>
+                <span class="status-badge" id="statusAkses" hidden>✅ Akses aktif — Versi Lengkap</span>
+                <div class="bab-tools" id="babTools" hidden>
+                    <button type="button" class="btn-kecil" id="btnBukaSemua">Buka semua</button>
+                    <button type="button" class="btn-kecil" id="btnTutupSemua">Tutup semua</button>
+                </div>
 
-            <div class="step">
-                <h3><span>7</span> Masa Panen</h3>
-                <p>Isi langkah ini tersedia di panduan lengkap untuk pelanggan yang sudah membeli bibit di Beken Seeds. Silakan verifikasi pesanan Anda.</p>
-            </div>
+                <!-- Isi asli Bab 4 tidak ada di HTML; dikirim server (api/akses_panduan.php)
+                     hanya untuk sesi dengan pesanan terverifikasi. -->
+                <div id="isiBab4">
+                    <div class="bab-terkunci" id="bab-4-1"><span class="sec-no">4.1</span> Persiapan Lahan <span aria-hidden="true">🔒</span></div>
+                    <div class="bab-terkunci" id="bab-4-2"><span class="sec-no">4.2</span> Pemupukan Dasar <span aria-hidden="true">🔒</span></div>
+                    <div class="bab-terkunci" id="bab-4-3"><span class="sec-no">4.3</span> Cara Tanam <span aria-hidden="true">🔒</span></div>
+                    <div class="bab-terkunci" id="bab-4-4"><span class="sec-no">4.4</span> Pembumbunan <span aria-hidden="true">🔒</span></div>
+                    <div class="bab-terkunci" id="bab-4-5"><span class="sec-no">4.5</span> Penyiangan <span aria-hidden="true">🔒</span></div>
+                    <div class="bab-terkunci" id="bab-4-6"><span class="sec-no">4.6</span> Pemupukan Susulan <span aria-hidden="true">🔒</span></div>
+                    <div class="bab-terkunci" id="bab-4-7"><span class="sec-no">4.7</span> Penyiraman <span aria-hidden="true">🔒</span></div>
+                    <div class="bab-terkunci" id="bab-4-8"><span class="sec-no">4.8</span> Pengendalian OPT <span aria-hidden="true">🔒</span></div>
+                    <div class="bab-terkunci" id="bab-4-9"><span class="sec-no">4.9</span> Rouging <span aria-hidden="true">🔒</span></div>
+                    <div class="bab-terkunci" id="bab-4-10"><span class="sec-no">4.10</span> Panen <span aria-hidden="true">🔒</span></div>
+                    <div class="bab-terkunci" id="bab-4-11"><span class="sec-no">4.11</span> Penanganan Pasca Panen <span aria-hidden="true">🔒</span></div>
+                    <div class="bab-terkunci" id="bab-4-12"><span class="sec-no">4.12</span> Hama dan Penyakit <span aria-hidden="true">🔒</span></div>
+                </div>
 
-            <div class="step">
-                <h3><span>8</span> Penyimpanan</h3>
-                <p>Isi langkah ini tersedia di panduan lengkap untuk pelanggan yang sudah membeli bibit di Beken Seeds. Silakan verifikasi pesanan Anda.</p>
-            </div>
-        </div>
-
-        <!-- TAMPIL JIKA BELUM BELI -->
-        <div class="lock-overlay" id="lock-section">
-            <div class="lock-icon">🔒</div>
-            <p class="lock-text">Masih ada langkah lengkap Perawatan, Pencegahan Hama, Panen & Penyimpanan yang belum dibuka</p>
-        </div>
-
-        <!-- KOTAK AKSES: verifikasi pesanan -->
-        <div class="paywall-box" id="pay-section">
-            <h3>🔒 Konten Terkunci</h3>
-            <p>Panduan budidaya lengkap tersedia untuk pelanggan yang sudah membeli bibit.</p>
-            <form class="akses-form" id="formAkses" novalidate>
-                <input type="text" id="aksesKode" placeholder="Nomor Pesanan (contoh: PSN-260925-A1B2C3)" maxlength="30" autocomplete="off" required>
-                <input type="tel" id="aksesWa" placeholder="No. WhatsApp saat checkout" maxlength="20" required>
-                <button type="submit" class="btn-buy" id="btnCekPesanan">🔎 Cek Pesanan</button>
-            </form>
-            <p class="akses-pesan" id="aksesPesan" role="status" aria-live="polite"></p>
-            <p class="akses-info">Nomor pesanan tercantum di pesan WhatsApp saat Anda checkout. Panduan terbuka setelah pesanan dikonfirmasi admin.</p>
-            <a href="index.html#katalog" class="btn-link">Belum punya pesanan? Lihat Katalog Bibit →</a>
-        </div>
+                <!-- KOTAK AKSES: verifikasi pesanan -->
+                <div class="paywall-box" id="pay-section">
+                    <h3>🔒 Bab 4 Terkunci</h3>
+                    <p>Teknologi produksi benih kentang (Bab 4.1–4.12) tersedia untuk pelanggan yang sudah membeli bibit.</p>
+                    <form class="akses-form" id="formAkses" novalidate>
+                        <input type="text" id="aksesKode" placeholder="Nomor Pesanan (contoh: PSN-260925-A1B2C3)" maxlength="30" autocomplete="off" aria-label="Nomor pesanan" required>
+                        <input type="tel" id="aksesWa" placeholder="No. WhatsApp saat checkout" maxlength="20" aria-label="Nomor WhatsApp saat checkout" required>
+                        <button type="submit" class="btn-buy" id="btnCekPesanan">🔎 Cek Pesanan</button>
+                    </form>
+                    <p class="akses-pesan" id="aksesPesan" role="status" aria-live="polite"></p>
+                    <p class="akses-info">Nomor pesanan tercantum di pesan WhatsApp saat Anda checkout. Panduan terbuka setelah pesanan dikonfirmasi admin.</p>
+                    <a href="index.html#katalog" class="btn-link">Belum punya pesanan? Lihat Katalog Bibit →</a>
+                </div>
+            </section>
+        </main>
     </div>
 </div>
 
 <!-- Tombol WhatsApp -->
-<a href="https://wa.me/6285797187917" target="_blank" rel="noopener noreferrer" class="floating-wa">💬</a>
+<a href="https://wa.me/6285797187917" target="_blank" rel="noopener noreferrer" class="floating-wa" aria-label="Hubungi kami via WhatsApp">💬</a>
 
 <script src="js/api.js"></script>
 <script>
@@ -322,37 +494,150 @@
     // (api/akses_panduan.php). Tidak ada status akses yang disimpan di browser.
     const wrapper = document.getElementById('guide-wrapper');
     const pesanEl = document.getElementById('aksesPesan');
+    const toc = document.getElementById('toc');
+    const layarKecil = matchMedia('(max-width: 959px)');
 
     function tampilkanPesanAkses(teks, jenis = 'info') {
         pesanEl.textContent = teks;
         pesanEl.className = 'akses-pesan akses-' + jenis;
     }
 
-    function bukaKonten(langkah) {
-        const wadah = document.getElementById('langkahTerkunci');
-        wadah.innerHTML = langkah.map(l => `
-            <div class="step">
-                <h3><span>${Number(l.no)}</span> ${escapeHTML(l.judul)}</h3>
-                <p>${escapeHTML(l.isi)}</p>
+    /* ---------- Render blok konten Bab 4 (semua teks di-escape) ---------- */
+    const e = escapeHTML;
+
+    function renderItemList(item) {
+        if (typeof item === 'string') return `<li>${e(item)}</li>`;
+        return `<li><strong>${e(item.judul)}</strong> ${e(item.teks)}</li>`;
+    }
+
+    function renderReview(teks) {
+        return `<p class="review"><b>⚠ Perlu konfirmasi client:</b> <span>${e(teks)}</span></p>`;
+    }
+
+    function renderOrganisme(o) {
+        const rincian = (o.rincian || []).map(([label, teks]) =>
+            `<dt>${e(label)}</dt><dd>${e(teks)}</dd>`).join('');
+        const bahan = o.bahan ? `
+            <div class="org-bahan">
+                <b>${e(o.bahan.label)} (referensi dokumen)</b>
+                <ul>${o.bahan.baris.map(b => `<li>${e(b)}</li>`).join('')}</ul>
+                ${o.bahan.catatan ? `<p class="org-catatan">${e(o.bahan.catatan)}</p>` : ''}
+            </div>` : '';
+        return `
+            <article class="org">
+                <h5>${e(o.nama)}</h5>
+                ${o.latin ? `<p class="org-latin">${e(o.latin)}</p>` : ''}
+                <dl>${rincian}</dl>
+                ${bahan}
+                ${o.review ? renderReview(o.review) : ''}
+            </article>`;
+    }
+
+    const RENDER_BLOK = {
+        p: b => `<p>${e(b.teks)}</p>`,
+        h: b => `<h4>${e(b.teks)}</h4>`,
+        list: b => `<ul>${b.item.map(renderItemList).join('')}</ul>`,
+        hst: b => `<ul class="hst-list">${b.item.map(i => `
+            <li><span class="badge-hst">${e(i.hst)}</span>
+                <div>${i.judul ? `<span class="hst-judul">${e(i.judul)}</span>` : ''}${e(i.teks)}</div></li>`).join('')}</ul>`,
+        param: b => `<div class="param-grid">${b.item.map(i => `
+            <div class="param-card">
+                <div class="param-label">${e(i.label)}</div>
+                <div class="param-nilai">${e(i.nilai)}</div>
+                ${i.ket ? `<div class="param-ket">${e(i.ket)}</div>` : ''}
+            </div>`).join('')}</div>`,
+        tabel: b => `
+            <div class="tabel-wrap" role="region" aria-label="${e(b.judul)}" tabindex="0">
+                <table>
+                    <caption>${e(b.judul)}</caption>
+                    <thead><tr>${b.kolom.map(k => `<th scope="col">${e(k)}</th>`).join('')}</tr></thead>
+                    <tbody>${b.baris.map(r => `<tr>${r.map(c => `<td>${e(c)}</td>`).join('')}</tr>`).join('')}</tbody>
+                </table>
             </div>
-        `).join('');
-        wadah.removeAttribute('aria-hidden');
+            ${b.catatan ? `<p class="tabel-catatan">${e(b.catatan)}</p>` : ''}`,
+        callout: b => `
+            <div class="callout callout-${b.jenis === 'kimia' ? 'kimia' : b.jenis === 'penting' ? 'penting' : 'info'}">
+                ${b.jenis === 'kimia' ? '<strong>⚠️ Catatan bahan kimia</strong>' : b.judul ? `<strong>${e(b.judul)}</strong>` : ''}
+                ${e(b.teks)}
+            </div>`,
+        review: b => renderReview(b.teks),
+        organisme: b => `
+            <div class="org-grup">
+                <h4>${e(b.judul)}</h4>
+                <div class="org-grid">${b.item.map(renderOrganisme).join('')}</div>
+            </div>`
+    };
+
+    function renderBagian(bagian) {
+        const isi = bagian.blok.map(b => (RENDER_BLOK[b.t] || (() => ''))(b)).join('');
+        // id hanya huruf/angka/strip agar aman dipakai sebagai atribut
+        const id = String(bagian.id).replace(/[^a-z0-9-]/gi, '');
+        return `
+            <details class="bab" id="${id}">
+                <summary><span class="sec-no">${e(bagian.no)}</span> ${e(bagian.judul)}</summary>
+                <div class="bab-isi">${isi}</div>
+            </details>`;
+    }
+
+    function bukaHash() {
+        const target = location.hash && document.getElementById(location.hash.slice(1));
+        if (!target) return;
+        if (target.tagName === 'DETAILS') target.open = true;
+        target.scrollIntoView();
+    }
+
+    function bukaKonten(bagian) {
+        document.getElementById('isiBab4').innerHTML = bagian.map(renderBagian).join('');
+        document.getElementById('statusAkses').hidden = false;
+        document.getElementById('babTools').hidden = false;
         wrapper.classList.add('unlocked');
+        bukaHash();
+    }
+
+    function semuaBab(buka) {
+        document.querySelectorAll('#isiBab4 details.bab').forEach(d => { d.open = buka; });
+    }
+    document.getElementById('btnBukaSemua').addEventListener('click', () => semuaBab(true));
+    document.getElementById('btnTutupSemua').addEventListener('click', () => semuaBab(false));
+
+    // Daftar isi: buka accordion tujuan; di layar kecil tutup daftar isi setelah memilih
+    toc.addEventListener('click', ev => {
+        const link = ev.target.closest('a[href^="#"]');
+        if (!link) return;
+        const target = document.getElementById(link.getAttribute('href').slice(1));
+        if (target && target.tagName === 'DETAILS') target.open = true;
+        if (layarKecil.matches) toc.open = false;
+    });
+    window.addEventListener('hashchange', bukaHash);
+    if (layarKecil.matches) toc.open = false;
+
+    // Tandai bagian yang sedang dibaca di daftar isi
+    if ('IntersectionObserver' in window) {
+        const tautan = new Map([...toc.querySelectorAll('a[href^="#"]')].map(a => [a.getAttribute('href').slice(1), a]));
+        const spy = new IntersectionObserver(entries => {
+            entries.forEach(en => {
+                if (!en.isIntersecting) return;
+                tautan.forEach(a => a.classList.remove('aktif'));
+                tautan.get(en.target.id)?.classList.add('aktif');
+            });
+        }, { rootMargin: '0px 0px -75% 0px' });
+        ['bab-1', 'bab-2', 'bab-3-1', 'bab-3-2', 'bab-3-3', 'bab-4']
+            .forEach(id => spy.observe(document.getElementById(id)));
     }
 
     // Cek akses sesi saat halaman dibuka
     async function cekAkses() {
         try {
             const res = await apiRequest('api/akses_panduan.php?halaman=panduan-kentang');
-            if (res.hasAccess) bukaKonten(res.data.langkah);
+            if (res.hasAccess) bukaKonten(res.data.bagian);
         } catch (err) {
             tampilkanPesanAkses(err.message, 'error');
         }
     }
 
     // Verifikasi pesanan: nomor pesanan + nomor WhatsApp saat checkout
-    document.getElementById('formAkses').addEventListener('submit', async e => {
-        e.preventDefault();
+    document.getElementById('formAkses').addEventListener('submit', async ev => {
+        ev.preventDefault();
         const kode = document.getElementById('aksesKode').value.trim().toUpperCase();
         const wa = document.getElementById('aksesWa').value.trim();
 
@@ -372,8 +657,8 @@
                 body: { halaman: 'panduan-kentang', kode, wa }
             });
             if (res.hasAccess) {
-                bukaKonten(res.data.langkah);
-                wrapper.scrollIntoView({ behavior: 'smooth' });
+                bukaKonten(res.data.bagian);
+                document.getElementById('bab-4').scrollIntoView({ behavior: 'smooth' });
             } else {
                 tampilkanPesanAkses(res.message, 'warning');
             }

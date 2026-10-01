@@ -2,7 +2,7 @@
 /* =========================================================
    API AKSES PANDUAN (berbasis pesanan)
    GET  ?halaman=beranda|panduan-kentang
-        → cek akses sesi ini; jika valid, kirim langkah panduan terkunci
+        → cek akses sesi ini; jika valid (panduan-kentang), kirim isi Bab 4 terkunci
    POST { halaman, kode, wa }
         → verifikasi pesanan (nomor pesanan + WhatsApp saat checkout),
           lalu simpan akses di sesi server
@@ -27,9 +27,9 @@ const PESAN_TERKUNCI = 'Panduan lengkap tersedia untuk konsumen yang sudah melak
 function jawab_akses(bool $akses, string $pesan, ?string $halaman = null): never
 {
     $body = ['success' => true, 'hasAccess' => $akses, 'message' => $pesan];
-    if ($akses && $halaman !== null) {
-        $konten = require dirname(__DIR__) . '/konten/panduan.php';
-        $body['data'] = ['langkah' => $konten[$halaman]];
+    // Isi Bab 4 hanya untuk halaman dokumen lengkap; beranda cukup status akses
+    if ($akses && $halaman === 'panduan-kentang') {
+        $body['data'] = ['bagian' => require dirname(__DIR__) . '/konten/panduan.php'];
     }
     http_response_code(200);
     echo json_encode($body, JSON_UNESCAPED_UNICODE);
