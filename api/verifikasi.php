@@ -120,7 +120,7 @@ function validate_kode(PDO $pdo, array $input): array
         $v->addError('kode', 'Isi Kode / Nomor Seri atau URL QR resmi (minimal salah satu).');
     }
 
-    $produkId = $v->int('produk_id', 'Bibit terkait', 1, PHP_INT_MAX, false);
+    $produkId = $v->int('produk_id', 'Benih terkait', 1, PHP_INT_MAX, false);
     $asal     = $v->string('asal', 'Asal', 100, false) ?? '';
     $status   = $v->in('status', 'Status', ['aktif', 'dicabut']);
 
@@ -135,7 +135,7 @@ function validate_kode(PDO $pdo, array $input): array
         $stmt = $pdo->prepare('SELECT 1 FROM produk WHERE id = ?');
         $stmt->execute([$produkId]);
         if ($stmt->fetchColumn() === false) {
-            $v->addError('produk_id', 'Bibit terkait tidak ditemukan.');
+            $v->addError('produk_id', 'Benih terkait tidak ditemukan.');
         }
     }
 

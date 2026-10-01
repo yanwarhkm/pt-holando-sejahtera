@@ -45,8 +45,8 @@ function validate_produk(PDO $pdo, array $input, ?int $kategoriLama = null): arr
 {
     $v = new Validator($input);
     $data = [
-        'nama'      => $v->string('nama', 'Nama bibit', 100, true, 3),
-        'kategori_id' => $v->int('kategori_id', 'Jenis bibit', 1, PHP_INT_MAX),
+        'nama'      => $v->string('nama', 'Nama benih', 100, true, 3),
+        'kategori_id' => $v->int('kategori_id', 'Jenis benih', 1, PHP_INT_MAX),
         'deskripsi' => $v->string('deskripsi', 'Deskripsi', 255, false) ?? '',
         'harga'     => $v->int('harga', 'Harga', 1, 100000000),
         'satuan'    => $v->string('satuan', 'Satuan', 20),
@@ -67,9 +67,9 @@ function validate_produk(PDO $pdo, array $input, ?int $kategoriLama = null): arr
         $stmt->execute([$data['kategori_id']]);
         $aktif = $stmt->fetchColumn();
         if ($aktif === false) {
-            $v->addError('kategori_id', 'Jenis bibit tidak ditemukan.');
+            $v->addError('kategori_id', 'Jenis benih tidak ditemukan.');
         } elseif ((int) $aktif !== 1 && $data['kategori_id'] !== $kategoriLama) {
-            $v->addError('kategori_id', 'Jenis bibit tersebut sedang nonaktif.');
+            $v->addError('kategori_id', 'Jenis benih tersebut sedang nonaktif.');
         }
     }
     $v->check();
@@ -86,19 +86,19 @@ if ($method === 'GET') {
         $stmt->execute([query_id()]);
         $row = $stmt->fetch();
         if (!$row) {
-            fail('Bibit tidak ditemukan.', 404);
+            fail('Benih tidak ditemukan.', 404);
         }
-        ok('Detail bibit berhasil dimuat.', format_produk($row));
+        ok('Detail benih berhasil dimuat.', format_produk($row));
     }
 
     if (isset($_GET['semua'])) {
         require_admin();
         $rows = $pdo->query(SELECT_PRODUK . ' ORDER BY p.id')->fetchAll();
-        ok('Data bibit berhasil dimuat.', array_map(fn($r) => format_produk($r, true), $rows));
+        ok('Data benih berhasil dimuat.', array_map(fn($r) => format_produk($r, true), $rows));
     }
 
     $rows = $pdo->query(SELECT_PRODUK . ' WHERE p.aktif = 1 ORDER BY p.id')->fetchAll();
-    ok('Data bibit berhasil dimuat.', array_map('format_produk', $rows));
+    ok('Data benih berhasil dimuat.', array_map('format_produk', $rows));
 }
 
 require_admin();
@@ -114,7 +114,7 @@ if ($method === 'POST') {
 
     $row = $pdo->prepare(SELECT_PRODUK . ' WHERE p.id = ?');
     $row->execute([$id]);
-    ok('Bibit berhasil ditambahkan.', format_produk($row->fetch(), true), 201);
+    ok('Benih berhasil ditambahkan.', format_produk($row->fetch(), true), 201);
 }
 
 if ($method === 'PUT') {
@@ -123,7 +123,7 @@ if ($method === 'PUT') {
     $exists->execute([$id]);
     $lama = $exists->fetch();
     if (!$lama) {
-        fail('Bibit tidak ditemukan.', 404);
+        fail('Benih tidak ditemukan.', 404);
     }
     $data = validate_produk($pdo, read_json(), $lama['kategori_id'] === null ? null : (int) $lama['kategori_id']);
 
@@ -136,14 +136,14 @@ if ($method === 'PUT') {
 
     $row = $pdo->prepare(SELECT_PRODUK . ' WHERE p.id = ?');
     $row->execute([$id]);
-    ok('Bibit berhasil diperbarui.', format_produk($row->fetch(), true));
+    ok('Benih berhasil diperbarui.', format_produk($row->fetch(), true));
 }
 
 if ($method === 'DELETE') {
     $stmt = $pdo->prepare('DELETE FROM produk WHERE id = ?');
     $stmt->execute([query_id()]);
     if ($stmt->rowCount() === 0) {
-        fail('Bibit tidak ditemukan.', 404);
+        fail('Benih tidak ditemukan.', 404);
     }
-    ok('Bibit berhasil dihapus.');
+    ok('Benih berhasil dihapus.');
 }

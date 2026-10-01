@@ -218,7 +218,7 @@
     <ul class="sidebar-menu">
       <li><a href="#dashboard" class="aktif" data-halaman="dashboard" title="Dashboard"><i class="fa-solid fa-chart-pie"></i> <span>Dashboard</span></a></li>
       <li><a href="#pesanan" data-halaman="pesanan" title="Pesanan"><i class="fa-solid fa-clipboard-list"></i> <span>Pesanan</span></a></li>
-      <li><a href="#produk" data-halaman="produk" title="Bibit"><i class="fa-solid fa-seedling"></i> <span>Bibit</span></a></li>
+      <li><a href="#produk" data-halaman="produk" title="Benih"><i class="fa-solid fa-seedling"></i> <span>Benih</span></a></li>
       <li><a href="#verifikasi" data-halaman="verifikasi" title="Verifikasi"><i class="fa-solid fa-qrcode"></i> <span>Verifikasi</span></a></li>
       <li><a href="#dokumentasi" data-halaman="dokumentasi" title="Dokumentasi"><i class="fa-solid fa-images"></i> <span>Dokumentasi</span></a></li>
       <li class="sidebar-bawah">
@@ -261,7 +261,7 @@
       </div>
       <div class="kartu">
         <i class="fa-solid fa-boxes-stacked kartu-ikon"></i>
-        <div class="kartu-judul">Stok Bibit</div>
+        <div class="kartu-judul">Stok Benih</div>
         <div class="kartu-angka" id="statStok">…</div>
       </div>
     </div>
@@ -344,15 +344,15 @@
    <section class="halaman" id="halaman-produk" hidden>
     <div class="atasan">
       <div>
-        <h1>Bibit</h1>
-        <p class="tanggal">Katalog bibit kentang untuk pelanggan. Bibit <strong>Nonaktif</strong> tidak tampil di katalog dan tidak bisa dipesan.</p>
+        <h1>Benih</h1>
+        <p class="tanggal">Katalog benih kentang untuk pelanggan. Benih <strong>Nonaktif</strong> tidak tampil di katalog dan tidak bisa dipesan.</p>
       </div>
       <div class="aksi-grup">
         <button type="button" class="btn-aksi btn-garis" onclick="bukaJenisBibit()">
-          <i class="fa-solid fa-tags"></i> <span>Jenis Bibit</span>
+          <i class="fa-solid fa-tags"></i> <span>Jenis Benih</span>
         </button>
         <button type="button" class="btn-aksi btn-selesai" onclick="bukaFormProduk()">
-          <i class="fa-solid fa-plus"></i> <span>Tambah Bibit</span>
+          <i class="fa-solid fa-plus"></i> <span>Tambah Benih</span>
         </button>
       </div>
     </div>
@@ -361,21 +361,21 @@
       <div class="pesanan-toolbar">
         <div class="pesanan-cari">
           <i class="fa-solid fa-magnifying-glass"></i>
-          <input type="search" id="cariProduk" placeholder="Cari nama atau jenis bibit" aria-label="Cari bibit">
+          <input type="search" id="cariProduk" placeholder="Cari nama atau jenis benih" aria-label="Cari benih">
         </div>
-        <select id="filterProduk" class="filter-select" aria-label="Filter status bibit">
+        <select id="filterProduk" class="filter-select" aria-label="Filter status benih">
           <option value="">Semua</option>
           <option value="aktif">Aktif</option>
           <option value="nonaktif">Nonaktif</option>
           <option value="habis">Stok Habis</option>
         </select>
       </div>
-      <p class="pesanan-info" id="infoProduk">Memuat bibit...</p>
+      <p class="pesanan-info" id="infoProduk">Memuat benih...</p>
       <table class="tabel-pesanan tabel-produk">
         <thead>
           <tr>
-            <th>Bibit</th>
-            <th>Jenis Bibit</th>
+            <th>Benih</th>
+            <th>Jenis Benih</th>
             <th>Harga</th>
             <th>Stok</th>
             <th>Status</th>
@@ -392,7 +392,7 @@
     <div class="atasan">
       <div>
         <h1>Verifikasi</h1>
-        <p class="tanggal">Hubungkan kode/nomor seri dan/atau URL QR resmi pada label dengan data bibit agar bisa dicocokkan saat pelanggan memindai QR. Data ini internal — bukan penentu keabsahan resmi BPSB/Kementan.</p>
+        <p class="tanggal">Hubungkan kode/nomor seri dan/atau URL QR resmi pada label dengan data benih agar bisa dicocokkan saat pelanggan memindai QR. Data ini internal — bukan penentu keabsahan resmi BPSB/Kementan.</p>
       </div>
       <div class="aksi-grup">
         <button type="button" class="btn-aksi btn-selesai" onclick="bukaFormVerifikasi()">
@@ -405,7 +405,7 @@
       <div class="pesanan-toolbar">
         <div class="pesanan-cari">
           <i class="fa-solid fa-magnifying-glass"></i>
-          <input type="search" id="cariVerifikasi" placeholder="Cari kode, URL, bibit, asal" aria-label="Cari data verifikasi">
+          <input type="search" id="cariVerifikasi" placeholder="Cari kode, URL, benih, asal" aria-label="Cari data verifikasi">
         </div>
         <select id="filterVerifikasi" class="filter-select" aria-label="Filter status verifikasi">
           <option value="">Semua</option>
@@ -418,7 +418,7 @@
         <thead>
           <tr>
             <th>Kode / Nomor Seri</th>
-            <th>Bibit Terkait</th>
+            <th>Benih Terkait</th>
             <th>Asal</th>
             <th>Terdaftar</th>
             <th>Status</th>
@@ -477,14 +477,14 @@
   <div class="modal" id="modalProduk" hidden>
     <div class="kotak modal-isi" role="dialog" aria-modal="true" aria-labelledby="judulFormProduk">
       <div class="modal-kepala">
-        <h3 id="judulFormProduk">Tambah Bibit</h3>
+        <h3 id="judulFormProduk">Tambah Benih</h3>
         <button type="button" class="modal-tutup" onclick="tutupFormProduk()" aria-label="Tutup">&times;</button>
       </div>
       <form id="formProduk" class="form-produk" novalidate>
-        <label class="penuh">Nama Bibit
+        <label class="penuh">Nama Benih
           <input type="text" id="fpNama" maxlength="100" required>
         </label>
-        <label>Jenis Bibit
+        <label>Jenis Benih
           <!-- Opsi dari tabel kategori_bibit (api/kategori_bibit.php) -->
           <select id="fpKategori" required></select>
         </label>
@@ -529,12 +529,12 @@
   <div class="modal" id="modalJenis" hidden>
     <div class="kotak modal-isi" role="dialog" aria-modal="true" aria-labelledby="judulJenis">
       <div class="modal-kepala">
-        <h3 id="judulJenis">Jenis Bibit</h3>
+        <h3 id="judulJenis">Jenis Benih</h3>
         <button type="button" class="modal-tutup" onclick="tutupJenisBibit()" aria-label="Tutup">&times;</button>
       </div>
-      <p class="pesanan-info">Isi dengan nama jenis/varietas bibit kentang sesuai label bibit. Generasi & ukuran bukan jenis. Jenis nonaktif tidak muncul di filter katalog dan tidak bisa dipilih untuk bibit baru.</p>
+      <p class="pesanan-info">Isi dengan nama jenis/varietas benih kentang sesuai label benih. Generasi & ukuran bukan jenis. Jenis nonaktif tidak muncul di filter katalog dan tidak bisa dipilih untuk benih baru.</p>
       <form id="formJenis" class="form-produk" novalidate>
-        <label class="penuh"><span id="labelJenis">Tambah jenis bibit</span>
+        <label class="penuh"><span id="labelJenis">Tambah jenis benih</span>
           <input type="text" id="fjNama" maxlength="50" placeholder="Nama jenis/varietas" required>
         </label>
         <p class="penuh fp-pesan" id="fjPesan" role="alert"></p>
@@ -544,7 +544,7 @@
         </div>
       </form>
       <table class="tabel-pesanan tabel-produk" style="margin-top:1rem;">
-        <thead><tr><th>Jenis</th><th>Jumlah Bibit</th><th>Status</th><th>Aksi</th></tr></thead>
+        <thead><tr><th>Jenis</th><th>Jumlah Benih</th><th>Status</th><th>Aksi</th></tr></thead>
         <tbody id="tabelJenis"></tbody>
       </table>
     </div>
@@ -578,7 +578,7 @@
             <button type="button" class="btn-aksi btn-batal" id="fvScanStop" onclick="hentikanScanKode()"><i class="fa-solid fa-stop"></i> Hentikan</button>
           </div>
         </div>
-        <label class="penuh">Bibit Terkait (opsional)
+        <label class="penuh">Benih Terkait (opsional)
           <!-- Opsi dari api/produk.php?semua=1 -->
           <select id="fvProduk"></select>
         </label>
@@ -732,7 +732,7 @@
         + itemRingkasan(true, 'QR Scanner aktif')
         + itemRingkasan(true, 'Kode manual aktif');
       if (data.stok_menipis.length === 0) {
-        list += itemRingkasan(true, 'Stok bibit aman');
+        list += itemRingkasan(true, 'Stok benih aman');
       } else {
         list += data.stok_menipis.map(p => itemRingkasan(false, `Stok menipis: ${p.nama} (${angka(p.stok)} ${p.satuan})`)).join('');
       }
@@ -839,7 +839,7 @@
           <dt>Status</dt><dd>${pillStatus(p.status)}</dd>
         </dl>
         <table class="detail-item">
-          <thead><tr><th>Bibit</th><th>Jumlah</th><th>Harga</th><th>Subtotal</th></tr></thead>
+          <thead><tr><th>Benih</th><th>Jumlah</th><th>Harga</th><th>Subtotal</th></tr></thead>
           <tbody>
             ${p.items.length === 0 ? '<tr><td colspan="4" style="color:#777;">Tidak ada item.</td></tr>' : p.items.map(it => `
               <tr>
@@ -902,7 +902,7 @@
     async function muatProdukAdmin() {
       const info = document.getElementById('infoProduk');
       info.className = 'pesanan-info';
-      info.textContent = 'Memuat bibit...';
+      info.textContent = 'Memuat benih...';
       try {
         [daftarProdukAdmin] = await Promise.all([
           apiRequest('api/produk.php?semua=1').then(r => r.data),
@@ -911,7 +911,7 @@
       } catch (err) {
         if (err.status === 401) { window.location.href = 'login.html'; return; }
         info.className = 'pesanan-info gagal';
-        info.textContent = 'Gagal memuat bibit: ' + err.message;
+        info.textContent = 'Gagal memuat benih: ' + err.message;
         document.getElementById('tabelProduk').innerHTML = '';
         return;
       }
@@ -926,22 +926,22 @@
         (!filter || (filter === 'aktif' && p.aktif) || (filter === 'nonaktif' && !p.aktif) || (filter === 'habis' && p.stok === 0))
       );
       document.getElementById('infoProduk').textContent = daftarProdukAdmin.length === 0
-        ? 'Belum ada bibit.'
-        : `Menampilkan ${hasil.length} dari ${daftarProdukAdmin.length} bibit`;
+        ? 'Belum ada benih.'
+        : `Menampilkan ${hasil.length} dari ${daftarProdukAdmin.length} benih`;
 
       document.getElementById('tabelProduk').innerHTML = hasil.length === 0
-        ? `<tr><td colspan="6" class="kosong" style="color:#777; text-align:center;">${daftarProdukAdmin.length === 0 ? 'Belum ada bibit. Klik "Tambah Bibit".' : 'Tidak ada bibit yang cocok.'}</td></tr>`
+        ? `<tr><td colspan="6" class="kosong" style="color:#777; text-align:center;">${daftarProdukAdmin.length === 0 ? 'Belum ada benih. Klik "Tambah Benih".' : 'Tidak ada benih yang cocok.'}</td></tr>`
         : hasil.map(p => {
             const kelasStok = p.stok === 0 ? 'stok-nol' : (p.stok < BATAS_STOK_RENDAH ? 'stok-rendah' : '');
             return `
             <tr>
-              <td data-label="Bibit">
+              <td data-label="Benih">
                 <div class="produk-sel">
                   <img class="produk-thumb" src="${escapeHTML(p.gambar)}" alt="" onerror="this.style.visibility='hidden'">
                   <div><div class="produk-nama">${escapeHTML(p.nama)}</div><div class="produk-sub">ID ${p.id}${p.badge ? ' · ' + escapeHTML(p.badge) : ''}</div></div>
                 </div>
               </td>
-              <td data-label="Jenis Bibit">${p.kategori ? escapeHTML(p.kategori) : '<span style="color:#b45309;">Belum ditentukan</span>'}</td>
+              <td data-label="Jenis Benih">${p.kategori ? escapeHTML(p.kategori) : '<span style="color:#b45309;">Belum ditentukan</span>'}</td>
               <td data-label="Harga">${formatRupiah(p.harga)} / ${escapeHTML(p.satuan)}</td>
               <td data-label="Stok"><span class="${kelasStok}">${p.stok === 0 ? 'Habis' : p.stok.toLocaleString('id-ID') + ' ' + escapeHTML(p.satuan)}</span></td>
               <td data-label="Status"><span class="status-pill ${p.aktif ? 'status-aktif' : 'status-nonaktif'}">${p.aktif ? 'Aktif' : 'Nonaktif'}</span></td>
@@ -1004,7 +1004,7 @@
     function isiOpsiJenis(kategoriId) {
       const opsi = daftarJenis.filter(k => k.aktif || k.id === kategoriId);
       document.getElementById('fpKategori').innerHTML =
-        '<option value="">— Pilih jenis bibit —</option>' +
+        '<option value="">— Pilih jenis benih —</option>' +
         opsi.map(k => `<option value="${k.id}">${escapeHTML(k.nama)}${k.aktif ? '' : ' (nonaktif)'}</option>`).join('');
       document.getElementById('fpKategori').value = kategoriId ?? '';
     }
@@ -1012,7 +1012,7 @@
     function bukaFormProduk(id = null) {
       const p = id === null ? null : daftarProdukAdmin.find(x => x.id === id);
       produkDiedit = p ? p.id : null;
-      document.getElementById('judulFormProduk').textContent = p ? 'Edit Bibit' : 'Tambah Bibit';
+      document.getElementById('judulFormProduk').textContent = p ? 'Edit Benih' : 'Tambah Benih';
       document.getElementById('fpNama').value = p ? p.nama : '';
       isiOpsiJenis(p ? p.kategori_id : null);
       document.getElementById('fpSatuan').value = p ? p.satuan : 'kg';
@@ -1055,8 +1055,8 @@
         badge: document.getElementById('fpBadge').value.trim() || null,
         aktif: document.getElementById('fpAktif').checked
       };
-      if (data.nama.length < 3) return 'Nama bibit minimal 3 karakter.';
-      if (!data.kategori_id) return 'Pilih jenis bibit. Tambahkan jenis baru lewat tombol "Jenis Bibit" jika belum ada.';
+      if (data.nama.length < 3) return 'Nama benih minimal 3 karakter.';
+      if (!data.kategori_id) return 'Pilih jenis benih. Tambahkan jenis baru lewat tombol "Jenis Benih" jika belum ada.';
       if (!data.satuan) return 'Satuan wajib diisi.';
       if (!/^\d+$/.test(data.harga) || +data.harga < 1 || +data.harga > 100000000) return 'Harga harus angka bulat antara 1 dan 100.000.000.';
       if (!/^\d+$/.test(data.stok) || +data.stok > 10000000) return 'Stok harus angka bulat 0 atau lebih.';
@@ -1104,11 +1104,11 @@
       const p = daftarProdukAdmin.find(x => x.id === id);
       if (!p) return;
       const aksi = p.aktif ? 'Nonaktifkan' : 'Aktifkan';
-      if (!confirm(`${aksi} bibit "${p.nama}"?${p.aktif ? '\nBibit tidak akan tampil di katalog pelanggan.' : ''}`)) return;
+      if (!confirm(`${aksi} benih "${p.nama}"?${p.aktif ? '\nBenih tidak akan tampil di katalog pelanggan.' : ''}`)) return;
       tombol.disabled = true;
       try {
         await apiRequest(`api/produk.php?id=${id}`, { method: 'PUT', body: { ...payloadProduk(p), aktif: !p.aktif } });
-        notif(`Bibit "${p.nama}" ${p.aktif ? 'dinonaktifkan' : 'diaktifkan'}.`);
+        notif(`Benih "${p.nama}" ${p.aktif ? 'dinonaktifkan' : 'diaktifkan'}.`);
       } catch (err) {
         if (err.status === 401) { window.location.href = 'login.html'; return; }
         notif(err.message, true);
@@ -1119,11 +1119,11 @@
     async function hapusProduk(id, tombol) {
       const p = daftarProdukAdmin.find(x => x.id === id);
       if (!p) return;
-      if (!confirm(`Hapus permanen bibit "${p.nama}"?\nRiwayat pesanan tetap menyimpan nama & harga bibit ini.\nJika hanya ingin menyembunyikan dari katalog, gunakan "Nonaktifkan".`)) return;
+      if (!confirm(`Hapus permanen benih "${p.nama}"?\nRiwayat pesanan tetap menyimpan nama & harga benih ini.\nJika hanya ingin menyembunyikan dari katalog, gunakan "Nonaktifkan".`)) return;
       tombol.disabled = true;
       try {
         await apiRequest(`api/produk.php?id=${id}`, { method: 'DELETE' });
-        notif(`Bibit "${p.nama}" dihapus.`);
+        notif(`Benih "${p.nama}" dihapus.`);
       } catch (err) {
         if (err.status === 401) { window.location.href = 'login.html'; return; }
         notif(err.message, true);
@@ -1134,11 +1134,11 @@
     /* ================= JENIS BIBIT (api/kategori_bibit.php) ================= */
     function renderJenis() {
       document.getElementById('tabelJenis').innerHTML = daftarJenis.length === 0
-        ? '<tr><td colspan="4" class="kosong" style="color:#777; text-align:center;">Belum ada jenis bibit.</td></tr>'
+        ? '<tr><td colspan="4" class="kosong" style="color:#777; text-align:center;">Belum ada jenis benih.</td></tr>'
         : daftarJenis.map(k => `
           <tr>
             <td data-label="Jenis"><strong>${escapeHTML(k.nama)}</strong></td>
-            <td data-label="Jumlah Bibit">${k.jumlah_bibit}</td>
+            <td data-label="Jumlah Benih">${k.jumlah_bibit}</td>
             <td data-label="Status"><span class="status-pill ${k.aktif ? 'status-aktif' : 'status-nonaktif'}">${k.aktif ? 'Aktif' : 'Nonaktif'}</span></td>
             <td data-label="Aksi">
               <div class="aksi-grup">
@@ -1155,7 +1155,7 @@
       jenisDiedit = null;
       document.getElementById('fjNama').value = '';
       document.getElementById('fjPesan').textContent = '';
-      document.getElementById('labelJenis').textContent = 'Tambah jenis bibit';
+      document.getElementById('labelJenis').textContent = 'Tambah jenis benih';
       document.getElementById('fjBatal').hidden = true;
     }
 
@@ -1192,7 +1192,7 @@
       e.preventDefault();
       const nama = document.getElementById('fjNama').value.trim();
       const pesan = document.getElementById('fjPesan');
-      if (nama.length < 2) { pesan.textContent = 'Nama jenis bibit minimal 2 karakter.'; return; }
+      if (nama.length < 2) { pesan.textContent = 'Nama jenis benih minimal 2 karakter.'; return; }
       const tombol = document.getElementById('fjSimpan');
       tombol.disabled = true;
       try {
@@ -1214,7 +1214,7 @@
     async function ubahAktifJenis(id, tombol) {
       const k = daftarJenis.find(x => x.id === id);
       if (!k) return;
-      if (k.aktif && !confirm(`Nonaktifkan jenis "${k.nama}"?\nJenis ini tidak muncul di filter katalog dan tidak bisa dipilih untuk bibit baru. ${k.jumlah_bibit} bibit yang sudah memakai jenis ini tetap tampil.`)) return;
+      if (k.aktif && !confirm(`Nonaktifkan jenis "${k.nama}"?\nJenis ini tidak muncul di filter katalog dan tidak bisa dipilih untuk benih baru. ${k.jumlah_bibit} benih yang sudah memakai jenis ini tetap tampil.`)) return;
       tombol.disabled = true;
       try {
         await apiRequest(`api/kategori_bibit.php?id=${id}`, { method: 'PUT', body: { nama: k.nama, aktif: !k.aktif } });
@@ -1283,7 +1283,7 @@
                   ? `<br><a class="url-resmi-link" href="${escapeHTML(v.url_resmi)}" target="_blank" rel="noopener noreferrer" title="${escapeHTML(v.url_resmi)}"><i class="fa-solid fa-arrow-up-right-from-square"></i> URL QR resmi</a>`
                   : ''}
               </td>
-              <td data-label="Bibit Terkait">${v.produk ? escapeHTML(v.produk) : '<span style="color:#999;">—</span>'}</td>
+              <td data-label="Benih Terkait">${v.produk ? escapeHTML(v.produk) : '<span style="color:#999;">—</span>'}</td>
               <td data-label="Asal">${v.asal ? escapeHTML(v.asal) : '<span style="color:#999;">—</span>'}</td>
               <td data-label="Terdaftar">${formatTanggal(v.tanggal_terdaftar)}</td>
               <td data-label="Status"><span class="status-pill ${aktif ? 'status-aktif' : 'status-nonaktif'}">${aktif ? 'Aktif' : 'Dicabut'}</span></td>
