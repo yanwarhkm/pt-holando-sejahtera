@@ -105,13 +105,18 @@ CREATE TABLE IF NOT EXISTS pesanan_item (
 -- ---------------------------------------------------------
 CREATE TABLE IF NOT EXISTS kode_produk (
     id                INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    kode              VARCHAR(50)  NOT NULL,
+    kode              VARCHAR(50)  NULL,   -- nomor seri/kode pada label (opsional bila ada url_resmi)
+    -- URL QR resmi pada label (https://benih.pertanian.go.id/...), disimpan apa adanya.
+    -- Tidak unik: satu URL boleh terhubung ke beberapa data internal.
+    url_resmi         VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL,
     produk_id         INT UNSIGNED NULL,
     asal              VARCHAR(100) NOT NULL DEFAULT '',
     tanggal_terdaftar DATE         NOT NULL,
     status            ENUM('aktif','dicabut') NOT NULL DEFAULT 'aktif',
     created_at        DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY uq_kode_produk (kode),
+    KEY idx_kode_produk_url (url_resmi(191)),   -- prefix: aman di batas index 767 byte
+    CONSTRAINT chk_kode_produk_isi CHECK (kode IS NOT NULL OR url_resmi IS NOT NULL),
     CONSTRAINT fk_kode_produk FOREIGN KEY (produk_id) REFERENCES produk(id)
         ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB;
@@ -119,7 +124,7 @@ CREATE TABLE IF NOT EXISTS kode_produk (
 -- Riwayat setiap pengecekan kode (dashboard.html - Aktivitas Verifikasi)
 CREATE TABLE IF NOT EXISTS log_verifikasi (
     id             INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    kode           VARCHAR(50) NOT NULL,
+    kode           VARCHAR(255) NOT NULL,  -- kode atau URL resmi yang dicek
     valid          TINYINT(1)  NOT NULL,
     kode_produk_id INT UNSIGNED NULL,
     created_at     DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,

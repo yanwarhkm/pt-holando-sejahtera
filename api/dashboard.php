@@ -23,7 +23,7 @@ $verifikasiHariIni = (int) $pdo->query(
 $totalStok = (int) $pdo->query('SELECT COALESCE(SUM(stok), 0) FROM produk WHERE aktif = 1')->fetchColumn();
 
 $aktivitas = $pdo->query(
-    'SELECT kode, valid, created_at FROM log_verifikasi ORDER BY id DESC LIMIT 8'
+    'SELECT kode, valid, kode_produk_id, created_at FROM log_verifikasi ORDER BY id DESC LIMIT 8'
 )->fetchAll();
 
 $stmt = $pdo->prepare('SELECT id, nama, stok, satuan FROM produk WHERE aktif = 1 AND stok < ? ORDER BY stok');
@@ -38,6 +38,9 @@ ok('Statistik berhasil dimuat.', [
     'aktivitas'           => array_map(fn($r) => [
         'kode'       => $r['kode'],
         'valid'      => (bool) $r['valid'],
+        // valid 0 + kode_produk_id terisi = data ditemukan tetapi dicabut saat dicek
+        'status'     => $r['valid'] ? 'aktif' : ($r['kode_produk_id'] !== null ? 'dicabut' : 'tidak_ditemukan'),
+        'jenis'      => stripos($r['kode'], 'https://') === 0 ? 'url' : 'kode',
         'created_at' => $r['created_at'],
     ], $aktivitas),
     'stok_menipis'        => array_map(fn($r) => [

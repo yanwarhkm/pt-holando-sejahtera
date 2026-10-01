@@ -137,6 +137,11 @@
     .fv-scan-mount { width: 100%; min-height: 200px; max-height: 300px; background: #000; overflow: hidden; display: flex; }
     .fv-scan-bawah { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap; padding: 0.5rem 0.6rem; }
     .fv-scan-status { font-size: 0.78rem; color: #555; min-width: 0; }
+    .fv-petunjuk { font-size: 0.8rem; color: #666; }
+    .fv-scan-hasil { font-size: 0.82rem; color: #2c5f2d; word-break: break-all; }
+    .fv-scan-hasil.peringatan { color: #b26a00; }
+    .fv-scan-hasil:empty { display: none; }
+    .url-resmi-link { display: inline-block; margin-top: 0.2rem; font-size: 0.78rem; color: #1a4f9c; }
     @media (max-width: 480px) {
       .fv-kode-baris { flex-wrap: wrap; }
       .fv-kode-baris .btn-aksi { width: 100%; }
@@ -268,7 +273,7 @@
         <table>
           <thead>
             <tr>
-              <th>Kode Sertifikat</th>
+              <th>Kode / URL</th>
               <th>Waktu</th>
               <th>Status</th>
             </tr>
@@ -387,7 +392,7 @@
     <div class="atasan">
       <div>
         <h1>Verifikasi</h1>
-        <p class="tanggal">Daftarkan kode/nomor seri pada label bibit agar bisa dicocokkan saat pelanggan memindai QR. Data ini internal — bukan verifikasi BPSB resmi.</p>
+        <p class="tanggal">Hubungkan kode/nomor seri dan/atau URL QR resmi pada label dengan data bibit agar bisa dicocokkan saat pelanggan memindai QR. Data ini internal — bukan penentu keabsahan resmi BPSB/Kementan.</p>
       </div>
       <div class="aksi-grup">
         <button type="button" class="btn-aksi btn-selesai" onclick="bukaFormVerifikasi()">
@@ -400,7 +405,7 @@
       <div class="pesanan-toolbar">
         <div class="pesanan-cari">
           <i class="fa-solid fa-magnifying-glass"></i>
-          <input type="search" id="cariVerifikasi" placeholder="Cari kode / nomor seri" aria-label="Cari kode verifikasi">
+          <input type="search" id="cariVerifikasi" placeholder="Cari kode, URL, bibit, asal" aria-label="Cari data verifikasi">
         </div>
         <select id="filterVerifikasi" class="filter-select" aria-label="Filter status verifikasi">
           <option value="">Semua</option>
@@ -553,12 +558,19 @@
         <button type="button" class="modal-tutup" onclick="tutupFormVerifikasi()" aria-label="Tutup">&times;</button>
       </div>
       <form id="formVerifikasi" class="form-produk" novalidate>
-        <label class="penuh">Kode / Nomor Seri
+        <p class="penuh fv-petunjuk">Isi minimal salah satu: Kode / Nomor Seri atau URL QR resmi. Tombol Scan mengisi field yang sesuai dengan isi QR.</p>
+        <label class="penuh">Kode / Nomor Seri (opsional)
           <span class="fv-kode-baris">
-            <input type="text" id="fvKode" maxlength="50" placeholder="Ketik atau scan kode pada label" required>
+            <input type="text" id="fvKode" maxlength="50" placeholder="Ketik atau scan kode pada label">
             <button type="button" class="btn-aksi btn-garis" id="fvScanBtn" onclick="mulaiScanKode()"><i class="fa-solid fa-camera"></i> Scan</button>
           </span>
         </label>
+        <label class="penuh">URL QR Resmi (opsional)
+          <!-- Disimpan apa adanya; hanya https://benih.pertanian.go.id/... yang diterima -->
+          <input type="text" id="fvUrl" maxlength="255" inputmode="url" autocomplete="off" spellcheck="false"
+                 placeholder="https://benih.pertanian.go.id/...">
+        </label>
+        <p class="penuh fv-scan-hasil" id="fvScanHasil" role="status"></p>
         <div class="penuh fv-scan-area" id="fvScanArea" hidden>
           <div class="fv-scan-mount" id="fvScanMount"></div>
           <div class="fv-scan-bawah">
@@ -698,6 +710,10 @@
       }
 
       const angka = n => Number(n).toLocaleString('id-ID');
+      // Status saat dicek: kode tidak ditemukan vs URL resmi yang belum terhubung dibedakan
+      const labelAktivitas = a => a.jenis === 'url'
+        ? { aktif: '✅ URL terhubung', dicabut: '⛔ Data dicabut', tidak_ditemukan: 'ℹ️ URL belum terhubung' }[a.status]
+        : { aktif: '✅ Terdaftar', dicabut: '⛔ Dicabut', tidak_ditemukan: '⚠️ Tidak Terdaftar' }[a.status];
       document.getElementById("statTotalKode").textContent = angka(data.total_kode);
       document.getElementById("statKodeAktif").textContent = angka(data.kode_aktif);
       document.getElementById("statHariIni").textContent = angka(data.verifikasi_hari_ini);
@@ -707,9 +723,9 @@
         ? '<tr><td colspan="3" style="color:#777;">Belum ada aktivitas verifikasi.</td></tr>'
         : data.aktivitas.map(a => `
             <tr>
-              <td>${escapeHTML(a.kode)}</td>
+              <td style="word-break:break-all;">${a.jenis === 'url' ? '<i class="fa-solid fa-link" title="URL QR resmi"></i> ' : ''}${escapeHTML(a.kode)}</td>
               <td>${escapeHTML(waktuRelatif(a.created_at))}</td>
-              <td class="${a.valid ? 'status-sah' : 'status-tidak'}">${a.valid ? '✅ Terdaftar' : '⚠️ Tidak Terdaftar'}</td>
+              <td class="${a.status === 'aktif' ? 'status-sah' : 'status-tidak'}">${labelAktivitas(a)}</td>
             </tr>`).join('');
 
       let list = itemRingkasan(true, 'Database tersambung')
@@ -1228,9 +1244,12 @@
     let daftarVerifikasi = [];
     let verifikasiDiedit = null;
     const payloadVerifikasi = v => ({
-      kode: v.kode, produk_id: v.produk_id, asal: v.asal || '',
+      kode: v.kode, url_resmi: v.url_resmi, produk_id: v.produk_id, asal: v.asal || '',
       tanggal_terdaftar: v.tanggal_terdaftar, status: v.status
     });
+
+    // Nama tampilan: kode, atau URL resmi bila data hanya punya URL
+    const labelVerifikasi = v => v.kode || v.url_resmi || `#${v.id}`;
 
     async function muatVerifikasi() {
       try {
@@ -1246,7 +1265,7 @@
       const kata = document.getElementById('cariVerifikasi').value.trim().toLowerCase();
       const filter = document.getElementById('filterVerifikasi').value;
       const hasil = daftarVerifikasi.filter(v =>
-        (!kata || `${v.kode} ${v.produk || ''} ${v.asal || ''}`.toLowerCase().includes(kata)) &&
+        (!kata || `${v.kode || ''} ${v.url_resmi || ''} ${v.produk || ''} ${v.asal || ''}`.toLowerCase().includes(kata)) &&
         (!filter || v.status === filter)
       );
       document.getElementById('infoVerifikasi').textContent = daftarVerifikasi.length === 0
@@ -1258,7 +1277,12 @@
             const aktif = v.status === 'aktif';
             return `
             <tr>
-              <td data-label="Kode"><strong>${escapeHTML(v.kode)}</strong></td>
+              <td data-label="Kode">
+                ${v.kode ? `<strong>${escapeHTML(v.kode)}</strong>` : '<span style="color:#999;">— tanpa kode —</span>'}
+                ${v.url_resmi && VerifikasiQR.adalahUrlResmi(v.url_resmi)
+                  ? `<br><a class="url-resmi-link" href="${escapeHTML(v.url_resmi)}" target="_blank" rel="noopener noreferrer" title="${escapeHTML(v.url_resmi)}"><i class="fa-solid fa-arrow-up-right-from-square"></i> URL QR resmi</a>`
+                  : ''}
+              </td>
               <td data-label="Bibit Terkait">${v.produk ? escapeHTML(v.produk) : '<span style="color:#999;">—</span>'}</td>
               <td data-label="Asal">${v.asal ? escapeHTML(v.asal) : '<span style="color:#999;">—</span>'}</td>
               <td data-label="Terdaftar">${formatTanggal(v.tanggal_terdaftar)}</td>
@@ -1269,7 +1293,7 @@
                   <button type="button" class="btn-aksi ${aktif ? 'btn-batal' : 'btn-selesai'}" onclick="ubahStatusVerifikasi(${v.id}, this)">
                     <i class="fa-solid ${aktif ? 'fa-ban' : 'fa-circle-check'}"></i> ${aktif ? 'Cabut' : 'Aktifkan'}
                   </button>
-                  <button type="button" class="btn-aksi btn-hapus" onclick="hapusVerifikasi(${v.id}, this)" title="Hapus" aria-label="Hapus ${escapeHTML(v.kode)}"><i class="fa-solid fa-trash"></i></button>
+                  <button type="button" class="btn-aksi btn-hapus" onclick="hapusVerifikasi(${v.id}, this)" title="Hapus" aria-label="Hapus ${escapeHTML(labelVerifikasi(v))}"><i class="fa-solid fa-trash"></i></button>
                 </div>
               </td>
             </tr>`;
@@ -1289,7 +1313,9 @@
       const v = id === null ? null : daftarVerifikasi.find(x => x.id === id);
       verifikasiDiedit = v ? v.id : null;
       document.getElementById('judulFormVerifikasi').textContent = v ? 'Edit Verifikasi' : 'Tambah Verifikasi';
-      document.getElementById('fvKode').value = v ? v.kode : '';
+      document.getElementById('fvKode').value = v ? (v.kode || '') : '';
+      document.getElementById('fvUrl').value = v ? (v.url_resmi || '') : '';
+      setScanHasil('');
       document.getElementById('fvAsal').value = v ? (v.asal || '') : '';
       document.getElementById('fvTanggal').value = v ? v.tanggal_terdaftar : new Date().toISOString().slice(0, 10);
       document.getElementById('fvStatus').value = v ? v.status : 'aktif';
@@ -1306,25 +1332,50 @@
       document.getElementById('modalVerifikasi').hidden = true;
     }
 
-    /* Scan kode pada label memakai modul bersama QRScanner (js/scanner.js).
-       Hasil scan dimasukkan ke field kode APA ADANYA; admin tetap menekan Simpan. */
+    /* Scan label memakai modul bersama QRScanner (js/scanner.js). Isi QR TIDAK diubah:
+       URL resmi → field URL QR Resmi, kode/nomor seri → field Kode. Tidak ada yang
+       tersimpan sebelum admin menekan Simpan. */
     function setScanStatus(teks) { document.getElementById('fvScanStatus').textContent = teks; }
+    // Pesan hasil scan di luar area kamera agar tetap terlihat setelah kamera ditutup
+    function setScanHasil(teks, peringatan = false) {
+      const el = document.getElementById('fvScanHasil');
+      el.textContent = teks;
+      el.classList.toggle('peringatan', peringatan);
+    }
+
+    function isiDariScan(isi) {
+      const teks = String(isi ?? '').trim();
+      const jenis = VerifikasiQR.jenis(teks);
+      if (jenis === 'url-resmi') {
+        document.getElementById('fvUrl').value = teks;
+        setScanHasil('URL QR resmi dimasukkan ke field "URL QR Resmi". Periksa lalu klik Simpan.');
+        document.getElementById('fvUrl').focus();
+      } else if (jenis === 'kode') {
+        document.getElementById('fvKode').value = teks.toUpperCase();
+        setScanHasil('Kode dimasukkan ke field "Kode / Nomor Seri". Periksa lalu klik Simpan.');
+        document.getElementById('fvKode').focus();
+      } else {
+        const tampil = teks.length > 120 ? teks.slice(0, 120) + '…' : teks;
+        setScanHasil(`QR terbaca, tetapi bukan URL verifikasi resmi (https://${VerifikasiQR.HOST_RESMI}/...) maupun format kode yang dikenali. Tidak ada field yang diisi. Isi QR: ${tampil}`, true);
+      }
+    }
 
     async function mulaiScanKode() {
       if (QRScanner.aktif()) return;
       document.getElementById('fvScanArea').hidden = false;
       document.getElementById('fvScanBtn').disabled = true;
+      setScanHasil('');
       setScanStatus('Menyiapkan kamera…');
       await QRScanner.start({
         mountEl: document.getElementById('fvScanMount'),
         onStatus: setScanStatus,
-        onResult: (teks) => {
-          document.getElementById('fvKode').value = String(teks || '').trim();
+        onResult: (teks) => { hentikanScanKode(); isiDariScan(teks); },
+        // timeout / QR kosong / halaman disembunyikan: tampilkan alasan di luar area kamera
+        onEnd: () => {
+          const pesan = document.getElementById('fvScanStatus').textContent;
           hentikanScanKode();
-          setScanStatus('Kode dimasukkan. Periksa lalu klik Simpan.');
-          document.getElementById('fvKode').focus();
+          setScanHasil(pesan, true);
         },
-        onEnd: () => { hentikanScanKode(); },
         onError: () => { document.getElementById('fvScanBtn').disabled = false; }
       });
     }
@@ -1342,12 +1393,15 @@
     // Validasi ringan di browser; server tetap memvalidasi ulang
     function dataFormVerifikasi() {
       const kode = document.getElementById('fvKode').value.trim().toUpperCase();
+      const url = document.getElementById('fvUrl').value.trim(); // URL tidak diubah hurufnya
       const tanggal = document.getElementById('fvTanggal').value;
-      if (kode.length < 2) return 'Kode / nomor seri minimal 2 karakter.';
-      if (!/^[A-Z0-9][A-Z0-9\-\/]{1,49}$/.test(kode)) return 'Format kode tidak valid. Contoh: BPSB-001234.';
+      if (!kode && !url) return 'Isi Kode / Nomor Seri atau URL QR resmi (minimal salah satu).';
+      if (kode && !VerifikasiQR.adalahKode(kode)) return 'Format kode tidak valid. Contoh: BPSB-001234.';
+      if (url && !VerifikasiQR.adalahUrlResmi(url)) return `URL QR resmi harus diawali https://${VerifikasiQR.HOST_RESMI}/ (maksimal 255 karakter).`;
       if (!tanggal) return 'Tanggal terdaftar wajib diisi.';
       return {
-        kode,
+        kode: kode || null,
+        url_resmi: url || null,
         produk_id: Number(document.getElementById('fvProduk').value) || null,
         asal: document.getElementById('fvAsal').value.trim(),
         tanggal_terdaftar: tanggal,
@@ -1367,7 +1421,7 @@
           ? await apiRequest('api/verifikasi.php', { method: 'POST', body: data })
           : await apiRequest(`api/verifikasi.php?id=${verifikasiDiedit}`, { method: 'PUT', body: data });
         tutupFormVerifikasi();
-        notif(`${res.message} (${res.data.kode})`);
+        notif(`${res.message} (${labelVerifikasi(res.data)})`);
         await muatVerifikasi();
       } catch (err) {
         if (err.status === 401) { window.location.href = 'login.html'; return; }
@@ -1381,11 +1435,11 @@
       const v = daftarVerifikasi.find(x => x.id === id);
       if (!v) return;
       const jadi = v.status === 'aktif' ? 'dicabut' : 'aktif';
-      if (!confirm(`${jadi === 'dicabut' ? 'Cabut' : 'Aktifkan'} verifikasi "${v.kode}"?`)) return;
+      if (!confirm(`${jadi === 'dicabut' ? 'Cabut' : 'Aktifkan'} verifikasi "${labelVerifikasi(v)}"?`)) return;
       tombol.disabled = true;
       try {
         await apiRequest(`api/verifikasi.php?id=${id}`, { method: 'PUT', body: { ...payloadVerifikasi(v), status: jadi } });
-        notif(`Verifikasi "${v.kode}" ${jadi === 'dicabut' ? 'dicabut' : 'diaktifkan'}.`);
+        notif(`Verifikasi "${labelVerifikasi(v)}" ${jadi === 'dicabut' ? 'dicabut' : 'diaktifkan'}.`);
       } catch (err) {
         if (err.status === 401) { window.location.href = 'login.html'; return; }
         notif(err.message, true);
@@ -1396,11 +1450,11 @@
     async function hapusVerifikasi(id, tombol) {
       const v = daftarVerifikasi.find(x => x.id === id);
       if (!v) return;
-      if (!confirm(`Hapus permanen kode verifikasi "${v.kode}"?`)) return;
+      if (!confirm(`Hapus permanen data verifikasi "${labelVerifikasi(v)}"?`)) return;
       tombol.disabled = true;
       try {
         await apiRequest(`api/verifikasi.php?id=${id}`, { method: 'DELETE' });
-        notif(`Kode "${v.kode}" dihapus.`);
+        notif(`Data verifikasi "${labelVerifikasi(v)}" dihapus.`);
       } catch (err) {
         if (err.status === 401) { window.location.href = 'login.html'; return; }
         notif(err.message, true);

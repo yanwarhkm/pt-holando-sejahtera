@@ -170,8 +170,8 @@
         <div class="checker-box">
             <div class="checker-header">
                 <i class="fas fa-qrcode tool-icon"></i>
-                <h3>Scan & Verifikasi Sertifikat Bibit</h3>
-                <p>Baca kode QR atau periksa kode pada label/sertifikat bibit Anda</p>
+                <h3>Scan & Verifikasi Label Bibit</h3>
+                <p>Baca kode QR atau periksa kode pada label bibit Anda</p>
             </div>
             <div class="qr-grid">
                 <div class="scanner-card">
@@ -191,7 +191,14 @@
                     <div class="scanner-status" id="scanStatus">
                         Menunggu pemindaian...
                     </div>
-                    <div class="verification-result-wrapper" id="verifikasiHasil"></div>
+                    <!-- Cadangan bila kamera tidak tersedia: hasil diperiksa dengan alur yang sama -->
+                    <form class="input-group" id="cekManualForm" novalidate>
+                        <input type="text" class="form-input" id="cekManualInput" maxlength="255" autocomplete="off"
+                               placeholder="Tempel URL QR atau ketik kode pada label" aria-label="URL QR atau kode pada label">
+                        <button type="submit" class="btn-primary"><i class="fas fa-magnifying-glass"></i> Periksa</button>
+                    </form>
+                    <p class="hint">Kamera tidak tersedia? Ketik kode/nomor seri atau tempel URL dari QR label.</p>
+                    <div class="verification-result-wrapper" id="verifikasiHasil" aria-live="polite"></div>
                 </div>
             </div>
         </div>
@@ -671,8 +678,12 @@ function hitungKebutuhanBibit() {
 }
 
 // Pemindai QR (kamera + jsQR, dimuat saat pertama kali dipakai).
-// Tahap ini hanya MEMBACA isi QR. Hasil baca bukan bukti keaslian/validitas BPSB —
-// verifikasi BPSB menunggu API/data resmi.
+// Scanner hanya MEMBACA isi QR. Isi diklasifikasi TANPA diubah (VerifikasiQR, js/scanner.js):
+//  - URL resmi https://benih.pertanian.go.id/... → tombol "Lihat Verifikasi Resmi" (dibuka
+//    pengguna sendiri di tab baru), lalu data internal Beken Seeds yang terhubung (terpisah).
+//  - Kode/nomor seri → dicocokkan dengan database internal (api/verifikasi.php).
+//  - Selain itu → tidak dikenali (bukan berarti label palsu).
+// Tidak ada data yang diambil dari situs Kementan dan tidak ada klaim keabsahan resmi.
 const scannerAreaHtmlAwal = document.getElementById('scannerArea').innerHTML;
 
 function statusPindai(teks, jenis) {
@@ -705,87 +716,155 @@ async function mulaiPindai() {
         mountEl: document.getElementById('scannerArea'),
         onReady:  () => { document.getElementById('scannerArea').className = 'scanner-area'; tombolPindai(true); },
         onStatus: statusPindai,
-        onResult: (teks) => { kembalikanAreaPindai(); tombolPindai(false, 'Pindai Ulang'); tampilkanHasilQR(teks); },
+        onResult: (teks) => { kembalikanAreaPindai(); tombolPindai(false, 'Pindai Ulang'); periksaIsi(teks, 'qr'); },
+        // timeout / QR kosong / halaman disembunyikan — pesan status sudah diisi modul
         onEnd:    () => { kembalikanAreaPindai(); tombolPindai(false, 'Pindai Ulang'); },
         onError:  () => { kembalikanAreaPindai(); tombolPindai(false, 'Coba Lagi'); }
     });
 }
 
-// Scanner hanya MEMBACA kode. Status verifikasi ditentukan oleh pencocokan
-// dengan database internal (api/verifikasi.php) — bukan karena QR berhasil dibaca.
-async function tampilkanHasilQR(isi) {
-    const el = document.getElementById('verifikasiHasil');
-    const kode = String(isi || '').trim();
+const CATATAN_INTERNAL = 'Data internal penjual (Beken Seeds) — bukan verifikasi resmi BPSB/Kementerian Pertanian.';
 
-    // Tahap 1: QR terbaca, sedang mencocokkan ke database
-    el.innerHTML = `
-        <div class="verification-pending">
+function kotakHasil(kelas, ikon, isi) {
+    return `
+        <div class="${kelas}">
             <div class="verification-result">
-                <div class="verification-result-icon"><i class="fas fa-qrcode"></i></div>
-                <div style="min-width:0; flex:1;">
-                    <div class="verification-label">QR berhasil dibaca</div>
-                    <div class="verification-code" style="word-break:break-all; white-space:pre-wrap;">${escapeHTML(kode)}</div>
-                    <p style="margin-top:0.75rem; font-size:0.9rem;"><i class="fas fa-spinner fa-spin"></i> Mencocokkan dengan database verifikasi...</p>
-                </div>
+                <div class="verification-result-icon">${ikon}</div>
+                <div style="min-width:0; flex:1;">${isi}</div>
             </div>
-        </div>
-    `;
-    tampilkanPesan('success', 'QR berhasil dibaca. Mencocokkan kode...');
+        </div>`;
+}
 
-    // Tahap 2: lookup kode ke database internal
-    let data;
-    try {
-        data = (await apiRequest('api/verifikasi.php?kode=' + encodeURIComponent(kode))).data;
-    } catch (err) {
-        el.innerHTML = `
-            <div class="verification-invalid">
-                <div class="verification-result">
-                    <div class="verification-result-icon">⚠️</div>
-                    <div style="min-width:0; flex:1;">
-                        <div class="verification-label">Data Verifikasi Tidak Ditemukan</div>
-                        <div class="verification-code" style="word-break:break-all;">${escapeHTML(kode)}</div>
-                        <p style="margin-top:8px; font-size:0.9rem;">${escapeHTML(err.message)}</p>
-                    </div>
-                </div>
-            </div>
-        `;
-        tampilkanPesan('error', err.message);
+// href = teks hasil scan/tersimpan PERSIS (hanya di-escape untuk atribut HTML)
+function tombolResmi(url) {
+    return `<a class="btn-primary" href="${escapeHTML(url)}" target="_blank" rel="noopener noreferrer" style="margin-top:0.75rem;">
+                <i class="fas fa-arrow-up-right-from-square"></i> Lihat Verifikasi Resmi
+            </a>`;
+}
+
+function rincianInternal(d) {
+    return `
+        ${d.kode ? `<div class="verification-code">${escapeHTML(d.kode)}</div>` : ''}
+        ${d.produk ? `<div class="verification-label" style="margin-top:0.75rem;">Bibit</div><strong>${escapeHTML(d.produk)}</strong>` : ''}
+        ${d.kategori ? `<div class="verification-label" style="margin-top:0.75rem;">Jenis / Varietas</div><strong>${escapeHTML(d.kategori)}</strong>` : ''}
+        <div class="verification-meta">
+            ${d.asal ? `<span><i class="fas fa-map-marker-alt"></i> Asal: ${escapeHTML(d.asal)}</span>` : ''}
+            <span><i class="fas fa-calendar"></i> Terdaftar: ${escapeHTML(formatTanggal(d.tanggal_terdaftar))}</span>
+        </div>`;
+}
+
+const ikonMuat = '<i class="fas fa-spinner fa-spin"></i>';
+let nomorPeriksa = 0; // respons lama diabaikan bila pengguna sudah memeriksa isi lain
+
+async function periksaIsi(isi, sumber) {
+    const el = document.getElementById('verifikasiHasil');
+    const teks = String(isi ?? '').trim();
+    const nomor = ++nomorPeriksa;
+    const judulBaca = sumber === 'qr' ? 'QR berhasil dibaca' : 'Input diperiksa';
+
+    if (!teks) {
+        el.innerHTML = kotakHasil('verification-pending', '⚠️',
+            '<div class="verification-label">Isi kosong</div><p style="margin-top:8px;">Masukkan kode/nomor seri atau URL dari QR label.</p>');
         return;
     }
 
-    if (data.valid) {
-        el.innerHTML = `
-            <div class="verification-pending">
-                <div class="verification-result">
-                    <div class="verification-result-icon"><i class="fas fa-circle-check" style="color:var(--primary-color);"></i></div>
-                    <div style="min-width:0; flex:1;">
-                        <div class="verification-label">✓ Data Verifikasi Ditemukan</div>
-                        <div class="verification-code">${escapeHTML(data.kode)}</div>
-                        ${data.produk ? `<div class="verification-label" style="margin-top:0.75rem;">Bibit</div><strong>${escapeHTML(data.produk)}</strong>` : ''}
-                        ${data.kategori ? `<div class="verification-label" style="margin-top:0.75rem;">Jenis / Varietas</div><strong>${escapeHTML(data.kategori)}</strong>` : ''}
-                        <div class="verification-meta" style="margin-top:0.75rem;">
-                            ${data.asal ? `<span><i class="fas fa-map-marker-alt"></i> Asal: ${escapeHTML(data.asal)}</span>` : ''}
-                            <span><i class="fas fa-calendar"></i> Terdaftar: ${escapeHTML(formatTanggal(data.tanggal_terdaftar))}</span>
-                        </div>
-                        <p style="margin-top:0.75rem; font-size:0.8rem; color:var(--text-muted);">Terdaftar pada database internal penjual. Bukan verifikasi resmi BPSB.</p>
-                    </div>
-                </div>
-            </div>
-        `;
-        tampilkanPesan('success', 'Data verifikasi ditemukan.');
+    const jenis = VerifikasiQR.jenis(teks);
+
+    // ---- 1. URL verifikasi resmi Kementan ----
+    if (jenis === 'url-resmi') {
+        el.innerHTML = kotakHasil('verification-resmi', '<i class="fas fa-landmark"></i>', `
+                <div class="verification-label">${judulBaca} · Sumber resmi</div>
+                <strong>Kementerian Pertanian RI</strong> <span style="font-size:0.85rem;">(${escapeHTML(VerifikasiQR.HOST_RESMI)})</span>
+                <div class="verification-code" style="word-break:break-all;">${escapeHTML(teks)}</div>
+                ${tombolResmi(teks)}
+                <p class="verification-catatan">Halaman dibuka di tab baru pada situs resmi. Beken Seeds tidak mengubah maupun menilai isi halaman tersebut.</p>`)
+            + `<div id="hasilInternal" style="margin-top:1rem;">${kotakHasil('verification-info', ikonMuat, 'Memeriksa data internal Beken Seeds...')}</div>`;
+        tampilkanPesan('success', 'URL verifikasi resmi dikenali.');
+
+        let data;
+        try {
+            data = (await apiRequest('api/verifikasi.php?url=' + encodeURIComponent(teks))).data;
+        } catch (err) {
+            if (nomor !== nomorPeriksa) return;
+            document.getElementById('hasilInternal').innerHTML = kotakHasil('verification-info', 'ℹ️',
+                `Data internal Beken Seeds gagal diperiksa: ${escapeHTML(err.message)} Tombol verifikasi resmi di atas tetap dapat digunakan.`);
+            return;
+        }
+        if (nomor !== nomorPeriksa) return;
+        const kotak = document.getElementById('hasilInternal');
+        if (data.status === 'aktif') {
+            kotak.innerHTML = kotakHasil('verification-valid', '<i class="fas fa-circle-check"></i>', `
+                <div class="verification-label">Data internal Beken Seeds yang terhubung</div>
+                ${data.terkait.map(rincianInternal).join('<hr style="border:0; border-top:1px solid rgba(0,0,0,.1); margin:0.75rem 0;">')}
+                <p class="verification-catatan">${CATATAN_INTERNAL}</p>`);
+        } else if (data.status === 'dicabut') {
+            kotak.innerHTML = kotakHasil('verification-invalid', '⛔', `
+                <div class="verification-label">Data internal Beken Seeds</div>
+                <strong>Data internal yang terhubung dengan URL ini sudah dicabut / tidak berlaku.</strong>
+                <p class="verification-catatan">${CATATAN_INTERNAL}</p>`);
+        } else {
+            kotak.innerHTML = kotakHasil('verification-info', 'ℹ️', `
+                <div class="verification-label">Data internal Beken Seeds</div>
+                URL resmi berhasil dibaca, tetapi belum terhubung dengan data internal Beken Seeds.`);
+        }
+        return;
+    }
+
+    // ---- 2. Tidak dikenali (domain lain, teks bebas, javascript:, dll.) ----
+    if (jenis === 'lain') {
+        const tampil = teks.length > 300 ? teks.slice(0, 300) + '…' : teks;
+        el.innerHTML = kotakHasil('verification-pending', '⚠️', `
+                <div class="verification-label">${judulBaca}</div>
+                <strong>${sumber === 'qr'
+                    ? 'QR berhasil dibaca, tetapi bukan URL verifikasi resmi yang dikenali.'
+                    : 'Input bukan URL verifikasi resmi maupun format kode yang dikenali.'}</strong>
+                <div class="verification-code" style="word-break:break-all; white-space:pre-wrap;">${escapeHTML(tampil)}</div>
+                <p class="verification-catatan">Isi hanya ditampilkan sebagai teks dan tidak dibuka. Hasil ini tidak menentukan keaslian label.</p>`);
+        tampilkanPesan('error', 'Isi QR/input tidak dikenali.');
+        return;
+    }
+
+    // ---- 3. Kode / nomor seri → database internal ----
+    el.innerHTML = kotakHasil('verification-info', ikonMuat, `
+            <div class="verification-label">${judulBaca}</div>
+            <div class="verification-code" style="word-break:break-all;">${escapeHTML(teks)}</div>
+            <p style="margin-top:0.5rem; font-size:0.9rem;">Mencocokkan dengan database internal...</p>`);
+
+    let data;
+    try {
+        data = (await apiRequest('api/verifikasi.php?kode=' + encodeURIComponent(teks))).data;
+    } catch (err) {
+        if (nomor !== nomorPeriksa) return;
+        // Gangguan server/jaringan BUKAN berarti kode tidak terdaftar
+        el.innerHTML = kotakHasil('verification-invalid', '⚠️', `
+                <div class="verification-label">Pemeriksaan gagal</div>
+                <div class="verification-code" style="word-break:break-all;">${escapeHTML(teks)}</div>
+                <p style="margin-top:8px; font-size:0.9rem;">${escapeHTML(err.message)} Silakan coba lagi.</p>`);
+        tampilkanPesan('error', err.message);
+        return;
+    }
+    if (nomor !== nomorPeriksa) return;
+
+    if (data.status === 'aktif') {
+        el.innerHTML = kotakHasil('verification-valid', '<i class="fas fa-circle-check"></i>', `
+                <div class="verification-label">✓ Kode terdaftar di sistem Beken Seeds</div>
+                ${rincianInternal(data)}
+                ${data.url_resmi && VerifikasiQR.adalahUrlResmi(data.url_resmi) ? `
+                    <div class="verification-label" style="margin-top:0.75rem;">URL QR resmi yang dicatat untuk label ini</div>
+                    ${tombolResmi(data.url_resmi)}` : ''}
+                <p class="verification-catatan">${CATATAN_INTERNAL}</p>`);
+        tampilkanPesan('success', 'Kode terdaftar di sistem.');
+    } else if (data.status === 'dicabut') {
+        el.innerHTML = kotakHasil('verification-invalid', '⛔', `
+                <div class="verification-label">Kode terdaftar, tetapi dicabut</div>
+                <div class="verification-code" style="word-break:break-all;">${escapeHTML(data.kode)}</div>
+                <p style="margin-top:8px; font-size:0.9rem;">Kode ini pernah terdaftar di sistem Beken Seeds, tetapi statusnya sudah dicabut / tidak berlaku.</p>`);
+        tampilkanPesan('error', 'Kode sudah dicabut.');
     } else {
-        el.innerHTML = `
-            <div class="verification-invalid">
-                <div class="verification-result">
-                    <div class="verification-result-icon">⚠️</div>
-                    <div style="min-width:0; flex:1;">
-                        <div class="verification-label">⚠ Data Verifikasi Tidak Ditemukan</div>
-                        <div class="verification-code" style="word-break:break-all;">${escapeHTML(data.kode || kode)}</div>
-                        <p style="margin-top:8px; font-size:0.9rem;">Kode tersebut belum terdaftar pada sistem.</p>
-                    </div>
-                </div>
-            </div>
-        `;
+        el.innerHTML = kotakHasil('verification-pending', '⚠️', `
+                <div class="verification-label">Data verifikasi tidak ditemukan</div>
+                <div class="verification-code" style="word-break:break-all;">${escapeHTML(data.kode || teks)}</div>
+                <p style="margin-top:8px; font-size:0.9rem;">Kode tersebut belum terdaftar pada sistem Beken Seeds.</p>`);
         tampilkanPesan('error', 'Data verifikasi tidak ditemukan.');
     }
 }
@@ -802,14 +881,18 @@ document.getElementById('stopScanBtn').addEventListener('click', () => {
     statusPindai('Pemindaian dihentikan.');
     tombolPindai(false);
 });
-// QRScanner sendiri sudah melepas kamera saat halaman disembunyikan/ditinggalkan;
-// di sini hanya memperbarui tampilan tombol/status jika pemindai sedang aktif.
-document.addEventListener('visibilitychange', () => {
-    if (document.hidden && QRScanner.aktif()) {
+// Halaman disembunyikan/ditinggalkan: QRScanner melepas kamera sendiri lalu memanggil
+// onEnd('dihentikan'), sehingga tombol & status di atas ikut dikembalikan.
+
+// Input manual — alur pemeriksaan sama dengan hasil scan
+document.getElementById('cekManualForm').addEventListener('submit', e => {
+    e.preventDefault();
+    if (QRScanner.aktif()) {
         hentikanPindai();
-        statusPindai('Pemindaian dihentikan karena halaman tidak aktif.');
-        tombolPindai(false, 'Pindai Ulang');
+        statusPindai('Pemindaian dihentikan.');
+        tombolPindai(false);
     }
+    periksaIsi(document.getElementById('cekManualInput').value, 'manual');
 });
 
 // Panduan Penuh — akses ditentukan server berdasarkan pesanan terkonfirmasi

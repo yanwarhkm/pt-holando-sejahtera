@@ -238,6 +238,13 @@ kbd { background: #f5f5f5; padding: 0.125rem 0.5rem; border-radius: 4px; border:
 .verification-invalid { background: #ffebee; border-left: 4px solid #c62828; padding: 1.25rem; border-radius: 8px; }
 .verification-pending { background: #fff8e1; border-left: 4px solid #b26a00; padding: 1.25rem; border-radius: 8px; }
 .verification-pending .verification-result-icon { color: #b26a00; }
+/* Sumber resmi (URL Kementan) dan info netral — dibedakan dari data internal */
+.verification-resmi { background: #e8f0fe; border-left: 4px solid #1a4f9c; padding: 1.25rem; border-radius: 8px; }
+.verification-resmi .verification-result-icon { color: #1a4f9c; }
+.verification-info { background: #f3f4f6; border-left: 4px solid #6b7280; padding: 1.25rem; border-radius: 8px; }
+.verification-info .verification-result-icon { color: #6b7280; }
+.verification-catatan { margin-top: 0.75rem; font-size: 0.8rem; color: var(--text-muted); }
+#cekManualForm { margin-top: 0.5rem; }
 .verification-result { display: flex; gap: 1rem; align-items: flex-start; flex-wrap: wrap; }
 .verification-result-icon { font-size: 2rem; flex-shrink: 0; }
 .verification-valid .verification-result-icon { color: #2c5f2d; }

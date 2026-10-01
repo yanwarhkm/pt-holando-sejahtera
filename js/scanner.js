@@ -1,5 +1,5 @@
 /* =========================================================
-   QRScanner — pemindai QR/barcode kamera yang dipakai bersama
+   QRScanner — pemindai QR kamera yang dipakai bersama
    oleh scanner publik (index.html) dan modal admin "Tambah
    Verifikasi" (dashboard.html). Satu implementasi, satu instance
    kamera (singleton) sehingga tidak ada stream yang bentrok.
@@ -11,18 +11,23 @@
      QRScanner.start({
         mountEl,               // elemen tempat menaruh <video>
         onReady()   {},        // kamera aktif, mulai memindai
-        onStatus(teks, jenis){},// pesan status ('active'|'success'|'error')
+        onStatus(teks, jenis){},// pesan status ('active'|'success'|'error'|'')
         onResult(teks){},      // kode terbaca (kamera sudah dihentikan)
-        onEnd(alasan){},       // berhenti sendiri tanpa hasil ('timeout'|'kosong')
+        onEnd(alasan){},       // berhenti sendiri tanpa hasil ('timeout'|'kosong'|
+                               // 'dihentikan' = halaman disembunyikan/ditinggalkan)
         onError(jenis){}       // gagal memulai (kamera sudah dihentikan)
      });
-     QRScanner.stop();         // lepas kamera & hentikan pemindaian
+     QRScanner.stop();         // lepas kamera & hentikan pemindaian (tanpa callback)
      QRScanner.aktif();        // boolean
 ========================================================= */
 window.QRScanner = (function () {
     const BATAS_PINDAI_MS = 30000; // berhenti otomatis bila 30 dtk tanpa kode
     let stream = null, video = null, canvas = null, rafId = 0;
     let batasWaktu = 0, sedangMulai = false, frameTerakhir = 0;
+    // Setiap start()/stop() menaikkan nomor sesi sehingga start lama yang masih
+    // menunggu izin kamera tidak menyalakan kamera lagi setelah dibatalkan.
+    let sesi = 0;
+    let callbackAktif = null; // { onStatus, onEnd } milik sesi yang sedang berjalan
 
     function tersedia() {
         return window.isSecureContext && navigator.mediaDevices && !!navigator.mediaDevices.getUserMedia;
@@ -50,11 +55,25 @@ window.QRScanner = (function () {
     function aktif() { return !!stream || sedangMulai; }
 
     function stop() {
+        sesi++;
         sedangMulai = false;
+        callbackAktif = null;
         if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
         if (stream) { stream.getTracks().forEach(t => t.stop()); }
         stream = null;
         if (video) { video.srcObject = null; video = null; }
+    }
+
+    // Dihentikan oleh halaman (bukan oleh pemanggil): beri tahu pemanggil
+    // agar tombol/status ikut kembali ke keadaan awal.
+    function hentikanOtomatis() {
+        if (!aktif()) return;
+        const cb = callbackAktif;
+        stop();
+        if (cb) {
+            cb.onStatus('Pemindaian dihentikan karena halaman tidak aktif.', '');
+            cb.onEnd('dihentikan');
+        }
     }
 
     function pesanError(jenis) {
@@ -82,14 +101,17 @@ window.QRScanner = (function () {
 
         if (!tersedia()) { onStatus(pesanError('tidak-tersedia'), 'error'); onError('tidak-tersedia'); return; }
         if (await izinDitolak()) { onStatus(pesanError('izin-ditolak'), 'error'); onError('izin-ditolak'); return; }
+        if (aktif()) return; // start lain sudah berjalan selama pengecekan izin
 
+        const id = ++sesi;
         sedangMulai = true;
+        callbackAktif = { onStatus, onEnd };
         onStatus('Meminta izin kamera...', 'active');
 
         try {
             await muatJsQR();
-        } catch { sedangMulai = false; gagal('komponen'); return; }
-        if (!sedangMulai) return; // dibatalkan saat memuat komponen
+        } catch { if (id === sesi) gagal('komponen'); return; }
+        if (id !== sesi) return; // dibatalkan saat memuat komponen
 
         let s;
         try {
@@ -98,7 +120,7 @@ window.QRScanner = (function () {
                 audio: false
             });
         } catch (err) {
-            sedangMulai = false;
+            if (id !== sesi) return;
             const n = err && err.name;
             const jenis = (n === 'NotAllowedError' || n === 'SecurityError') ? 'izin-ditolak'
                 : (n === 'NotFoundError' || n === 'OverconstrainedError') ? 'tidak-ada-kamera'
@@ -107,7 +129,7 @@ window.QRScanner = (function () {
             return;
         }
 
-        if (!sedangMulai) { s.getTracks().forEach(t => t.stop()); return; } // halaman ditinggalkan saat menunggu izin
+        if (id !== sesi) { s.getTracks().forEach(t => t.stop()); return; } // dibatalkan saat menunggu izin
         sedangMulai = false;
         stream = s;
 
@@ -121,10 +143,14 @@ window.QRScanner = (function () {
 
         try {
             await video.play();
-        } catch { stop(); onStatus(pesanError('pratinjau'), 'error'); onError('pratinjau'); return; }
+        } catch {
+            if (id !== sesi) return;
+            stop(); onStatus(pesanError('pratinjau'), 'error'); onError('pratinjau'); return;
+        }
+        if (id !== sesi) return;
 
         onReady();
-        onStatus('Kamera aktif. Arahkan kamera ke kode QR/barcode pada label.', 'active');
+        onStatus('Kamera aktif. Arahkan kamera ke kode QR pada label.', 'active');
         batasWaktu = Date.now() + BATAS_PINDAI_MS;
         rafId = requestAnimationFrame(w => loop(w, onResult, onStatus, onEnd));
     }
@@ -164,8 +190,47 @@ window.QRScanner = (function () {
     }
 
     // Jangan biarkan kamera tetap menyala saat halaman ditinggalkan/disembunyikan
-    window.addEventListener('pagehide', stop);
-    document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); });
+    window.addEventListener('pagehide', hentikanOtomatis);
+    document.addEventListener('visibilitychange', () => { if (document.hidden) hentikanOtomatis(); });
 
     return { start, stop, aktif, tersedia };
+})();
+
+/* =========================================================
+   VerifikasiQR — mengklasifikasi isi QR/input TANPA mengubahnya.
+   - URL resmi: HANYA https:// dengan host TEPAT benih.pertanian.go.id,
+     tanpa userinfo/port. javascript:, data:, file:, localhost, IP, dan
+     domain lain ditolak. Aturannya sama dengan url_resmi_valid() di
+     api/verifikasi.php (server tetap memvalidasi ulang).
+   - Kode internal: pola kode/nomor seri yang sama dengan api/verifikasi.php.
+   Dikenali sebagai URL resmi ≠ label sah; keabsahan hanya dapat dilihat
+   pengguna sendiri di situs resmi.
+========================================================= */
+window.VerifikasiQR = (function () {
+    const HOST_RESMI = 'benih.pertanian.go.id';
+    const POLA_URL = /^https:\/\/benih\.pertanian\.go\.id(?:[/?#][A-Za-z0-9\-._~:/?#[\]@!$&'()*+,;=%]*)?$/i;
+    const POLA_KODE = /^[A-Z0-9][A-Z0-9\-\/]{1,49}$/;
+
+    function adalahUrlResmi(teks) {
+        if (typeof teks !== 'string' || teks.length > 255 || !POLA_URL.test(teks)) return false;
+        try {
+            const u = new URL(teks);
+            return u.protocol === 'https:' && u.hostname === HOST_RESMI && !u.username && !u.password && u.port === '';
+        } catch {
+            return false;
+        }
+    }
+
+    function adalahKode(teks) {
+        return typeof teks === 'string' && POLA_KODE.test(teks.toUpperCase());
+    }
+
+    // 'url-resmi' | 'kode' | 'lain'
+    function jenis(teks) {
+        if (adalahUrlResmi(teks)) return 'url-resmi';
+        if (adalahKode(teks)) return 'kode';
+        return 'lain';
+    }
+
+    return { HOST_RESMI, adalahUrlResmi, adalahKode, jenis };
 })();
