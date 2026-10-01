@@ -1218,13 +1218,19 @@ async function pesanSekarang() {
         });
         const order = res.data;
 
-        // Harga & total memakai data yang sudah dihitung ulang oleh server
-        let pesan = `Halo, saya ingin memesan bibit kentang (No. Pesanan: ${order.kode_pesanan}):\n\n`;
-        order.items.forEach(i => {
-            pesan += `✅ ${i.nama} — ${i.jumlah} × ${formatRupiah(i.harga)} = ${formatRupiah(i.subtotal)}\n`;
-        });
-        pesan += `\nTotal: ${formatRupiah(order.total)}`;
-        pesan += `\n\n📝 Data Penerima:\nNama: ${nama}\nAlamat: ${alamat}\nWA: ${wa}\nMetode: ${bayar}`;
+        // Harga & total memakai data yang sudah dihitung ulang oleh server.
+        // Tanpa emoji: sebagian aplikasi WhatsApp menampilkannya sebagai karakter pengganti (U+FFFD).
+        const daftarBibit = order.items.map((i, n) =>
+            `${n + 1}. ${i.nama}\n   ${i.jumlah} × ${formatRupiah(i.harga)} = ${formatRupiah(i.subtotal)}`
+        ).join('\n\n');
+        const pesan = [
+            'Halo, saya ingin memesan bibit kentang.',
+            `*No. Pesanan:* ${order.kode_pesanan}`,
+            `*Daftar Bibit:*\n\n${daftarBibit}`,
+            `*Total Pesanan: ${formatRupiah(order.total)}*`,
+            `*Data Penerima:*\nNama: ${nama}\nAlamat: ${alamat}\nWA: ${wa}\nMetode Pembayaran: ${bayar}`,
+            'Mohon informasi mengenai proses pesanan dan pembayaran. Terima kasih.'
+        ].join('\n\n');
         arahkanKeWA(tabWA, pesan);
 
         keranjang = [];
