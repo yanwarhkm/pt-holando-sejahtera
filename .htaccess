@@ -1,0 +1,36 @@
+# =========================================================
+#  Aturan server untuk deploy (InfinityFree / Apache)
+#  Hanya keamanan file deploy & header cache — tidak mengubah
+#  routing halaman, API, atau folder lain.
+# =========================================================
+
+# File status sinkronisasi FTP-Deploy-Action (GitHub Actions).
+# Tetap dibaca/ditulis action lewat FTP; hanya akses HTTP yang ditolak.
+<Files ".ftp-deploy-sync-state.json">
+    Require all denied
+</Files>
+
+# script.js lama (prototipe localStorage) sudah dihapus dari repository,
+# tetapi deploy FTP tidak menghapus berkas yang tidak pernah ia unggah.
+# Tolak aksesnya sampai berkas di server dihapus manual.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^script\.js$ - [G]
+</IfModule>
+
+# Cache: hosting bawaan memberi max-age 30 hari sehingga browser
+# memakai HTML/CSS/JS lama setelah deploy. "no-cache" tetap menyimpan
+# berkas di browser, tetapi wajib cek ulang ke server (304 bila tidak berubah),
+# jadi versi baru langsung dipakai tanpa perlu ?v= di setiap halaman.
+<IfModule mod_expires.c>
+    ExpiresByType text/html "access plus 0 seconds"
+    ExpiresByType text/css "access plus 0 seconds"
+    ExpiresByType application/javascript "access plus 0 seconds"
+    ExpiresByType text/javascript "access plus 0 seconds"
+</IfModule>
+<IfModule mod_headers.c>
+    <FilesMatch "\.(html?|css|js)$">
+        Header set Cache-Control "no-cache"
+        Header unset Expires
+    </FilesMatch>
+</IfModule>
